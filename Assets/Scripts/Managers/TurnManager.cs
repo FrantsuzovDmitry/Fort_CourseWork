@@ -13,6 +13,9 @@ public class TurnManager : MonoBehaviour
 
     public Action onAttackStopped;
 
+    private const byte FIRST_PLAYER_ID = 0;
+    private byte LAST_PLAYER_ID;
+
     private void Awake()
     {
         instance = this;
@@ -21,10 +24,12 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
-        StartTurnGameplay(0);
+        StartTurnOfPlayer(0);
+
+        LAST_PLAYER_ID = (byte)PlayerManager.instance.players.Last().ID;
     }
 
-    public void StartTurnGameplay(int playerID)
+    public void StartTurnOfPlayer(int playerID)
     {
         currentPlayerTurn = playerID;
         StartTurn();
@@ -40,11 +45,9 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
-        var lastPlayerID = PlayerManager.instance.players.Last().ID;
-        if (currentPlayerTurn == lastPlayerID)
+        if (currentPlayerTurn == LAST_PLAYER_ID)
         {
-            // Firt player turn
-            currentPlayerTurn = 0;
+            currentPlayerTurn = FIRST_PLAYER_ID;
         }
         else
         {

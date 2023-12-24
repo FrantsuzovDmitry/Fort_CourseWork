@@ -6,70 +6,72 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-    public static CardManager instance;
-    public List<Card>
-            cards = new List<Card>(),
-            deck = new List<Card>();
-    public Transform player1Hand, player2Hand, player3Hand, player4Hand,
-                        player1Forts, player2Forts, player3Forts, player4Forts,
-                        playArea, sandglassesArea;
+	public static CardManager instance;
+	public List<Card>
+			cards = new List<Card>(),
+			deck = new List<Card>();
+	public Transform player1Hand, player2Hand, player3Hand, player4Hand,
+						player1Forts, player2Forts, player3Forts, player4Forts,
+						playArea, sandglassesArea;
 
-    private Transform[] playerHandsPosition;
-    private Transform[] playersFortsPosition;
+	private Transform[] playerHandsPosition;
+	private Transform[] playersFortsPosition;
 
-    public CardController cardControllerPrefab;
+	public CardController cardControllerPrefab;
 
-    // For debug 
-    public List<CardController>
-            player1Cards = new List<CardController>(),
-            player2Cards = new List<CardController>(),
-            player3Cards = new List<CardController>(),
-            player4Cards = new List<CardController>();
+	// For debug 
+	public List<CardController>
+			player1Cards = new List<CardController>(),
+			player2Cards = new List<CardController>(),
+			player3Cards = new List<CardController>(),
+			player4Cards = new List<CardController>();
 
-    [SerializeField] public List<List<CardController>> playersCards = new List<List<CardController>>();
-    [SerializeField] private List<Character> groupOfCharacters = new List<Character>();
+	[SerializeField] public List<List<CardController>> playersCards = new List<List<CardController>>();
+	[SerializeField] private List<Character> groupOfCharacters = new List<Character>();
 
-    public int numberOfSandglasses;
+	public short NumberOfSandglasses { get; private set; }
 
-    private const int NotAPlayerID = 100;
+	public short NumberOfCardInDeck { get; private set; }
 
-    public List<Character> GroupOfCharacters { get => groupOfCharacters; }
+	public List<Character> GroupOfCharacters { get => groupOfCharacters; }
 
-    //Initialization
-    private void Awake()
-    {
-        instance = this;
-        numberOfSandglasses = 0;
-        for (int i = 0; i < 4; i++) playersCards.Add(new List<CardController>());
-    }
+	private const short NotAPlayerID = 100;
 
-    private void Start()
-    {
-        GenerateDeck();
+	//Initialization
+	private void Awake()
+	{
+		instance = this;
+		NumberOfSandglasses = 0;
+		for (int i = 0; i < 4; i++) playersCards.Add(new List<CardController>());
+	}
 
-        playersFortsPosition = new Transform[4];
-        playersFortsPosition[0] = player1Forts;
-        playersFortsPosition[1] = player2Forts;
-        playersFortsPosition[2] = player3Forts;
-        playersFortsPosition[3] = player4Forts;
+	private void Start()
+	{
+		GenerateDeck();
 
-        playerHandsPosition = new Transform[4];
-        playerHandsPosition[0] = player1Hand;
-        playerHandsPosition[1] = player2Hand;
-        playerHandsPosition[2] = player3Hand;
-        playerHandsPosition[3] = player4Hand;
+		playersFortsPosition = new Transform[4];
+		playersFortsPosition[0] = player1Forts;
+		playersFortsPosition[1] = player2Forts;
+		playersFortsPosition[2] = player3Forts;
+		playersFortsPosition[3] = player4Forts;
 
-        player1Cards = playersCards[0];
-        player2Cards = playersCards[1];
-        player3Cards = playersCards[2];
-        player4Cards = playersCards[3];
+		playerHandsPosition = new Transform[4];
+		playerHandsPosition[0] = player1Hand;
+		playerHandsPosition[1] = player2Hand;
+		playerHandsPosition[2] = player3Hand;
+		playerHandsPosition[3] = player4Hand;
 
-    }
+		player1Cards = playersCards[0];
+		player2Cards = playersCards[1];
+		player3Cards = playersCards[2];
+		player4Cards = playersCards[3];
 
-    private void GenerateDeck()
-    {
-        // Real deck (for now is locked)
-        /*
+	}
+
+	private void GenerateDeck()
+	{
+		// Real deck (for now is locked)
+		/*
         for (int i = 0; i < 10; i++)
         {
             string logoPath = "Card pictures/" + (i + 1);
@@ -97,149 +99,182 @@ public class CardManager : MonoBehaviour
         }
         */
 
-        // Test deck
-        string logoPath = "Sprites/" + 1;
-        Sprite logo = Resources.Load<Sprite>(logoPath);
-        deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
-        deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
-        deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
-        deck.Add(new Fortress(3, Resources.Load<Sprite>("Sprites/2")));
-        deck.Add(new SimpleCharacter(2, 1, 1, Resources.Load<Sprite>("Sprites/4")));
-        deck.Add(new SimpleCharacter(1, 1, 1, Resources.Load<Sprite>("Sprites/5")));
-        deck.Add(new SimpleCharacter(2, 1, 1, Resources.Load<Sprite>("Sprites/6")));
-        deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-        deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-        deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-        deck.Add(new Joker(Resources.Load<Sprite>("Sprites/35")));
-        deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-        deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-        deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
-        deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
-        deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
-        deck.Add(new Mirror(Resources.Load<Sprite>("Sprites/62")));
-    }
+		// Test deck
+		string logoPath = "Sprites/" + 1;
+		Sprite logo = Resources.Load<Sprite>(logoPath);
+		deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
+		deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
+		deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
+		deck.Add(new Fortress(3, Resources.Load<Sprite>("Sprites/2")));
+		deck.Add(new SimpleCharacter(2, 1, 1, Resources.Load<Sprite>("Sprites/4")));
+		deck.Add(new SimpleCharacter(1, 1, 1, Resources.Load<Sprite>("Sprites/5")));
+		deck.Add(new SimpleCharacter(2, 1, 1, Resources.Load<Sprite>("Sprites/6")));
+		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new Joker(Resources.Load<Sprite>("Sprites/35")));
+		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
+		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
+		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
+		deck.Add(new Mirror(Resources.Load<Sprite>("Sprites/62")));
+		NumberOfCardInDeck = (short)deck.Count;
+	}
 
-    public void GiveCardToPlayer(int playerID)
-    {
-        Card card = deck[deck.Count - 1];
-        CardController newCard;
-        var type = card.GetType();
+	private bool IsCardOnTable(Card card)
+	{
+		return (card is Sandglass) || (card is Fortress) || (card is Rule);
+	}
 
-        if (card is Sandglass || card is Fortress || card is Rule)
-        {
-            if (card is Sandglass)
-            {
-                newCard = Instantiate(cardControllerPrefab, sandglassesArea);
-                IncreaseNumberOfSandglasses();
-            }
-            else //(card is Fortress)
-            {
-                newCard = Instantiate(cardControllerPrefab, playArea);
-                FortressManager.instance.AddFort(card);
-            }
-            newCard.transform.localPosition = Vector3.zero;
-            newCard.Initialize(card, NotAPlayerID);
-        }
-        else
-        {
-            newCard = Instantiate(cardControllerPrefab, playerHandsPosition[playerID]);
-            newCard.transform.localPosition = Vector3.zero;
-            newCard.Initialize(card, playerID);
+	private void CreateCardInCorrectArea(Card card, int playerID)
+	{
+		if (IsCardOnTable(card))
+		{
+			CreateCardOnTable(card);
+			TakeCardFromDeck(playerID);		// Make move again
+		}
+		else
+		{
+			CreateCardInPlayerHand(card, playerID);
+		}
+	}
 
-            playersCards[playerID].Add(newCard);
-        }
+	private void CreateCardInPlayerHand(Card card, int playerID)
+	{
+		CardController newCard = Instantiate(cardControllerPrefab, playerHandsPosition[playerID]);
+		newCard.transform.localPosition = Vector3.zero;
+		newCard.Initialize(card, playerID);
+		playersCards[playerID].Add(newCard);
+		return;
+	}
 
-        // Delete top card
-        deck.RemoveAt(deck.Count - 1);
-    }
+	private void CreateCardOnTable(Card card)
+	{
+		CardController newCard;
+		switch (card)
+		{
+			case Sandglass _:
+				newCard = Instantiate(cardControllerPrefab, sandglassesArea);
+				IncreaseNumberOfSandglasses();
+				break;
 
-    private void GenerateCards()
-    {
-        foreach (Card card in deck)
-        {
-            CardController newCard = Instantiate(cardControllerPrefab, player1Hand);
-            newCard.transform.localPosition = Vector3.zero;
-            newCard.Initialize(card, 0);
-        }
-    }
+			case Fortress _:
+				newCard = Instantiate(cardControllerPrefab, playArea);
+				FortressManager.instance.AddFortToList(card);
+				break;
 
-    public void IncreaseNumberOfSandglasses()
-    {
-        numberOfSandglasses++;
-        CheckOfStopGameCondition();
-    }
+			case Rule _:
+				throw new NotImplementedException();
+				break;
 
-    private void CheckOfStopGameCondition()
-    {
-        if (numberOfSandglasses == 3)
-        {
-            Observer.onGameStopped();
-            //PlayerManager.instance.EndGame();
-        }
-    }
+			default:
+				throw new NotImplementedException();
+				break;
+		}
+		newCard.transform.localPosition = Vector3.zero;
+		newCard.Initialize(card, NotAPlayerID);
+		return;
+	}
 
-    public void AddCharacterToGroup(Character character)
-    {
-        groupOfCharacters.Add(character);
-    }
+	public void TakeCardFromDeck(int playerID)
+	{
+		if (deck.Count < 1) return ;
 
-    public void RemoveCharacterFromGroup(Character character)
-    {
-        groupOfCharacters.Remove(character);
-    }
+		Card card = deck[deck.Count - 1];
+		deck.RemoveAt(deck.Count - 1);      // Delete top card
+		--NumberOfCardInDeck;
 
-    public void StopCreatingOfGroup()
-    {
-        groupOfCharacters.Clear();
-    }
+		CreateCardInCorrectArea(card, playerID);
+	}
 
-    public void RemoveAttackersFromHand()
-    {
-        int i = 0;
-        var playerHand = playersCards[TurnManager.instance.currentPlayerTurn];
-        while (i < playerHand.Count)
-        {
-            var card = playerHand[i];
-            // if card was in the attackers group, the card will be removed
-            if (((Character)card.card).isInGroup)
-            {
-                playerHand.Remove(card);
-                Destroy(card.gameObject);
-            }
-            else
-            {
-                i++;
-            }
-        }
-    }
+	private void GenerateCards()
+	{
+		foreach (Card card in deck)
+		{
+			CardController newCard = Instantiate(cardControllerPrefab, player1Hand);
+			newCard.transform.localPosition = Vector3.zero;
+			newCard.Initialize(card, 0);
+		}
+	}
 
-    public void HideOpponentsCards()
-    {
-        for (int i = 0; i < playersCards.Count; i++)
-            if (i != TurnManager.instance.currentPlayerTurn)
-                foreach (CardController card in playersCards[i])
-                    card.cardBack.gameObject.SetActive(true);
-    }
+	public void IncreaseNumberOfSandglasses()
+	{
+		NumberOfSandglasses++;
+		CheckOfStopGameCondition();
+	}
 
-    public void ShowMyCards()
-    {
-        foreach (CardController card in playersCards[TurnManager.instance.currentPlayerTurn])
-            card.cardBack.gameObject.SetActive(false);
-    }
+	private void CheckOfStopGameCondition()
+	{
+		if (NumberOfSandglasses == 3)
+		{
+			Observer.onGameStopped();
+			//PlayerManager.instance.EndGame();
+		}
+	}
 
-    public void ChangeParentPosition(CardController card)
-    {
-        card.gameObject.transform.parent = playersFortsPosition[TurnManager.instance.currentPlayerTurn];
-        card.changeParent(playersFortsPosition[TurnManager.instance.currentPlayerTurn]);
-    }
+	public void AddCharacterToGroup(Character character)
+	{
+		groupOfCharacters.Add(character);
+	}
 
-    private void OnEnable()
-    {
-        TurnManager.instance.onAttackStopped += StopCreatingOfGroup;
-    }
+	public void RemoveCharacterFromGroup(Character character)
+	{
+		groupOfCharacters.Remove(character);
+	}
 
-    private void OnDisable()
-    {
+	public void StopCreatingOfGroup()
+	{
+		groupOfCharacters.Clear();
+	}
 
-    }
+	public void RemoveAttackersFromHand()
+	{
+		int i = 0;
+		var playerHand = playersCards[TurnManager.instance.currentPlayerTurn];
+		while (i < playerHand.Count)
+		{
+			var card = playerHand[i];
+			// if card was in the attackers group, the card will be removed
+			if (((Character)card.card).isInGroup)
+			{
+				playerHand.Remove(card);
+				Destroy(card.gameObject);
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
+
+	public void HideOpponentsCards()
+	{
+		for (int i = 0; i < playersCards.Count; i++)
+			if (i != TurnManager.instance.currentPlayerTurn)
+				foreach (CardController card in playersCards[i])
+					card.cardBack.gameObject.SetActive(true);
+	}
+
+	public void ShowMyCards()
+	{
+		foreach (CardController card in playersCards[TurnManager.instance.currentPlayerTurn])
+			card.cardBack.gameObject.SetActive(false);
+	}
+
+	public void ChangeParentPosition(CardController card)
+	{
+		card.gameObject.transform.parent = playersFortsPosition[TurnManager.instance.currentPlayerTurn];
+		card.changeParent(playersFortsPosition[TurnManager.instance.currentPlayerTurn]);
+	}
+
+	private void OnEnable()
+	{
+		TurnManager.instance.onAttackStopped += StopCreatingOfGroup;
+	}
+
+	private void OnDisable()
+	{
+
+	}
 }

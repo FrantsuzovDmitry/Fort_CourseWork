@@ -14,7 +14,9 @@ public class FortressManager : MonoBehaviour
         instance = this;
     }
 
-    private int CalculateForce(Character[] groupOfCharacters)
+	/// Probably move to GameActionManager
+    /////////////////////////////////////////////////////////////////////
+	private int CalculateForce(Character[] groupOfCharacters)
     {
         // sorting the character in group, Mirrors and Jokers must be in the end;
         var begIndex = 0;
@@ -41,7 +43,9 @@ public class FortressManager : MonoBehaviour
         return totalForce * totalWeight;    // Тут не совсем корректно, ибо зеркало умножает силу ДО того, как ее умножили на вес карт
     }
 
-    public void AttackToFortress(CardController defendingFort)
+	/// Probably move to GameActionManager
+	/////////////////////////////////////////////////////////////////////
+	public void AttackToFortress(CardController defendingFort)
     {
         int attackerID = TurnManager.instance.currentPlayerTurn;
         var fort = (Fortress)defendingFort.card;
@@ -119,7 +123,7 @@ public class FortressManager : MonoBehaviour
         Observer.onFortressAttacked += AttackToFortress;
     }
 
-    public void AddFort(Card fort)
+    public void AddFortToList(Card fort)
     {
         notCapturedFortress.Add((Fortress)fort);
     }

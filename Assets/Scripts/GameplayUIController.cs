@@ -9,13 +9,16 @@ using System;
 public class GameplayUIController : MonoBehaviour
 {
     public static GameplayUIController instance;
-    public TextMeshProUGUI currentPlayerTurn;
+    public TextMeshProUGUI currentPlayerTurnMessage;
     public Button endTurnButton;
     public Button getCardButton;
+    public GameObject Deck;
+    [SerializeField] private TextMeshProUGUI numberOfCardsText;
 
     private void Awake()
     {
         instance = this;
+        getCardButton = Deck.GetComponent<Button>();
         SetupButton();
     }
 
@@ -29,34 +32,40 @@ public class GameplayUIController : MonoBehaviour
 
         getCardButton.onClick.AddListener(() =>
         {
-            CardManager.instance.GiveCardToPlayer(TurnManager.instance.currentPlayerTurn);
-        });
+            CardManager.instance.TakeCardFromDeck(TurnManager.instance.currentPlayerTurn);
+			//TurnManager.instance.EndTurn();
+		});
     }
 
-    public void UpdateCurrentPlayerTurn(int playerID)
+	private void Start()
+	{
+        numberOfCardsText.SetText(CardManager.instance.NumberOfCardInDeck.ToString());
+	}
+
+	public void UpdateCurrentPlayerTurn(int playerID)
     {
-        currentPlayerTurn.text = $"Player {playerID + 1} turn!";
+        currentPlayerTurnMessage.text = $"Player {playerID + 1} turn!";
         StartCoroutine(BlinkLabel());
     }
 
     private IEnumerator BlinkLabel()
     {
-        currentPlayerTurn.gameObject.SetActive(true);
+        currentPlayerTurnMessage.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurn.gameObject.SetActive(false);
+        currentPlayerTurnMessage.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurn.gameObject.SetActive(true);
+        currentPlayerTurnMessage.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurn.gameObject.SetActive(false);
+        currentPlayerTurnMessage.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurn.gameObject.SetActive(true);
+        currentPlayerTurnMessage.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurn.gameObject.SetActive(false);
+        //currentPlayerTurnMessage.gameObject.SetActive(false);
     }
 
     public void ChangeCardPosition(CardController card, Transform position)
