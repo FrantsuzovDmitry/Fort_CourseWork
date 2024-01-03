@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class Card
 {
-    public int ownerID;
-    public string cardName;
+	public int ownerID;
+	public string cardName;
     public Sprite illustration;
 
     public Card() { }
@@ -17,8 +17,8 @@ public class Card
 
     public Card(Card card)
     {
-        this.ownerID = card.ownerID;
-        this.cardName = card.cardName;
+		this.ownerID = card.ownerID;
+		this.cardName = card.cardName;
         this.illustration = card.illustration;
     }
 }

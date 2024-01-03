@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Character : Card
 {
-    public bool isInGroup = false;
+    public bool IsInGroup = false;
 
     public Character() : base() { }
 

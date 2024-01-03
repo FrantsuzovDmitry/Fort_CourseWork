@@ -11,8 +11,6 @@ public class TurnManager : MonoBehaviour
 
     public bool isProcessOfCreatingGroup;
 
-    public Action onAttackStopped;
-
     private const byte FIRST_PLAYER_ID = 0;
     private byte LAST_PLAYER_ID;
 
@@ -71,11 +69,11 @@ public class TurnManager : MonoBehaviour
 
     private void OnEnable()
     {
-        onAttackStopped += StopCreatingOfGroup;
+        Observer.onAttackStopped += StopCreatingOfGroup;
     }
 
     private void OnDisable()
     {
-        onAttackStopped -= StopCreatingOfGroup;
+		Observer.onAttackStopped -= StopCreatingOfGroup;
     }
 }

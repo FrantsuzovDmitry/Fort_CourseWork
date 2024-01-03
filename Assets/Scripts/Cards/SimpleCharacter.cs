@@ -3,28 +3,25 @@ using UnityEngine;
 [System.Serializable]
 public class SimpleCharacter : Character
 {
-    public int force, weight;
+	public virtual int Force { get; }
 
-    public SimpleCharacter() : base() { }
+	public SimpleCharacter() : base() { }
 
-    public SimpleCharacter(SimpleCharacter card) : base(card)
-    {
-        this.force = card.force;
-        this.weight = card.weight;
-    }
+	public SimpleCharacter(SimpleCharacter card) : base(card)
+	{
+		this.Force = card.Force;
+	}
 
-    // Можно удалить OwnerID
-    public SimpleCharacter(int force, int weight, int ownerID, Sprite illustration) : base("SimpleCharacter", illustration)
-    {
-        this.force = force;
-        this.weight = weight;
-    }
+	public SimpleCharacter(int force, Sprite illustration) : base("SimpleCharacter", illustration)
+	{
+		this.Force = force;
+	}
 
-    public SimpleCharacter(string cardName, Sprite illustration) : base(cardName, illustration) { }
+	public SimpleCharacter(string cardName, Sprite illustration) : base(cardName, illustration) { }
 
-    public override void EnterInGroup(ref int totalForce, ref int totalWeight)
-    {
-        totalForce += force;
-        totalWeight += weight;
-    }
+	public override void EnterInGroup(ref int totalForce, ref int totalWeight)
+	{
+		totalForce += Force;
+		totalWeight += 1;
+	}
 }

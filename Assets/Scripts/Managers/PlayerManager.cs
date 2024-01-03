@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        for (int i = 0; i < players.Count; i++) players[i].ID = i;
     }
 
     internal void AssignTurn(int currentPlayerTurn)

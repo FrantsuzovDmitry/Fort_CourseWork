@@ -12,4 +12,10 @@ public static class Observer
 
     public delegate void OnGameStopped();
     public static OnGameStopped onGameStopped;
+
+	public delegate void OnCardTaken();
+	public static OnGameStopped onCardTaken;
+
+	public delegate void OnAttackStopped();
+	public static OnGameStopped onAttackStopped;
 }

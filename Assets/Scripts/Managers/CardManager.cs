@@ -31,7 +31,7 @@ public class CardManager : MonoBehaviour
 
 	public short NumberOfSandglasses { get; private set; }
 
-	public short NumberOfCardInDeck { get; private set; }
+	public short NumberOfCardInDeck { get => (short)deck.Count; }
 
 	public List<Character> GroupOfCharacters { get => groupOfCharacters; }
 
@@ -119,7 +119,6 @@ public class CardManager : MonoBehaviour
 		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
 		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
 		deck.Add(new Mirror(Resources.Load<Sprite>("Sprites/62")));
-		NumberOfCardInDeck = (short)deck.Count;
 	}
 
 	private bool IsCardOnTable(Card card)
@@ -132,7 +131,7 @@ public class CardManager : MonoBehaviour
 		if (IsCardOnTable(card))
 		{
 			CreateCardOnTable(card);
-			TakeCardFromDeck(playerID);		// Make move again
+			//TODO: YOU CAN MAKE MOVE AGAIN
 		}
 		else
 		{
@@ -179,13 +178,19 @@ public class CardManager : MonoBehaviour
 
 	public void TakeCardFromDeck(int playerID)
 	{
+		Observer.onCardTaken();
+
 		if (deck.Count < 1) return ;
 
 		Card card = deck[deck.Count - 1];
 		deck.RemoveAt(deck.Count - 1);      // Delete top card
-		--NumberOfCardInDeck;
 
 		CreateCardInCorrectArea(card, playerID);
+
+		if (IsCardOnTable(card))
+			TakeCardFromDeck(playerID);
+		//else
+			//TurnManager.instance.EndTurn();				////////////////////////////////
 	}
 
 	private void GenerateCards()
@@ -209,7 +214,6 @@ public class CardManager : MonoBehaviour
 		if (NumberOfSandglasses == 3)
 		{
 			Observer.onGameStopped();
-			//PlayerManager.instance.EndGame();
 		}
 	}
 
@@ -236,7 +240,7 @@ public class CardManager : MonoBehaviour
 		{
 			var card = playerHand[i];
 			// if card was in the attackers group, the card will be removed
-			if (((Character)card.card).isInGroup)
+			if (((Character)card.card).IsInGroup)
 			{
 				playerHand.Remove(card);
 				Destroy(card.gameObject);
@@ -270,11 +274,11 @@ public class CardManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		TurnManager.instance.onAttackStopped += StopCreatingOfGroup;
-	}
+		Observer.onAttackStopped += StopCreatingOfGroup;
+	}  
 
 	private void OnDisable()
 	{
-
+		Observer.onAttackStopped -= StopCreatingOfGroup;
 	}
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using Unity.VisualScripting;
 
 // I suppose the better name is GameplayUIManager
 public class GameplayUIController : MonoBehaviour
@@ -13,16 +14,26 @@ public class GameplayUIController : MonoBehaviour
     public Button endTurnButton;
     public Button getCardButton;
     public GameObject Deck;
+
     [SerializeField] private TextMeshProUGUI numberOfCardsText;
+
+    public Action onCardTaken;
 
     private void Awake()
     {
         instance = this;
         getCardButton = Deck.GetComponent<Button>();
-        SetupButton();
-    }
+		SetupButtons();
+	}
 
-    private void SetupButton()
+	#region NOTIFICATION CONTROLLER CLASS:
+    public void ShowNotification(string message)
+    {
+        Debug.Log(message);
+    }
+	#endregion
+
+	private void SetupButtons()
     {
         // Assign an event to the buttons
         endTurnButton.onClick.AddListener(() =>
@@ -33,13 +44,17 @@ public class GameplayUIController : MonoBehaviour
         getCardButton.onClick.AddListener(() =>
         {
             CardManager.instance.TakeCardFromDeck(TurnManager.instance.currentPlayerTurn);
-			//TurnManager.instance.EndTurn();
-		});
+        });
     }
 
 	private void Start()
 	{
-        numberOfCardsText.SetText(CardManager.instance.NumberOfCardInDeck.ToString());
+        UpdateCardNumberText();
+	}
+
+    private void UpdateCardNumberText()
+    {
+		numberOfCardsText.SetText(CardManager.instance.NumberOfCardInDeck.ToString());
 	}
 
 	public void UpdateCurrentPlayerTurn(int playerID)
@@ -72,4 +87,9 @@ public class GameplayUIController : MonoBehaviour
     {
         card.transform.SetParent(position);
     }
+
+	private void OnEnable()
+	{
+        Observer.onCardTaken += UpdateCardNumberText;
+	}
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     public Card card;
     public Image illustration, image, cardBack;
@@ -65,15 +65,15 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 $"Player{TurnManager.instance.currentPlayerTurn + 1}Hand")
             {
                 var temp = (Character)card;
-                if (temp.isInGroup)
+                if (temp.IsInGroup)
                 {
                     CardManager.instance.RemoveCharacterFromGroup(temp);
-                    temp.isInGroup = false;
+                    temp.IsInGroup = false;
                 }
                 else
                 {
                     CardManager.instance.AddCharacterToGroup(temp);
-                    temp.isInGroup = true;
+                    temp.IsInGroup = true;
                 }
             }
             // The card is not his
@@ -90,13 +90,6 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             TurnManager.instance.CreatingOfGroupOfCharacters();
         }
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        //Debug.Log(eventData.pointerEnter);
-        //image.raycastTarget = true;
-        //ReturnRoHand();
     }
 
     public void changeParent(Transform parent)

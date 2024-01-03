@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Отвечает за учет фортов в игре
+/// </summary>
 public class FortressManager : MonoBehaviour
 {
     public static FortressManager instance;
@@ -16,35 +19,36 @@ public class FortressManager : MonoBehaviour
 
 	/// Probably move to GameActionManager
     /////////////////////////////////////////////////////////////////////
-	private int CalculateForce(Character[] groupOfCharacters)
+	private int CalculateForce(List<Character> groupOfCharacters)
     {
         // sorting the character in group, Mirrors and Jokers must be in the end;
-        var begIndex = 0;
-        var endIndex = groupOfCharacters.Length;
-        Character[] tempGroup = new Character[groupOfCharacters.Length];
-        for (int i = 0; i < groupOfCharacters.Length; i++)
+
+        List<Character> simpleCharacters = new List<Character>();
+        List<Character> mirrors = new List<Character>(3);
+        List<Character> jokers = new List<Character>(3);
+
+        foreach (Character character in groupOfCharacters)
         {
-            if (groupOfCharacters[i] is Mirror || groupOfCharacters[i] is Joker)
-            {
-                tempGroup[endIndex - 1] = groupOfCharacters[i];
-                --endIndex;
-            }
-            else
-            {
-                tempGroup[begIndex] = groupOfCharacters[i];
-                ++begIndex;
-            }
+            if (character is SimpleCharacter)
+                simpleCharacters.Add(character);
+            else if (character is Joker)
+                jokers.Add(character);
+            else mirrors.Add(character);
         }
+        simpleCharacters.AddRange(jokers);
+        simpleCharacters.AddRange(mirrors);
 
-        int totalForce = 0, totalWeight = 0;
-        foreach (SimpleCharacter character in tempGroup)
-            character.EnterInGroup(ref totalForce, ref totalWeight);
+        int totalCurrentForce = 0, totalWeight = 0;
+        // Calculate total force of characters and jokers
+        foreach (Character character in simpleCharacters)
+            character.EnterInGroup(ref totalCurrentForce, ref totalWeight);
 
-        return totalForce * totalWeight;    // Тут не совсем корректно, ибо зеркало умножает силу ДО того, как ее умножили на вес карт
+        return totalCurrentForce * totalWeight;    // Тут не совсем корректно, ибо зеркало умножает силу ДО того, как ее умножили на вес карт
     }
 
 	/// Probably move to GameActionManager
 	/////////////////////////////////////////////////////////////////////
+    // TODO: Refactor this method
 	public void AttackToFortress(CardController defendingFort)
     {
         int attackerID = TurnManager.instance.currentPlayerTurn;
@@ -54,15 +58,17 @@ public class FortressManager : MonoBehaviour
         var defendersGroup = fort.defendersGroup;
         int attackerForce, defendersForce;
 
+        if (attackersGroup.Count < 1) return;
+
         if (defendersGroup != null)
         {
-            attackerForce = CalculateForce(attackersGroup.ToArray());
-            defendersForce = CalculateForce(defendersGroup.ToArray());
+            attackerForce = CalculateForce(attackersGroup);
+            defendersForce = CalculateForce(defendersGroup);
         }
         else
         {
-            attackerForce = 10000;     // any number greater than 0
-            defendersForce = 0;
+            attackerForce = int.MaxValue;
+            defendersForce = int.MinValue;
         }
 
         if (attackerForce > defendersForce)
@@ -95,7 +101,8 @@ public class FortressManager : MonoBehaviour
             Debug.Log("Unsuccessful attack");
         }
 
-        TurnManager.instance.onAttackStopped?.Invoke();
+        Observer.onAttackStopped();
+        //TurnManager.instance.onAttackStopped?.Invoke();
     }
 
     private void RemoveFortressFromList(List<Character> attackersGroup, Player defender, Fortress fort)
