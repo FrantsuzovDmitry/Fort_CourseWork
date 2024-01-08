@@ -10,6 +10,7 @@ namespace Assets.Scripts.Cards
 	public class GroupOfCharacters
 	{
 		public List<Character> Characters { get; }
+		public List<SimpleCharacter> SimpleCharacters { get; private set; }
 		public int TotalForce { get; private set; }
 		public int CardInGroup => Characters.Count;
 
@@ -19,13 +20,13 @@ namespace Assets.Scripts.Cards
 			Characters = characters;
 		}
 
-		private int CalculateGroupForce(List<Character> characters)
+		private void SortGroup(List<Character> characters)
 		{
 			List<Character> simpleCharacters = new List<Character>();
 			List<Character> mirrors = new List<Character>(3);
 			List<Character> jokers = new List<Character>(3);
 
-			// Jokers must be before simple characters
+			// Jokers must be after simple characters
 			// Jokers must be before nulls
 			// Mirrors must be after nulls
 			foreach (Character character in characters)
@@ -36,15 +37,19 @@ namespace Assets.Scripts.Cards
 					jokers.Add(character);
 				else mirrors.Add(character);
 			}
-			if (!AreCharactersForcesEqual(simpleCharacters.Cast<SimpleCharacter>().ToList()))
-			{
-				GameplayUIController.instance.ShowNotification("characters must have an equals forces");
-				return 0;
-			}
+			//if (!AreCharactersForcesEqual(simpleCharacters.Cast<SimpleCharacter>().ToList()))
+			//{
+			//	GameplayUIController.instance.ShowNotification("characters must have an equals forces");
+			//	return 0;
+			//}
 			characters = simpleCharacters;
 			characters.AddRange(jokers);
 			characters.AddRange(mirrors);
+		}
 
+		private int CalculateGroupForce(List<Character> characters)
+		{
+			SortGroup(characters);
 			int totalCurrentForce = 0, totalWeight = 0;
 			foreach (Character character in characters)
 				character.EnterInGroup(ref totalCurrentForce, ref totalWeight);
@@ -52,6 +57,7 @@ namespace Assets.Scripts.Cards
 			return totalCurrentForce * totalWeight;
 		}
 
+		//TODO: Удалить это здесь (и референс тоже исправить), и переместить в Fortress requirements
 		private bool AreCharactersForcesEqual(List<SimpleCharacter> characters)
 		{
 			int comparisonForce = characters[0].Force;

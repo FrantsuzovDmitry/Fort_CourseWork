@@ -27,6 +27,7 @@ public class CardManager : MonoBehaviour
 			player4Cards = new List<CardController>();
 
 	[SerializeField] public List<List<CardController>> playersCards = new List<List<CardController>>();
+	//TODO: заменить на GroupOfCharacters
 	[SerializeField] private List<Character> groupOfCharacters = new List<Character>();
 
 	public short NumberOfSandglasses { get; private set; }

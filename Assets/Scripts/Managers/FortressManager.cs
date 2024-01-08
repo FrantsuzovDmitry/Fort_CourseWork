@@ -55,7 +55,7 @@ public class FortressManager : MonoBehaviour
         var fort = (Fortress)defendingFort.card;
 
         var attackersGroup = CardManager.instance.GroupOfCharacters;
-        var defendersGroup = fort.defendersGroup;
+        var defendersGroup = fort.DefendersGroup;
         int attackerForce, defendersForce;
 
         if (attackersGroup.Count < 1) return;
@@ -107,7 +107,7 @@ public class FortressManager : MonoBehaviour
 
     private void RemoveFortressFromList(List<Character> attackersGroup, Player defender, Fortress fort)
     {
-        if (fort.defendersGroup == null)
+        if (fort.DefendersGroup == null)
         {
             // If there are no defenders
             notCapturedFortress.
