@@ -9,7 +9,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager instance;
     public int currentPlayerTurn;
 
-    public bool isProcessOfCreatingGroup;
+    public bool NowTheProcessOfCreatingGroupIsUnderway {  get; private set; }
 
     private const byte FIRST_PLAYER_ID = 0;
     private byte LAST_PLAYER_ID;
@@ -17,7 +17,7 @@ public class TurnManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        isProcessOfCreatingGroup = false;
+        NowTheProcessOfCreatingGroupIsUnderway = false;
     }
 
     private void Start()
@@ -55,16 +55,16 @@ public class TurnManager : MonoBehaviour
         StartTurn();
     }
 
-    public void CreatingOfGroupOfCharacters()
+    public void StartCreatingOfGroupOfCharacters()
     {
         Debug.Log("Start creating");
-        isProcessOfCreatingGroup = true;
+        NowTheProcessOfCreatingGroupIsUnderway = true;
     }
 
     public void StopCreatingOfGroup()
     {
         Debug.Log("Stop creating");
-        isProcessOfCreatingGroup = false;
+        NowTheProcessOfCreatingGroupIsUnderway = false;
     }
 
     private void OnEnable()

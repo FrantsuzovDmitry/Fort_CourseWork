@@ -37,11 +37,6 @@ namespace Assets.Scripts.Cards
 					jokers.Add(character);
 				else mirrors.Add(character);
 			}
-			//if (!AreCharactersForcesEqual(simpleCharacters.Cast<SimpleCharacter>().ToList()))
-			//{
-			//	GameplayUIController.instance.ShowNotification("characters must have an equals forces");
-			//	return 0;
-			//}
 			characters = simpleCharacters;
 			characters.AddRange(jokers);
 			characters.AddRange(mirrors);

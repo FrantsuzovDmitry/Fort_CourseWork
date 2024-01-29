@@ -27,7 +27,8 @@ public class FortressManager : MonoBehaviour
         List<Character> mirrors = new List<Character>(3);
         List<Character> jokers = new List<Character>(3);
 
-        foreach (Character character in groupOfCharacters)
+		#region Sort the characters in the group
+		foreach (Character character in groupOfCharacters)
         {
             if (character is SimpleCharacter)
                 simpleCharacters.Add(character);
@@ -37,8 +38,9 @@ public class FortressManager : MonoBehaviour
         }
         simpleCharacters.AddRange(jokers);
         simpleCharacters.AddRange(mirrors);
+		#endregion
 
-        int totalCurrentForce = 0, totalWeight = 0;
+		int totalCurrentForce = 0, totalWeight = 0;
         // Calculate total force of characters and jokers
         foreach (Character character in simpleCharacters)
             character.EnterInGroup(ref totalCurrentForce, ref totalWeight);
@@ -49,7 +51,7 @@ public class FortressManager : MonoBehaviour
 	/// Probably move to GameActionManager
 	/////////////////////////////////////////////////////////////////////
     // TODO: Refactor this method
-	public void AttackToFortress(CardController defendingFort)
+	public void ProcessAttackToFortress(CardController defendingFort)
     {
         int attackerID = TurnManager.instance.currentPlayerTurn;
         var fort = (Fortress)defendingFort.card;
@@ -109,7 +111,6 @@ public class FortressManager : MonoBehaviour
     {
         if (fort.DefendersGroup == null)
         {
-            // If there are no defenders
             notCapturedFortress.
                 Find(x => x == fort).SetDefenders(attackersGroup);
             notCapturedFortress.Remove(fort);
@@ -126,8 +127,7 @@ public class FortressManager : MonoBehaviour
     private void OnEnable()
     {
         // Subscribe to action
-        //CardManager.instance.onFortAdded += AddFort;
-        Observer.onFortressAttacked += AttackToFortress;
+        Observer.onFortressAttacked += ProcessAttackToFortress;
     }
 
     public void AddFortToList(Card fort)

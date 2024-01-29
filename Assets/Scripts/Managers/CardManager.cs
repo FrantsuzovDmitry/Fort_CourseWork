@@ -107,15 +107,15 @@ public class CardManager : MonoBehaviour
 		deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
 		deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
 		deck.Add(new Fortress(3, Resources.Load<Sprite>("Sprites/2")));
-		deck.Add(new SimpleCharacter(2, 1, 1, Resources.Load<Sprite>("Sprites/4")));
-		deck.Add(new SimpleCharacter(1, 1, 1, Resources.Load<Sprite>("Sprites/5")));
-		deck.Add(new SimpleCharacter(2, 1, 1, Resources.Load<Sprite>("Sprites/6")));
-		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(2, Resources.Load<Sprite>("Sprites/4")));
+		deck.Add(new SimpleCharacter(1, Resources.Load<Sprite>("Sprites/5")));
+		deck.Add(new SimpleCharacter(2, Resources.Load<Sprite>("Sprites/6")));
+		deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
 		deck.Add(new Joker(Resources.Load<Sprite>("Sprites/35")));
-		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
-		deck.Add(new SimpleCharacter(3, 1, 1, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
+		deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
 		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
 		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
 		deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
@@ -270,7 +270,7 @@ public class CardManager : MonoBehaviour
 	public void ChangeParentPosition(CardController card)
 	{
 		card.gameObject.transform.parent = playersFortsPosition[TurnManager.instance.currentPlayerTurn];
-		card.changeParent(playersFortsPosition[TurnManager.instance.currentPlayerTurn]);
+		card.changePosition(playersFortsPosition[TurnManager.instance.currentPlayerTurn]);
 	}
 
 	private void OnEnable()

@@ -5,30 +5,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using Assets.Scripts;
 
 public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     public Card card;
-    public Image illustration, image, cardBack;
+    public Image illustration, emission, cardBack;
     public TextMeshProUGUI cardName;
 
-    private Transform originalParent;
+    private Transform parentPosition;
+    private Vector3 position => transform.position;
 
-    private void Awake()
-    {
-        //image = GetComponent<Image>();
-    }
-
-    public void Initialize(Card card, int ownerID)
+	public void Initialize(Card card, int ownerID)
     {
         this.card = card;
         this.card.ownerID = card.ownerID;
         illustration.sprite = card.illustration;
         cardName.text = card.cardName;
 
-        cardBack.gameObject.SetActive(false);
+        cardBack.SetInactive();
 
-        originalParent = transform.parent;
+        parentPosition = transform.parent;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -41,63 +38,89 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     }
 
+    private void ShowCardInfo()
+    {
+        //TODO:
+        /*
+         * При наведении (или при долгом нажатии) на карту должна появляться информация про неё.
+         * То есть должна дергаться инфа о карте из класса Card. Что-то типа GetCardInformation; 
+         * Это сильно потом надо будет сделать.
+         * 
+         * При обычном нажатии происходит выбор карты
+         * */
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        /*
-        if (originalParent.name != $"Player{card.ownerID+1}Hand")
-            //TurnManager.instance.currentPlayerTurn != card.ownerID)
-        {
-            Debug.Log("It's not your hand of not your turn!");
-        }
-        else
-        {
-            // Parent of the parent (UI in our case)
-            transform.SetParent(transform.root);
-            image.raycastTarget = false;
-        }
-        */
+        if (card is Sandglass) return;
 
         // If fortress to attack is selected
-        if (TurnManager.instance.isProcessOfCreatingGroup)
+        if (TurnManager.instance.NowTheProcessOfCreatingGroupIsUnderway)
         {
             // Player try to take his card
-            if (originalParent.name ==
-                $"Player{TurnManager.instance.currentPlayerTurn + 1}Hand")
+            if (IsCardInPlayerHand())
             {
                 var temp = (Character)card;
                 if (temp.IsInGroup)
                 {
                     CardManager.instance.RemoveCharacterFromGroup(temp);
                     temp.IsInGroup = false;
+                    MakeUnselected();
                 }
                 else
                 {
                     CardManager.instance.AddCharacterToGroup(temp);
                     temp.IsInGroup = true;
-                }
-            }
+                    MakeSelected();
+				}
+			}
             // The card is not his
-            else
+            else if (card is Fortress)
             {
                 //CardManager.instance.AttackToFortress(TurnManager.instance.currentPlayerTurn, (Fortress)card);
                 //CardManager.instance.AttackToFortress(TurnManager.instance.currentPlayerTurn, this);
                 Observer.onFortressAttacked(this);
                 //TurnManager.instance.StopCreatingOfGroup();
             }
+            else
+            {
+                Debug.Log("You cannot attack this card");
+            }
         }
-        // If it's a Fort (OR SANDGLASSES)
-        else if (originalParent.name == "PlayArea")
+        // If it's a Fort on the table
+        else if (IsCardInTheMidOfTable())
         {
-            TurnManager.instance.CreatingOfGroupOfCharacters();
+            MakeSelected();
+            UIManager.instance.ShowButton(UIButtons.StartAttackButton);
+            //TurnManager.instance.StartCreatingOfGroupOfCharacters();
         }
     }
 
-    public void changeParent(Transform parent)
+    private void MakeSelected()
     {
-        originalParent = parent;
+        emission.SetActive();
+        transform.position = new Vector3(position.x, position.y, -5);   // set in front
     }
 
-    private void ReturnRoHand()
+    private void MakeUnselected()
+    {
+        emission.SetInactive();
+		transform.position = new Vector3(position.x, position.y, 0);    // default value
+	}
+
+    private bool IsCardInPlayerHand() {
+        return parentPosition.name ==
+                $"Player{TurnManager.instance.currentPlayerTurn + 1}Hand";
+    }
+
+    private bool IsCardInTheMidOfTable() { return parentPosition.name == "PlayArea"; }
+
+	public void changePosition(Transform parent)
+    {
+        parentPosition = parent;
+    }
+
+    private void ReturnToHand()
     {
         //transform.SetParent(originalParent);
         //transform.localPosition = Vector3.zero;
