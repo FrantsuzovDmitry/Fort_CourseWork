@@ -1,28 +1,54 @@
 using Assets.Scripts.Cards;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using static Assets.Scripts.Constants;
 
-public class CurrentUserStateController : MonoBehaviour
+public static class CurrentUserStateController
 {
-    private GroupOfCharacters groupOfCharacters;
-    private bool nowTheProcessOfCreatingGroupIsUnderway;
-    private byte selectedFortToAttack;
+	private static readonly List<Character> selectedCharacters = new List<Character>();
+	public static bool NowTheProcessOfCreatingGroupIsUnderway { get; private set; } = false;
+	public static byte SelectedFortToAttack { get; private set; }
+	//public static CardController SelectedFortToAttack { get; private set; }
 
-	void Start()
-    {
-		nowTheProcessOfCreatingGroupIsUnderway = false;
-    }
+	public static GroupOfCharacters GetAttackersGroup() => new GroupOfCharacters(selectedCharacters);
 
-	public void StartCreatingOfGroupOfCharacters()
+	public static bool CanAttackFortress => selectedCharacters.Count > 0;
+
+	public static void StartCreatingOfGroupOfCharacters()
 	{
-		Debug.Log("Start creating");
-		nowTheProcessOfCreatingGroupIsUnderway = true;
+		NowTheProcessOfCreatingGroupIsUnderway = true;
+		UIManager.instance.DebugNotification("Start creating of group");
 	}
 
-	public void StopCreatingOfGroupOfCharacters()
+	public static void RememberUserFortSelection(byte numberOfFortToAttack)
 	{
-		Debug.Log("Stop creating");
-		nowTheProcessOfCreatingGroupIsUnderway = false;
+		if (numberOfFortToAttack >= MIN_FORT_RATE && numberOfFortToAttack <= MAX_FORT_RATE)
+			SelectedFortToAttack = numberOfFortToAttack;
+		else
+			throw new Exception("Incorrect number of fort!");
+	}
+
+	public static void StopCreatingOfGroupOfCharacters()
+	{
+		NowTheProcessOfCreatingGroupIsUnderway = false;
+		SelectedFortToAttack = MIN_FORT_RATE - 1;
+		ClearGroup();
+		UIManager.instance.DebugNotification("Stop creating of group");
+	}
+
+	public static void RemoveCharacterFromGroup(Character character)
+	{
+		selectedCharacters.Remove(character);
+	}
+
+	public static void AddCharacterToGroup(Character character)
+	{
+		selectedCharacters.Add(character);
+	}
+
+	public static void ClearGroup()
+	{
+		selectedCharacters.Clear();
 	}
 }

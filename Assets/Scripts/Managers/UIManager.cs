@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum UIButtons
+public enum UIButtons : byte
 {
 	StartAttackButton,
 	AttackConfirmationButton
@@ -20,45 +20,34 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Button startAttackButton;
 	[SerializeField] private Button attackConfirmationButton;
 
-	private List<Button> UIbuttons;
+	private List<Button> _UIbuttons;
 
 	private void Awake()
 	{
 		instance = this;
-		UIbuttons = new List<Button>() { startAttackButton, attackConfirmationButton };
+		_UIbuttons = new List<Button>() { startAttackButton, attackConfirmationButton };
 
 		startAttackButton.onClick.AddListener(() =>
 		{
-			TurnManager.instance.StartCreatingOfGroupOfCharacters();
-			ShowButton(UIButtons.AttackConfirmationButton);
+			Mediator.OnCreatingAttackersGroupStarted();
 		});
 		attackConfirmationButton.onClick.AddListener(() =>
 		{
-			//TODO: Сделать так, чтобы эта кнопка вызывала все необходимые вещи. 
-			//		Наверное, это надо сделать после создания класса намерений пользователя (CurrentState* который).
-			//Observer.onFortressAttacked();
+			Mediator.OnFortressTriedAttacked();
 		});
 	}
 
-	// I suppose the better name is ShowWinner[Panel/Screen]
 	// And maybe this function is better to be in GameplayUIController/Manager OR Move methods from the controller here
 	public void ShowWinnerPanel()
 	{
 		var winner = PlayerManager.instance.DefineWinner();
-		//winnerPanel.gameObject.SetActive(true);
 		winnerPanel.SetActive(true);
-		//gameEndUI.Initialize(winner);
 		winnerName.text = $"Player {winner.ID + 1} has won!";
-	}
-
-	private void OnEnable()
-	{
-		Observer.onGameStopped += ShowWinnerPanel;
 	}
 
 	public void ShowButton(UIButtons button)
 	{
-		foreach (Button btn in UIbuttons)
+		foreach (Button btn in _UIbuttons)
 		{
 			btn.gameObject.SetActive(false);
 		}
@@ -72,5 +61,25 @@ public class UIManager : MonoBehaviour
 				attackConfirmationButton.gameObject.SetActive(true);
 				break;
 		}
+	}
+
+	// Probably should remember active button and set inactive only it
+	public void HideCurrentButtons() 
+	{
+		foreach (Button btn in _UIbuttons)
+		{
+			btn.gameObject.SetActive(false);
+		}
+	}
+
+	public void DebugNotification(string message)
+	{
+		Debug.Log(message);
+	}
+
+	public void ShowWarningMessage(string message)
+	{
+		// TODO: make more cute. Panel for example.
+		DebugNotification(message);
 	}
 }

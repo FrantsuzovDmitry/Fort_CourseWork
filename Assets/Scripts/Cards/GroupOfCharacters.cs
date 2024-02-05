@@ -9,18 +9,18 @@ namespace Assets.Scripts.Cards
 {
 	public class GroupOfCharacters
 	{
-		public List<Character> Characters { get; }
+		public List<Character> Characters { get; private set; }
 		public List<SimpleCharacter> SimpleCharacters { get; private set; }
 		public int TotalForce { get; private set; }
 		public int CardInGroup => Characters.Count;
 
 		public GroupOfCharacters(List<Character> characters)
 		{
+			SortAndInitializeGroup(characters);
 			TotalForce = CalculateGroupForce(characters);
-			Characters = characters;
 		}
 
-		private void SortGroup(List<Character> characters)
+		private void SortAndInitializeGroup(List<Character> characters)
 		{
 			List<Character> simpleCharacters = new List<Character>();
 			List<Character> mirrors = new List<Character>(3);
@@ -37,29 +37,21 @@ namespace Assets.Scripts.Cards
 					jokers.Add(character);
 				else mirrors.Add(character);
 			}
-			characters = simpleCharacters;
+			characters = new(simpleCharacters);
 			characters.AddRange(jokers);
 			characters.AddRange(mirrors);
+
+			Characters = characters;
+			SimpleCharacters = simpleCharacters.Cast<SimpleCharacter>().ToList();
 		}
 
 		private int CalculateGroupForce(List<Character> characters)
 		{
-			SortGroup(characters);
 			int totalCurrentForce = 0, totalWeight = 0;
 			foreach (Character character in characters)
 				character.EnterInGroup(ref totalCurrentForce, ref totalWeight);
 
 			return totalCurrentForce * totalWeight;
-		}
-
-		//TODO: Удалить это здесь (и референс тоже исправить), и переместить в Fortress requirements
-		private bool AreCharactersForcesEqual(List<SimpleCharacter> characters)
-		{
-			int comparisonForce = characters[0].Force;
-			for (int i = 1; i < characters.Count; i++)
-				if (comparisonForce != characters[i].Force) 
-					return false;
-			return true;
 		}
 	}
 }

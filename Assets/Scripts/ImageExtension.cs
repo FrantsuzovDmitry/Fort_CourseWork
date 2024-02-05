@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
 		public static void SetInactive(this Image image)
 		{
-			image.gameObject.SetActive(false);
+			image.gameObject?.SetActive(false);
 		}
 	}
 }

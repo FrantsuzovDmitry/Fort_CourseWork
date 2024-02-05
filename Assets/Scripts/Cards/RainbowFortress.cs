@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Scripts.Cards
 {
@@ -10,10 +7,10 @@ namespace Assets.Scripts.Cards
 	{
 		public override bool IsRequirementsToDefendersAreAccept(GroupOfCharacters groupOfCharacters)
 		{
+			// All characters forces must be different
+
 			if (AreGroupContainJokers(groupOfCharacters))
 				return false;
-
-			// All characters forces must be different
 
 			//TODO: Check this predicate
 			return !base.IsRequirementsToDefendersAreAccept (groupOfCharacters);

@@ -1,25 +1,25 @@
-using System.Collections;
+using Assets.Scripts.Cards;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
+using static Assets.Scripts.Constants;
 
 /// <summary>
-/// Отвечает за учет фортов в игре
+/// Responsible for keeping records of forts in the game
 /// </summary>
 public class FortressManager : MonoBehaviour
 {
     public static FortressManager instance;
-    public Dictionary<Player, List<Fortress>> capturedFortresses = new();
-    public List<Fortress> notCapturedFortress = new List<Fortress>();
+    public Dictionary<byte, byte> FortressesOwnersPairs = new(MAX_FORT_RATE);       // Pairs Fortress <-> owner
+    public Fortress[] Fortresses = new Fortress[8];
 
-    private void Awake()
+	private void Awake()
     {
         instance = this;
     }
 
-	/// Probably move to GameActionManager
-    /////////////////////////////////////////////////////////////////////
-	private int CalculateForce(List<Character> groupOfCharacters)
+	private int CalculateGroupForce(GroupOfCharacters groupOfCharacters)
     {
         // sorting the character in group, Mirrors and Jokers must be in the end;
 
@@ -28,7 +28,7 @@ public class FortressManager : MonoBehaviour
         List<Character> jokers = new List<Character>(3);
 
 		#region Sort the characters in the group
-		foreach (Character character in groupOfCharacters)
+		foreach (Character character in groupOfCharacters.Characters)
         {
             if (character is SimpleCharacter)
                 simpleCharacters.Add(character);
@@ -48,90 +48,51 @@ public class FortressManager : MonoBehaviour
         return totalCurrentForce * totalWeight;    // Тут не совсем корректно, ибо зеркало умножает силу ДО того, как ее умножили на вес карт
     }
 
-	/// Probably move to GameActionManager
-	/////////////////////////////////////////////////////////////////////
-    // TODO: Refactor this method
-	public void ProcessAttackToFortress(CardController defendingFort)
+	public void ProcessAttackToFortress(byte defendingFortRate, GroupOfCharacters attackersGroup, byte attackerID)
     {
-        int attackerID = TurnManager.instance.currentPlayerTurn;
-        var fort = (Fortress)defendingFort.card;
+        var defendingFort = Fortresses.FirstOrDefault(f => f.Rate == defendingFortRate);
+        if (defendingFort == null) throw new Exception("Trying to attack unexisting fortress");
+        if (attackersGroup.Characters.Count < 1) throw new Exception("Empty attackers group");
 
-        var attackersGroup = CardManager.instance.GroupOfCharacters;
-        var defendersGroup = fort.DefendersGroup;
+		var defendersGroup = defendingFort.DefendersGroup;
         int attackerForce, defendersForce;
-
-        if (attackersGroup.Count < 1) return;
 
         if (defendersGroup != null)
         {
-            attackerForce = CalculateForce(attackersGroup);
-            defendersForce = CalculateForce(defendersGroup);
+            attackerForce = CalculateGroupForce(attackersGroup);
+            defendersForce = CalculateGroupForce(defendersGroup);
         }
         else
         {
             attackerForce = int.MaxValue;
             defendersForce = int.MinValue;
         }
+        
+        if (attackerForce > defendersForce)         // Successful capturing
+		{
+            FortressesOwnersPairs[defendingFortRate] = attackerID;
 
-        if (attackerForce > defendersForce)
+            Mediator.OnFortressCaptured(defendingFort, attackerID);
+			Debug.Log("Successful attack: TotalForce = " + attackerForce);
+		}
+        else if (attackerForce == defendersForce)   // Fortress has been destroyed
         {
-            // Successful capture
-            Player attacker = PlayerManager.instance.FindPlayerByID(attackerID);
-            Player defender = PlayerManager.instance.FindPlayerByID(fort.ownerID);
-
-            RemoveFortressFromList(attackersGroup, defender, fort);
-
-            // Adding new Fort to the player collection
-            if (capturedFortresses.ContainsKey(attacker))
-            {
-                capturedFortresses[attacker].Add(fort);
-            }
-            // Creating of new pair Player - Fort
-            else
-            {
-                capturedFortresses.Add(attacker, new List<Fortress> { fort });
-            }
-
-            CardManager.instance.ChangeParentPosition(defendingFort);
-            CardManager.instance.RemoveAttackersFromHand();
-
-            Debug.Log("Successful attack: TotalForce = " + attackerForce);
+            Mediator.OnFortressDestroyed(defendingFort);
         }
-        else
-        {
-            // Unsuccessful capture
-            Debug.Log("Unsuccessful attack");
-        }
-
-        Observer.onAttackStopped();
-        //TurnManager.instance.onAttackStopped?.Invoke();
-    }
-
-    private void RemoveFortressFromList(List<Character> attackersGroup, Player defender, Fortress fort)
-    {
-        if (fort.DefendersGroup == null)
-        {
-            notCapturedFortress.
-                Find(x => x == fort).SetDefenders(attackersGroup);
-            notCapturedFortress.Remove(fort);
-        }
-        else
-        {
-            capturedFortresses[defender].
-                Find(x => x == fort).SetDefenders(attackersGroup);
-            capturedFortresses[defender].Remove(fort);
+		else                                        // Unsuccessful capturing
+		{
+            Mediator.OnFortressUnsuccessfulAttacked();
         }
     }
 
-    // Called when the Unity-object is active
-    private void OnEnable()
+    public void RemoveFortress(Fortress fort)
     {
-        // Subscribe to action
-        Observer.onFortressAttacked += ProcessAttackToFortress;
+        Fortresses[fort.Rate] = null;
+        FortressesOwnersPairs[fort.Rate] = MIN_PLAYER_ID - 1;
     }
 
-    public void AddFortToList(Card fort)
+    public void AddNewFort(Fortress fort)
     {
-        notCapturedFortress.Add((Fortress)fort);
+        Fortresses[fort.Rate] = fort;
     }
 }

@@ -17,21 +17,12 @@ public class GameplayUIController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI numberOfCardsText;
 
-    public Action onCardTaken;
-
     private void Awake()
     {
         instance = this;
         getCardButton = Deck.GetComponent<Button>();
 		SetupButtons();
 	}
-
-	#region NOTIFICATION CONTROLLER CLASS:
-    public void ShowNotification(string message)
-    {
-        Debug.Log(message);
-    }
-	#endregion
 
 	private void SetupButtons()
     {
@@ -43,18 +34,18 @@ public class GameplayUIController : MonoBehaviour
 
         getCardButton.onClick.AddListener(() =>
         {
-            CardManager.instance.TakeCardFromDeck(TurnManager.instance.currentPlayerTurn);
+            Mediator.OnCardTaken();
         });
     }
 
 	private void Start()
 	{
-        UpdateCardNumberText();
+        UpdateCardNumberText(Assets.Scripts.Deck.deck.Count.ToString());
 	}
 
-    private void UpdateCardNumberText()
+    public void UpdateCardNumberText(string numberOfCards)
     {
-		numberOfCardsText.SetText(CardManager.instance.NumberOfCardInDeck.ToString());
+		numberOfCardsText.SetText(numberOfCards);
 	}
 
 	public void UpdateCurrentPlayerTurn(int playerID)
@@ -82,14 +73,4 @@ public class GameplayUIController : MonoBehaviour
 
         //currentPlayerTurnMessage.gameObject.SetActive(false);
     }
-
-    public void ChangeCardPosition(CardController card, Transform position)
-    {
-        card.transform.SetParent(position);
-    }
-
-	private void OnEnable()
-	{
-        Observer.onCardTaken += UpdateCardNumberText;
-	}
 }

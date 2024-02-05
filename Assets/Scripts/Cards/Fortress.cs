@@ -1,4 +1,6 @@
+using Assets.Scripts;
 using Assets.Scripts.Cards;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -6,13 +8,13 @@ using UnityEngine.TextCore.Text;
 [System.Serializable]
 public class Fortress : Card
 {
-    public int Rate { get; }
-    // TODO: заменить на groupOfCharacters
-    public List<Character> DefendersGroup {  get; private set; }
+    public byte Rate { get; }
+    //public List<Character> DefendersGroup {  get; private set; }
+    public GroupOfCharacters DefendersGroup { get; private set; }
 
     public Fortress() { }
 
-    public Fortress(int rate, Sprite illustrarion) : base("Fortress", illustrarion)
+    public Fortress(byte rate, Sprite illustrarion) : base("Fortress", illustrarion)
     {
         this.Rate = rate;
     }
@@ -23,12 +25,11 @@ public class Fortress : Card
         DefendersGroup = null;
     }
 
-    public void SetDefenders(List<Character> defenders)
+    public void SetDefenders(GroupOfCharacters defenders)
     {
         DefendersGroup = defenders;
     }
 
-    // TODO: Use this in FortressManager
     public virtual bool IsRequirementsToDefendersAreAccept(GroupOfCharacters groupOfCharacters)
     {
         var characters = groupOfCharacters.SimpleCharacters;
@@ -38,4 +39,23 @@ public class Fortress : Card
 				return false;
 		return true;
     }
+
+	public override NeedToBeSelected ProcessOnClick(in CardController c)
+	{
+        if (c.IsCardInTheMidOfTable())
+        {
+            Mediator.OnAttackStopped();
+			Mediator.OnAttackStarted(Rate);
+			return NeedToBeSelected.YES;
+		}
+
+        if (c.IsCardIsPlayersOwn())
+        {
+            // TODO: Show the defenders group
+            // ShowDefendersGroup()
+            return NeedToBeSelected.YES;
+        }
+
+        return NeedToBeSelected.NO;
+	}
 }

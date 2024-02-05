@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     {
         instance = this;
 
-        for (int i = 0; i < players.Count; i++) players[i].ID = i;
+        for (byte i = 0; i < players.Count; i++) players[i].ID = i;
     }
 
     internal void AssignTurn(int currentPlayerTurn)
@@ -38,16 +38,9 @@ public class PlayerManager : MonoBehaviour
         return null;
     }
 
-    //public void EndGame()
-    //{
-    //    Player winner = DefineWinner();
-    //    // Show panel with results
-    //    UIManager.instance.ShowWinnerPanel(winner);
-    //}
-
     public Player DefineWinner()
     {
-        // Implement the function of define winner later
+        // TODO: Implement the function of define winner later
         return players[0];
     }
 }
