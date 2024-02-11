@@ -3,31 +3,28 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-	public class Deck : MonoBehaviour
+	public class Deck
 	{
 		private const byte CARD_NUMBER = 17;
-		//public static List<Card> deck = new(CARD_NUMBER);
-		public static Stack<Card> deck = new(CARD_NUMBER);
+		public Stack<Card> deck = new(CARD_NUMBER);
+		public Card Pop => deck.Pop(); 
 
-		public static Deck instance { get; private set; }
-
-		private void Awake()
+		public void Init()
 		{
-			instance = this;
 			CreateTestDeck();
 		}
 
-		private static void CreateRandomDeck()
+		private void CreateRandomDeck()
 		{
 			//TODO: implement random deck generation
 		}
 
-		private static void CreateVanillaDeck()
+		private void CreateVanillaDeck()
 		{
 
 		}
 
-		private static void CreateTestDeck()
+		private void CreateTestDeck()
 		{
 			/*
 			string logoPath = "Sprites/" + 1;

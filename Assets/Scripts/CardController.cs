@@ -12,11 +12,12 @@ public enum NeedToBeSelected : byte
 	YES, NO
 }
 
-public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+public class CardController : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler, */IPointerDownHandler
 {
 	public Card Card;
-	public Image illustration, emission, cardBack;
-	public TextMeshProUGUI cardName;
+	[SerializeField] private TextMeshProUGUI cardName;
+	[SerializeField] private Image illustration, standardEmission, specialEmission, currentEmission, cardBack;
+
 	public bool Selected { get; private set; } = false;
 
 	private Transform parentPosition;
@@ -25,35 +26,25 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	public void Initialize(Card card, int ownerID)
 	{
 		this.Card = card;
-		this.Card.ownerID = card.ownerID;
+		this.Card.OwnerID = card.OwnerID;
 		illustration.sprite = card.illustration;
 		cardName.text = card.cardName;
 
 		cardBack.SetInactive();
 
 		parentPosition = transform.parent;
+
+		currentEmission = standardEmission;
 	}
 
-	public void OnPointerEnter(PointerEventData eventData)
+	public void Hide()
 	{
-
+		cardBack.SetActive();
 	}
 
-	public void OnPointerExit(PointerEventData eventData)
+	public void Show()
 	{
-
-	}
-
-	private void ShowCardInfo()
-	{
-		//TODO:
-		/*
-         * При наведении (или при долгом нажатии) на карту должна появляться информация про неё.
-         * То есть должна дергаться инфа о карте из класса Card. Что-то типа GetCardInformation; 
-         * Это сильно потом надо будет сделать.
-         * 
-         * При обычном нажатии происходит выбор карты
-         * */
+		cardBack.SetInactive();
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -64,16 +55,34 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 			MakeUnselected();
 	}
 
+	public bool IsOneOfTheCardsThatCanBeGiven()
+	{
+		return parentPosition.name ==
+				$"CardsToSelectionPanel";
+	}
+
+	public void SetStdEmission()
+	{
+		currentEmission = standardEmission;
+	}
+
+	public void SetSpecialEmission()
+	{
+		currentEmission = specialEmission;
+	}
+
 	public void MakeSelected()
 	{
-		emission.SetActive();
+		currentEmission.SetActive();
+		//standardEmission.SetActive();
 		transform.position = new Vector3(Position.x, Position.y, -5);   // set in front
 		Selected = true;
 	}
 
 	public void MakeUnselected()
 	{
-		emission.SetInactive();
+		currentEmission.SetInactive();
+		//standardEmission.SetInactive();
 		transform.position = new Vector3(Position.x, Position.y, 0);    // default value
 		Selected = false;
 	}
@@ -81,13 +90,13 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	public bool IsCardInPlayerHand()
 	{
 		return parentPosition.name ==
-				$"Player{TurnManager.instance.currentPlayerTurn + 1}Hand";
+				$"Player{TurnManager.instance.CurrentPlayerTurn + 1}Hand";
 	}
 
 	public bool IsCardIsPlayersOwn()
 	{
 		return parentPosition.name ==
-				$"Player{TurnManager.instance.currentPlayerTurn + 1}Forts";
+				$"Player{TurnManager.instance.CurrentPlayerTurn + 1}Forts";
 	}
 
 	public bool IsCardInTheMidOfTable() { return parentPosition.name == "PlayArea"; }

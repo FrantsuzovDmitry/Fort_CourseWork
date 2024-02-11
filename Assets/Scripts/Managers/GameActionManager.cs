@@ -13,6 +13,6 @@ public class GameActionManager : MonoBehaviour
 
 	void Start()
     {
-        
+		Mediator.InitializeComponents();
     }
 }

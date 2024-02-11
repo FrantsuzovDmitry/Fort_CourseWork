@@ -6,71 +6,83 @@ using UnityEngine.UI;
 using System;
 using Unity.VisualScripting;
 
-// I suppose the better name is GameplayUIManager
 public class GameplayUIController : MonoBehaviour
 {
-    public static GameplayUIController instance;
-    public TextMeshProUGUI currentPlayerTurnMessage;
-    public Button endTurnButton;
-    public Button getCardButton;
-    public GameObject Deck;
+	public static GameplayUIController instance;
 
-    [SerializeField] private TextMeshProUGUI numberOfCardsText;
+	//[SerializeField] private GameObject backgroundBlurPanel;
+	//[SerializeField] private GameObject Deck;
+	//[SerializeField] private TextMeshProUGUI numberOfCardsText;
+	//[SerializeField] private TextMeshProUGUI currentPlayerTurnMessage;
+	//[SerializeField] private Button endTurnButton;
 
-    private void Awake()
-    {
-        instance = this;
-        getCardButton = Deck.GetComponent<Button>();
-		SetupButtons();
-	}
+	//private TextMeshProUGUI hintMessage;
+	//private Button getCardButton;
 
-	private void SetupButtons()
-    {
-        // Assign an event to the buttons
-        endTurnButton.onClick.AddListener(() =>
-        {
-            TurnManager.instance.EndTurn();
-        });
+	//private void Awake()
+	//{
+	//	instance = this;
+	//	getCardButton = Deck.GetComponent<Button>();
+	//	hintMessage = backgroundBlurPanel.GetComponentInChildren<TextMeshProUGUI>();
+	//	//SetupButtons();
+	//}
 
-        getCardButton.onClick.AddListener(() =>
-        {
-            Mediator.OnCardTaken();
-        });
-    }
+	//private void SetupButtons()
+	//{
+	//	endTurnButton.onClick.AddListener(() =>
+	//	{
+	//		Mediator.OnTurnEnded();
+	//	});
 
-	private void Start()
-	{
-        UpdateCardNumberText(Assets.Scripts.Deck.deck.Count.ToString());
-	}
+	//	getCardButton.onClick.AddListener(() =>
+	//	{
+	//		Mediator.OnCardTaken();
+	//	});
+	//}
 
-    public void UpdateCardNumberText(string numberOfCards)
-    {
-		numberOfCardsText.SetText(numberOfCards);
-	}
+	//private void Start()
+	//{
+	//	UpdateCardNumberText(Assets.Scripts.Deck.deck.Count.ToString());
+	//}
 
-	public void UpdateCurrentPlayerTurn(int playerID)
-    {
-        currentPlayerTurnMessage.text = $"Player {playerID + 1} turn!";
-        StartCoroutine(BlinkLabel());
-    }
+	//public void UpdateCardNumberText(string numberOfCards)
+	//{
+	//	numberOfCardsText.SetText(numberOfCards);
+	//}
 
-    private IEnumerator BlinkLabel()
-    {
-        currentPlayerTurnMessage.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+	//public void UpdateCurrentPlayerTurnLabel(int playerID)
+	//{
+	//	currentPlayerTurnMessage.text = $"Player {playerID + 1} turn!";
+	//	StartCoroutine(BlinkLabel());
+	//}
 
-        currentPlayerTurnMessage.gameObject.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
+	//private IEnumerator BlinkLabel()
+	//{
+	//	currentPlayerTurnMessage.gameObject.SetActive(true);
+	//	yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurnMessage.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+	//	currentPlayerTurnMessage.gameObject.SetActive(false);
+	//	yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurnMessage.gameObject.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
+	//	currentPlayerTurnMessage.gameObject.SetActive(true);
+	//	yield return new WaitForSeconds(0.5f);
 
-        currentPlayerTurnMessage.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+	//	currentPlayerTurnMessage.gameObject.SetActive(false);
+	//	yield return new WaitForSeconds(0.5f);
 
-        //currentPlayerTurnMessage.gameObject.SetActive(false);
-    }
+	//	currentPlayerTurnMessage.gameObject.SetActive(true);
+	//	yield return new WaitForSeconds(0.5f);
+
+	//	//currentPlayerTurnMessage.gameObject.SetActive(false);
+	//}
+
+	//public void ShowHint(string message)
+	//{
+	//	hintMessage.SetText(message);
+	//}
+
+	//public void BlurBackground()
+	//{
+	//	backgroundBlurPanel.SetActive(true);
+	//}
 }

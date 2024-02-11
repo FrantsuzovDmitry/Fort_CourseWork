@@ -22,9 +22,9 @@ namespace Assets.Scripts.Cards
 
 		private void SortAndInitializeGroup(List<Character> characters)
 		{
-			List<Character> simpleCharacters = new List<Character>();
-			List<Character> mirrors = new List<Character>(3);
-			List<Character> jokers = new List<Character>(3);
+			List<Character> simpleCharacters = new();
+			List<Character> mirrors = new(3);
+			List<Character> jokers = new(3);
 
 			// Jokers must be after simple characters
 			// Jokers must be before nulls

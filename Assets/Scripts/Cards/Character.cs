@@ -1,6 +1,11 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
+using static UnityEngine.EventSystems.ExecuteEvents;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class Character : Card
@@ -17,6 +22,17 @@ public class Character : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
+		if (CurrentUserStateController.NowTheProcessOfSelectingCardToGiveAway)
+		{
+			if (c.IsOneOfTheCardsThatCanBeGiven())
+			{
+				Mediator.OnCardToGiveChosen(this);
+				CurrentUserStateController.RememberUserCharacterSelection(this);
+				return NeedToBeSelected.YES;
+			}
+			return NeedToBeSelected.NO;
+		}
+
 		if (CurrentUserStateController.NowTheProcessOfCreatingGroupIsUnderway)
 		{
 			if (!c.IsCardInPlayerHand())
@@ -33,7 +49,6 @@ public class Character : Card
 			CurrentUserStateController.AddCharacterToGroup(this);
 			return NeedToBeSelected.YES;
 		}
-
 		return NeedToBeSelected.NO;
 	}
 }

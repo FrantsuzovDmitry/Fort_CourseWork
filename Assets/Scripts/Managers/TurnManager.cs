@@ -1,16 +1,22 @@
 using Assets.Scripts;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using static Assets.Scripts.Constants;
 
 public class TurnManager : MonoBehaviour
 {
-    public static TurnManager instance;
-    public byte currentPlayerTurn;
+    public enum GameStage
+    {
+        StandartStage,          // Getting card
+        SelectingCharacters     // I'll try to generalize 
+        //SelectingCharacterFromHand,
+        //SelectingCharacterFromDefenders,
+    }
 
-    private byte LAST_PLAYER_ID;
+    public static TurnManager instance;
+    public byte CurrentPlayerTurn {  get; private set; }
+    public GameStage CurrentGameStage { get; private set; }
 
     private void Awake()
     {
@@ -19,46 +25,28 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
-        StartTurnOfPlayer(0);
+        CurrentPlayerTurn = 0;
+        CurrentGameStage = GameStage.StandartStage;
 
-        LAST_PLAYER_ID = (byte)PlayerManager.instance.players.Last().ID;
+        Mediator.OnTurnStarted();
     }
 
-    public void StartTurnOfPlayer(byte playerID)
+    public void AssignNextPlayerTurn()
     {
-        currentPlayerTurn = playerID;
-        StartTurn();
-    }
-
-    public void StartTurn()
-    {
-        GameplayUIController.instance.UpdateCurrentPlayerTurn(currentPlayerTurn);
-        PlayerManager.instance.AssignTurn(currentPlayerTurn);
-        CardVisualizationManager.instance.ShowCurrentPlayerCards();
-        CardVisualizationManager.instance.HideOpponentsCards();
-    }
-
-    public void EndTurn()
-    {
-        if (currentPlayerTurn == LAST_PLAYER_ID)
+        if (CurrentPlayerTurn == LAST_PLAYER_ID)
         {
-            currentPlayerTurn = Constants.MIN_PLAYER_ID;
+            CurrentPlayerTurn = MIN_PLAYER_ID;
         }
         else
         {
             // Next player turn;
-            currentPlayerTurn++;
+            ++CurrentPlayerTurn;
         }
-        StartTurn();
     }
 
-    public void StartCreatingOfGroupOfCharacters()
+    public void AssignSelectingCard(byte playerID)
     {
-        Debug.Log("Start creating");
-    }
-
-    public void StopCreatingOfGroup()
-    {
-        Debug.Log("Stop creating");
+        CurrentGameStage = GameStage.SelectingCharacters;
+        CurrentPlayerTurn = playerID;
     }
 }

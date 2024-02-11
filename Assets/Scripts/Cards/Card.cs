@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Card
 {
-	public byte ownerID;
+	public byte OwnerID;
 	public string cardName;
     public Sprite illustration;
 
@@ -19,7 +19,7 @@ public class Card
 
     public Card(Card card)
     {
-		this.ownerID = card.ownerID;
+		this.OwnerID = card.OwnerID;
 		this.cardName = card.cardName;
         this.illustration = card.illustration;
     }

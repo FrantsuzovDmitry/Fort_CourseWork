@@ -6,15 +6,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using UnityEngine;
+using static Assets.Scripts.Constants;
 
+/// <summary>
+/// Visual cards displaying
+/// </summary>
 public class CardVisualizationManager : MonoBehaviour
 {
 	public static CardVisualizationManager instance;
 	public List<Card>
 			cards = new List<Card>();
-			//deck = new List<Card>();
 
-	private Stack<Card> deck = Deck.deck;
 	public Transform player1Hand, player2Hand, player3Hand, player4Hand,
 						player1Forts, player2Forts, player3Forts, player4Forts,
 						playArea, sandglassesArea;
@@ -26,22 +28,10 @@ public class CardVisualizationManager : MonoBehaviour
 
 	private Dictionary<Card, CardController> cardsCardControllersPairs = new(25);
 
-	// For debug 
-	public List<CardController>
-			player1Cards = new(),
-			player2Cards = new(),
-			player3Cards = new(),
-			player4Cards = new();
-
 	[SerializeField] public List<List<CardController>> playersCards = new();
-
-	[SerializeField] private GroupOfCharacters groupOfCharacters;
+	[SerializeField] private Transform selectingPanel;
 
 	public short NumberOfSandglasses { get; private set; }
-
-	public short NumberOfCardInDeck { get => (short)deck.Count; }
-
-	public GroupOfCharacters GroupOfCharacters { get => groupOfCharacters; }
 
 	private const short NotAPlayerID = 100;
 
@@ -50,7 +40,7 @@ public class CardVisualizationManager : MonoBehaviour
 	{
 		instance = this;
 		NumberOfSandglasses = 0;
-		for (int i = 0; i < 4; i++) playersCards.Add(new List<CardController>());
+		//for (int i = 0; i < 4; i++) playersCards.Add(new List<CardController>());
 	}
 
 	private void Start()
@@ -66,12 +56,6 @@ public class CardVisualizationManager : MonoBehaviour
 		playersHandsPosition[1] = player2Hand;
 		playersHandsPosition[2] = player3Hand;
 		playersHandsPosition[3] = player4Hand;
-
-		player1Cards = playersCards[0];
-		player2Cards = playersCards[1];
-		player3Cards = playersCards[2];
-		player4Cards = playersCards[3];
-
 	}
 
 	private bool IsCardOnTable(Card card)
@@ -79,12 +63,12 @@ public class CardVisualizationManager : MonoBehaviour
 		return (card is Sandglass) || (card is Fortress) || (card is Rule);
 	}
 
-	private void CreateCardInCorrectArea(Card card, int playerID)
+	public void CreateCardInCorrectArea(Card card, byte playerID)
 	{
 		if (IsCardOnTable(card))
 		{
 			CreateCardOnTable(card);
-			//TODO: YOU CAN MAKE MOVE AGAIN
+			Mediator.OnCardTaken();
 		}
 		else
 		{
@@ -92,12 +76,13 @@ public class CardVisualizationManager : MonoBehaviour
 		}
 	}
 
-	private void CreateCardInPlayerHand(Card card, int playerID)
+	private void CreateCardInPlayerHand(Card card, byte playerID)
 	{
+		card.OwnerID = playerID;
 		CardController newCard = Instantiate(cardControllerPrefab, playersHandsPosition[playerID]);
 		newCard.transform.localPosition = Vector3.zero;
 		newCard.Initialize(card, playerID);
-		playersCards[playerID].Add(newCard);
+		//playersCards[playerID].Add(newCard);
 
 		// Remember the Card-CardController pairs:
 		cardsCardControllersPairs.Add(card, newCard);
@@ -108,6 +93,7 @@ public class CardVisualizationManager : MonoBehaviour
 	private void CreateCardOnTable(Card card)
 	{
 		CardController newCard;
+		card.OwnerID = NOT_A_PLAYER_ID;
 		switch (card)
 		{
 			case Sandglass _:
@@ -135,19 +121,6 @@ public class CardVisualizationManager : MonoBehaviour
 		cardsCardControllersPairs.Add(card, newCard);
 
 		return;
-	}
-
-	public void TakeCardFromDeck(int playerID)
-	{
-		if (!deck.TryPop(out Card card))
-			return;
-
-		CreateCardInCorrectArea(card, playerID);
-
-		if (IsCardOnTable(card))
-			TakeCardFromDeck(playerID);
-		//else
-		//TurnManager.instance.EndTurn();				////////////////////////////////
 	}
 
 	public void IncreaseNumberOfSandglasses()
@@ -178,24 +151,21 @@ public class CardVisualizationManager : MonoBehaviour
 		}
 	}
 
-	public void HideOpponentsCards()
+	public void ShowCurrentPlayersAndHideOpponentsCards(byte currentPlayerTurn)
 	{
-		for (int i = 0; i < playersCards.Count; i++)
-			if (i != TurnManager.instance.currentPlayerTurn)
-				foreach (CardController card in playersCards[i])
-					card.cardBack.gameObject.SetActive(true);
+		foreach (var card in cardsCardControllersPairs.Keys)
+		{
+			if (card.OwnerID != currentPlayerTurn &&
+				card.OwnerID != NOT_A_PLAYER_ID)
+				cardsCardControllersPairs[card].Hide();
+			else
+				cardsCardControllersPairs[card].Show();
+		}
 	}
 
-	public void ShowCurrentPlayerCards()
-	{
-		foreach (CardController card in playersCards[TurnManager.instance.currentPlayerTurn])
-			card.cardBack.gameObject.SetActive(false);
-	}
-
-	public void ChangeParentPosition(Fortress card, byte playerID)
+	public void MoveFortToPlayerArea(Fortress card, byte playerID)
 	{
 		cardsCardControllersPairs[card].ChangePosition(playersFortsPosition[playerID]);
-		//cardsCardControllersPairs[card].gameObject.transform.parent = playersFortsPosition[TurnManager.instance.currentPlayerTurn];
 	}
 
 	public void DeselectAllCards()
@@ -203,7 +173,24 @@ public class CardVisualizationManager : MonoBehaviour
 		foreach (CardController card in cardsCardControllersPairs.Values)
 		{
 			if (card.Selected)
+			{
 				card.MakeUnselected();
+				card.SetStdEmission();
+			}
+		}
+	}
+
+	public void SetCardRedEmission(Character card)
+	{
+		cardsCardControllersPairs[card].SetSpecialEmission();
+	}
+
+	public void DisplayCardToChoice(byte playerWhichSelectingCardID, List<Character> charactersToChoice)
+	{
+		foreach (Character character in charactersToChoice)
+		{
+			cardsCardControllersPairs[character].ChangePosition(selectingPanel);
+			cardsCardControllersPairs[character].transform.localRotation = Quaternion.Euler(0, 0, 0);
 		}
 	}
 }

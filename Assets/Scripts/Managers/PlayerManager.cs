@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
     public List<Player> players = new List<Player>();
+    public byte LAST_PLAYER_ID => players.Last().ID;
 
     private void Awake()
     {

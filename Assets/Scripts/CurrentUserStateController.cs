@@ -7,9 +7,10 @@ using static Assets.Scripts.Constants;
 public static class CurrentUserStateController
 {
 	private static readonly List<Character> selectedCharacters = new List<Character>();
+	public static Character selectedCharacter { get; private set; }
 	public static bool NowTheProcessOfCreatingGroupIsUnderway { get; private set; } = false;
+	public static bool NowTheProcessOfSelectingCardToGiveAway;
 	public static byte SelectedFortToAttack { get; private set; }
-	//public static CardController SelectedFortToAttack { get; private set; }
 
 	public static GroupOfCharacters GetAttackersGroup() => new GroupOfCharacters(selectedCharacters);
 
@@ -50,5 +51,13 @@ public static class CurrentUserStateController
 	public static void ClearGroup()
 	{
 		selectedCharacters.Clear();
+	}
+
+	public static void RememberUserCharacterSelection(Character character)
+	{
+		if (character != null)
+			selectedCharacter = character;
+		else
+			throw new Exception("Nullable character!");
 	}
 }

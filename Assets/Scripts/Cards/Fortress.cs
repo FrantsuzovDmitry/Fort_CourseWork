@@ -27,7 +27,10 @@ public class Fortress : Card
 
     public void SetDefenders(GroupOfCharacters defenders)
     {
-        DefendersGroup = defenders;
+        if (defenders != null)
+            DefendersGroup = defenders;
+        else
+            throw new Exception("Trying to set nullable defenders group to the fort");
     }
 
     public virtual bool IsRequirementsToDefendersAreAccept(GroupOfCharacters groupOfCharacters)
@@ -42,20 +45,18 @@ public class Fortress : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
-        if (c.IsCardInTheMidOfTable())
+        if (c.IsCardIsPlayersOwn())
+        {
+			Mediator.OnAttackStopped();
+			// TODO: Show the defenders group
+			// ShowDefendersGroup()
+		}
+        else
         {
             Mediator.OnAttackStopped();
 			Mediator.OnAttackStarted(Rate);
-			return NeedToBeSelected.YES;
 		}
-
-        if (c.IsCardIsPlayersOwn())
-        {
-            // TODO: Show the defenders group
-            // ShowDefendersGroup()
-            return NeedToBeSelected.YES;
-        }
-
-        return NeedToBeSelected.NO;
+        
+        return NeedToBeSelected.YES;
 	}
 }

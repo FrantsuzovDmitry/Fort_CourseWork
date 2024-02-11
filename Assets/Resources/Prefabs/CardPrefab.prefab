@@ -31,7 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7231208845087371033}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -242,7 +242,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7231208845087371033}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -319,6 +319,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6742865468327179438}
+  - {fileID: 6797680929406111449}
   - {fileID: 7231208844192267534}
   - {fileID: 5705258133835015106}
   - {fileID: 4181323798124110037}
@@ -380,14 +381,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7c18c4d408dda45bfa7c01a855fd99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card:
-    ownerID: 0
-    cardName: Test 1
-    illustration: {fileID: 21300000, guid: 7adfc644215eaac4e953dd87fa75ff39, type: 3}
-  illustration: {fileID: 7231208844192267529}
-  emission: {fileID: 7360851084974383521}
-  cardBack: {fileID: 48652858864692750}
+  Card:
+    OwnerID: 0
+    cardName: 
+    illustration: {fileID: 0}
   cardName: {fileID: 7318537484321965496}
+  illustration: {fileID: 7231208844192267529}
+  standardEmission: {fileID: 7360851084974383521}
+  specialEmission: {fileID: 1726111764481028512}
+  cardBack: {fileID: 48652858864692750}
+--- !u!1 &8087563788781911160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6797680929406111449}
+  - component: {fileID: 3745598071992219682}
+  - component: {fileID: 1726111764481028512}
+  m_Layer: 5
+  m_Name: RedEmission
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &6797680929406111449
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8087563788781911160}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7231208845087371033}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.00011826, y: -0.00025558}
+  m_SizeDelta: {x: 157, y: 227}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3745598071992219682
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8087563788781911160}
+  m_CullTransparentMesh: 1
+--- !u!114 &1726111764481028512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8087563788781911160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: 7d3ae8eea89c4f349b8f3b86e2709cb0, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.13333334}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &7512150519175434912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -409,7 +487,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5928864456928195189, guid: 9ffe51abfcc492b4896910dbc54752da, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5928864456928195189, guid: 9ffe51abfcc492b4896910dbc54752da, type: 3}
       propertyPath: m_AnchorMax.x

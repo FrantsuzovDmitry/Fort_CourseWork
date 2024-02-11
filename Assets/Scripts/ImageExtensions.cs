@@ -1,8 +1,9 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-	public static class ImageExtension
+	public static class ImageExtensions
 	{
 		public static void SetActive(this Image image)
 		{
