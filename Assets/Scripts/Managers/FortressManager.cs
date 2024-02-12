@@ -11,7 +11,7 @@ using static Assets.Scripts.Constants;
 public class FortressManager : MonoBehaviour
 {
 	public static FortressManager instance;
-	public Dictionary<byte, byte> FortressesOwnersPairs = new(MAX_FORT_RATE);       // Pairs Fortress <-> owner
+	public Dictionary<byte, byte> FortressOwnerPairs = new(MAX_FORT_RATE);       // Pairs Fortress <-> owner
 	public Fortress[] Fortresses = new Fortress[8];
 
 	private void Awake()
@@ -48,6 +48,11 @@ public class FortressManager : MonoBehaviour
 		return totalCurrentForce * totalWeight;    // Тут не совсем корректно, ибо зеркало умножает силу ДО того, как ее умножили на вес карт
 	}
 
+	public byte GetFortressOwner(byte fortressID)
+	{
+		return FortressOwnerPairs[fortressID];
+	}
+
 	public void ProcessAttackToFortress(byte defendingFortRate, GroupOfCharacters attackersGroup, byte attackerID)
 	{
 		var defendingFort = Fortresses.FirstOrDefault(f => f.Rate == defendingFortRate);
@@ -60,7 +65,7 @@ public class FortressManager : MonoBehaviour
 
 		if (attackerForce > defendersForce)
 		{
-			FortressesOwnersPairs[defendingFortRate] = attackerID;
+			FortressOwnerPairs[defendingFortRate] = attackerID;
 
 			Mediator.OnFortressCaptured(defendingFort, attackerID);
 			defendingFort.SetDefenders(attackersGroup);
@@ -79,7 +84,7 @@ public class FortressManager : MonoBehaviour
 	public void RemoveFortress(Fortress fort)
 	{
 		Fortresses[fort.Rate] = null;
-		FortressesOwnersPairs[fort.Rate] = NOT_A_PLAYER_ID;
+		FortressOwnerPairs[fort.Rate] = NOT_A_PLAYER_ID;
 	}
 
 	public void AddNewFort(Fortress fort)

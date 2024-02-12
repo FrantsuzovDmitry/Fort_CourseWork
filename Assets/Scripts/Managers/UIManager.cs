@@ -13,6 +13,11 @@ public enum UIButtons : byte
 	SelectionCharacterToGiveConfirmation
 }
 
+public enum UIElementState : byte
+{
+	ON, OFF
+}
+
 /// <summary>
 /// Buttons, hints, warnings and gameplay events
 /// </summary>
@@ -106,9 +111,12 @@ public class UIManager : MonoBehaviour
 		hintMessage.SetText(message);
 	}
 
-	public void BlurBackground()
+	public void ToggleCardSelectionPanelVisibility(UIElementState state)
 	{
-		hintPanel.SetActive(true);
+		if (state == UIElementState.ON)
+			hintPanel.SetActive(true);
+		else
+			hintPanel.SetActive(false);
 	}
 
 	public void ShowWinnerPanel()

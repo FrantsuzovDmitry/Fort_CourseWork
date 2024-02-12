@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using static Assets.Scripts.Constants;
 
-public static class CurrentUserStateController
+public static class UserStateController
 {
 	private static readonly List<Character> selectedCharacters = new List<Character>();
-	public static Character selectedCharacter { get; private set; }
-	public static bool NowTheProcessOfCreatingGroupIsUnderway { get; private set; } = false;
-	public static bool NowTheProcessOfSelectingCardToGiveAway;
-	public static byte SelectedFortToAttack { get; private set; }
+	public static Character SelectedCharacter { get; private set; }
+	public static bool IsCreatingGroupInProgress { get; private set; } = false;
+	public static bool IsSelectingCardToGiveInProgress;
+	public static byte SelectedFortIDToAttack { get; private set; }
 
 	public static GroupOfCharacters GetAttackersGroup() => new GroupOfCharacters(selectedCharacters);
 
@@ -18,22 +18,22 @@ public static class CurrentUserStateController
 
 	public static void StartCreatingOfGroupOfCharacters()
 	{
-		NowTheProcessOfCreatingGroupIsUnderway = true;
+		IsCreatingGroupInProgress = true;
 		UIManager.instance.DebugNotification("Start creating of group");
 	}
 
 	public static void RememberUserFortSelection(byte numberOfFortToAttack)
 	{
 		if (numberOfFortToAttack >= MIN_FORT_RATE && numberOfFortToAttack <= MAX_FORT_RATE)
-			SelectedFortToAttack = numberOfFortToAttack;
+			SelectedFortIDToAttack = numberOfFortToAttack;
 		else
 			throw new Exception("Incorrect number of fort!");
 	}
 
 	public static void StopCreatingOfGroupOfCharacters()
 	{
-		NowTheProcessOfCreatingGroupIsUnderway = false;
-		SelectedFortToAttack = MIN_FORT_RATE - 1;
+		IsCreatingGroupInProgress = false;
+		SelectedFortIDToAttack = MIN_FORT_RATE - 1;
 		ClearGroup();
 		UIManager.instance.DebugNotification("Stop creating of group");
 	}
@@ -56,7 +56,7 @@ public static class CurrentUserStateController
 	public static void RememberUserCharacterSelection(Character character)
 	{
 		if (character != null)
-			selectedCharacter = character;
+			SelectedCharacter = character;
 		else
 			throw new Exception("Nullable character!");
 	}

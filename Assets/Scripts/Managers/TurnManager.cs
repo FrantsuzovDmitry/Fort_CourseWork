@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
 {
     public enum GameStage
     {
-        StandartStage,          // Getting card
+        StandardStage,          // Getting card
         SelectingCharacters     // I'll try to generalize 
         //SelectingCharacterFromHand,
         //SelectingCharacterFromDefenders,
@@ -26,7 +26,7 @@ public class TurnManager : MonoBehaviour
     private void Start()
     {
         CurrentPlayerTurn = 0;
-        CurrentGameStage = GameStage.StandartStage;
+        CurrentGameStage = GameStage.StandardStage;
 
         Mediator.OnTurnStarted();
     }
@@ -42,6 +42,8 @@ public class TurnManager : MonoBehaviour
             // Next player turn;
             ++CurrentPlayerTurn;
         }
+
+        CurrentGameStage = GameStage.StandardStage;
     }
 
     public void AssignSelectingCard(byte playerID)

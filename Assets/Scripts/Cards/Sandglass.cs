@@ -7,7 +7,7 @@ public class Sandglass : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
-		if (CurrentUserStateController.NowTheProcessOfCreatingGroupIsUnderway)
+		if (UserStateController.IsCreatingGroupInProgress)
 			Mediator.OnAttackStopped();
 		return NeedToBeSelected.NO;
 	}

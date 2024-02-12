@@ -17,30 +17,25 @@ public class CardVisualizationManager : MonoBehaviour
 	public List<Card>
 			cards = new List<Card>();
 
-	public Transform player1Hand, player2Hand, player3Hand, player4Hand,
-						player1Forts, player2Forts, player3Forts, player4Forts,
-						playArea, sandglassesArea;
 
 	private Transform[] playersHandsPosition;
 	private Transform[] playersFortsPosition;
 
-	public CardController cardControllerPrefab;
-
 	private Dictionary<Card, CardController> cardsCardControllersPairs = new(25);
 
-	[SerializeField] public List<List<CardController>> playersCards = new();
+	[SerializeField] private CardController cardControllerPrefab;
 	[SerializeField] private Transform selectingPanel;
+	[SerializeField] private Transform player1Hand, player2Hand, player3Hand, player4Hand,
+										player1Forts, player2Forts, player3Forts, player4Forts,
+										playArea, sandglassesArea;
 
 	public short NumberOfSandglasses { get; private set; }
-
-	private const short NotAPlayerID = 100;
 
 	//Initialization
 	private void Awake()
 	{
 		instance = this;
 		NumberOfSandglasses = 0;
-		//for (int i = 0; i < 4; i++) playersCards.Add(new List<CardController>());
 	}
 
 	private void Start()
@@ -58,14 +53,9 @@ public class CardVisualizationManager : MonoBehaviour
 		playersHandsPosition[3] = player4Hand;
 	}
 
-	private bool IsCardOnTable(Card card)
-	{
-		return (card is Sandglass) || (card is Fortress) || (card is Rule);
-	}
-
 	public void CreateCardInCorrectArea(Card card, byte playerID)
 	{
-		if (IsCardOnTable(card))
+		if (card.IsCardOnTheTable())
 		{
 			CreateCardOnTable(card);
 			Mediator.OnCardTaken();
@@ -82,7 +72,6 @@ public class CardVisualizationManager : MonoBehaviour
 		CardController newCard = Instantiate(cardControllerPrefab, playersHandsPosition[playerID]);
 		newCard.transform.localPosition = Vector3.zero;
 		newCard.Initialize(card, playerID);
-		//playersCards[playerID].Add(newCard);
 
 		// Remember the Card-CardController pairs:
 		cardsCardControllersPairs.Add(card, newCard);
@@ -115,7 +104,7 @@ public class CardVisualizationManager : MonoBehaviour
 				break;
 		}
 		newCard.transform.localPosition = Vector3.zero;
-		newCard.Initialize(card, NotAPlayerID);
+		newCard.Initialize(card, NOT_A_PLAYER_ID);
 
 		// Remember the Card-CardController pair:
 		cardsCardControllersPairs.Add(card, newCard);
@@ -163,9 +152,12 @@ public class CardVisualizationManager : MonoBehaviour
 		}
 	}
 
-	public void MoveFortToPlayerArea(Fortress card, byte playerID)
+	public void MoveCardToPlayer(Card card, byte playerID)
 	{
-		cardsCardControllersPairs[card].ChangePosition(playersFortsPosition[playerID]);
+		if (card is Fortress)
+			cardsCardControllersPairs[card].ChangePosition(playersFortsPosition[playerID]);
+		if (card is Character)
+			cardsCardControllersPairs[card].ChangePosition(playersHandsPosition[playerID]);
 	}
 
 	public void DeselectAllCards()

@@ -28,4 +28,6 @@ public class Card
     /// Return the 1 if card should to be selected, 0 otherwise
     /// </summary>
     public virtual NeedToBeSelected ProcessOnClick(in CardController cardController) { /*throw new System.Exception("Abstract method");*/ return NeedToBeSelected.NO; } // abstract
+
+    public bool IsCardOnTheTable() { return this is Fortress || this is Sandglass || this is Rule; }
 }

@@ -2821,6 +2821,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  cardControllerPrefab: {fileID: 2284559454111406803, guid: b435d3d764cf02a4fa2f9e61a43f31c8, type: 3}
+  selectingPanel: {fileID: 264318783}
   player1Hand: {fileID: 192280224}
   player2Hand: {fileID: 1233875313}
   player3Hand: {fileID: 533158544}
@@ -2831,9 +2833,6 @@ MonoBehaviour:
   player4Forts: {fileID: 1024227475}
   playArea: {fileID: 77624980}
   sandglassesArea: {fileID: 278150822}
-  cardControllerPrefab: {fileID: 2284559454111406803, guid: b435d3d764cf02a4fa2f9e61a43f31c8, type: 3}
-  selectingPanel: {fileID: 264318783}
-  cardEmission: {fileID: 2100000, guid: d14478dfd5a26434094a0293d032c247, type: 2}
 --- !u!114 &1564123591
 MonoBehaviour:
   m_ObjectHideFlags: 0
