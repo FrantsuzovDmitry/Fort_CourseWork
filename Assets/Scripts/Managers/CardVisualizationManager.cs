@@ -29,13 +29,10 @@ public class CardVisualizationManager : MonoBehaviour
 										player1Forts, player2Forts, player3Forts, player4Forts,
 										playArea, sandglassesArea;
 
-	public short NumberOfSandglasses { get; private set; }
-
 	//Initialization
 	private void Awake()
 	{
 		instance = this;
-		NumberOfSandglasses = 0;
 	}
 
 	private void Start()
@@ -87,12 +84,10 @@ public class CardVisualizationManager : MonoBehaviour
 		{
 			case Sandglass _:
 				newCard = Instantiate(cardControllerPrefab, sandglassesArea);
-				IncreaseNumberOfSandglasses();
 				break;
 
 			case Fortress _:
 				newCard = Instantiate(cardControllerPrefab, playArea);
-				Mediator.OnFortressAppears((Fortress)card);
 				break;
 
 			case Rule _:
@@ -110,20 +105,6 @@ public class CardVisualizationManager : MonoBehaviour
 		cardsCardControllersPairs.Add(card, newCard);
 
 		return;
-	}
-
-	public void IncreaseNumberOfSandglasses()
-	{
-		NumberOfSandglasses++;
-		CheckOfStopGameCondition();
-	}
-
-	private void CheckOfStopGameCondition()
-	{
-		if (NumberOfSandglasses == 3)
-		{
-			Mediator.onGameStopped();
-		}
 	}
 
 	public void RemoveAttackersFromHand()

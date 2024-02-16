@@ -45,31 +45,12 @@ namespace Assets.Scripts.Managers
 		{
 			var card = deck.Pop;
 
-			if (card.IsCardOnTheTable())
-			{
-				HandleEvent(card);
-			}
-			else
-			{
-				playersHands[TurnManager.instance.CurrentPlayerTurn].AddLast(card);
-			}
-			return card;
-		}
+			card.InvokeOnCardAppearsEvent();
 
-		private static void HandleEvent(Card card)
-		{
-			switch (card)
-			{
-				case Fortress _:
-					Mediator.OnFortressAppears((Fortress)card);
-					break;
-				case Sandglass _:
-					Mediator.OnSandglassAppears((Sandglass)card);
-					break;
-				case Rule _:
-					Mediator.OnRuleAppears((Rule)card);
-					break;
-			}
+			if (!card.IsCardOnTheTable())
+				playersHands[TurnManager.instance.CurrentPlayerTurn].AddLast(card);
+
+			return card;
 		}
 
 		public static List<Character> GetUserHandCharacters(byte playerID)
@@ -81,7 +62,7 @@ namespace Assets.Scripts.Managers
 			return list2;
 		}
 
-		private static void IncreaseNumberOfSandglasses()
+		public static void IncreaseNumberOfSandglasses()
 		{
 			NumberOfSandglasses++;
 			CheckOfStopGameCondition();

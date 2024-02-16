@@ -30,4 +30,6 @@ public class Card
     public virtual NeedToBeSelected ProcessOnClick(in CardController cardController) { /*throw new System.Exception("Abstract method");*/ return NeedToBeSelected.NO; } // abstract
 
     public bool IsCardOnTheTable() { return this is Fortress || this is Sandglass || this is Rule; }
+
+    public virtual void InvokeOnCardAppearsEvent() { }
 }

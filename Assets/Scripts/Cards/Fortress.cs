@@ -59,4 +59,9 @@ public class Fortress : Card
         
         return NeedToBeSelected.YES;
 	}
+
+    public override void InvokeOnCardAppearsEvent()
+    {
+        Mediator.OnFortressAppears(this);
+    }
 }

@@ -11,4 +11,9 @@ public class Sandglass : Card
 			Mediator.OnAttackStopped();
 		return NeedToBeSelected.NO;
 	}
+
+    public override void InvokeOnCardAppearsEvent()
+    {
+		Mediator.OnSandglassAppears(this);
+    }
 }

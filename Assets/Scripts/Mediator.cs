@@ -136,9 +136,7 @@ public static class Mediator
 
 	public static void OnSandglassAppears(Sandglass card)
 	{
-		//TODO:
-		// В VisualManager создать события для создания форта и песочных часов с соответствующей инициализацией (нужно ли?)
-		throw new NotImplementedException();
+		CardManager.IncreaseNumberOfSandglasses();
 	}
 
 	internal static void OnRuleAppears(Rule card)
