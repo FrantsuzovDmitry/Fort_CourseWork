@@ -10,8 +10,6 @@ public class TurnManager : MonoBehaviour
     {
         StandardStage,          // Getting card
         SelectingCharacters     // I'll try to generalize 
-        //SelectingCharacterFromHand,
-        //SelectingCharacterFromDefenders,
     }
 
     public static TurnManager instance;

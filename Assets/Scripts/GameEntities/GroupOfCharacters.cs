@@ -17,7 +17,7 @@ namespace Assets.Scripts.Cards
 		public GroupOfCharacters(List<Character> characters)
 		{
 			SortAndInitializeGroup(characters);
-			TotalForce = CalculateGroupForce(characters);
+			TotalForce = CalculateGroupForce(Characters);
 		}
 
 		private void SortAndInitializeGroup(List<Character> characters)
@@ -47,11 +47,16 @@ namespace Assets.Scripts.Cards
 
 		private int CalculateGroupForce(List<Character> characters)
 		{
-			int totalCurrentForce = 0, totalWeight = 0;
+			int totalForce = 0, totalWeight = 0;
 			foreach (Character character in characters)
-				character.EnterInGroup(ref totalCurrentForce, ref totalWeight);
+				character.EnterInGroup(ref totalForce, ref totalWeight);
 
-			return totalCurrentForce * totalWeight;
+			return totalForce * totalWeight;
+		}
+
+		public List<Character> ToList()
+		{
+			return new List<Character>(Characters);
 		}
 	}
 }

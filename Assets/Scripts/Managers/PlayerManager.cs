@@ -21,7 +21,7 @@ public class PlayerManager : MonoBehaviour
     {
         foreach (Player player in players)
         {
-            player.myTurn = player.ID == currentPlayerTurn;
+            player.MyTurn = player.ID == currentPlayerTurn;
         }
     }
 
@@ -42,6 +42,8 @@ public class PlayerManager : MonoBehaviour
     public Player DefineWinner()
     {
         // TODO: Implement the function of define winner later
+        
+
         return players[0];
     }
 }

@@ -37,11 +37,13 @@ public class CardController : MonoBehaviour, /*IPointerEnterHandler, IPointerExi
 		currentEmission = standardEmission;
 	}
 
+	/// Turn ON card back
 	public void Hide()
 	{
 		cardBack.SetActive();
 	}
 
+	/// Turn OFF card back
 	public void Show()
 	{
 		cardBack.SetInactive();

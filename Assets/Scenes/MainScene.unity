@@ -2851,7 +2851,7 @@ MonoBehaviour:
   currentPlayerTurnMessage: {fileID: 733730449}
   startAttackButton: {fileID: 1896842151}
   attackConfirmationButton: {fileID: 1330842892}
-  selectionConfirmationButton: {fileID: 2007053522}
+  exchangeConfirmationButton: {fileID: 2007053522}
   Deck: {fileID: 1707147056}
   hintPanel: {fileID: 590847144}
   endTurnButton: {fileID: 1932480345}

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using static Assets.Scripts.Constants;
 
-public static class UserStateController
+public static class UserStateManager
 {
 	private static readonly List<Character> selectedCharacters = new List<Character>();
 	public static Character SelectedCharacter { get; private set; }

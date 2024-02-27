@@ -19,38 +19,9 @@ public class FortressManager : MonoBehaviour
 		instance = this;
 	}
 
-	private int CalculateGroupForce(GroupOfCharacters groupOfCharacters)
+	public byte GetFortressOwner(byte fortressRate)
 	{
-		// sorting the character in group, Mirrors and Jokers must be in the end;
-
-		List<Character> simpleCharacters = new List<Character>();
-		List<Character> mirrors = new List<Character>(3);
-		List<Character> jokers = new List<Character>(3);
-
-		#region Sort the characters in the group
-		foreach (Character character in groupOfCharacters.Characters)
-		{
-			if (character is SimpleCharacter)
-				simpleCharacters.Add(character);
-			else if (character is Joker)
-				jokers.Add(character);
-			else mirrors.Add(character);
-		}
-		simpleCharacters.AddRange(jokers);
-		simpleCharacters.AddRange(mirrors);
-		#endregion
-
-		int totalCurrentForce = 0, totalWeight = 0;
-		// Calculate total force of characters and jokers
-		foreach (Character character in simpleCharacters)
-			character.EnterInGroup(ref totalCurrentForce, ref totalWeight);
-
-		return totalCurrentForce * totalWeight;    // Тут не совсем корректно, ибо зеркало умножает силу ДО того, как ее умножили на вес карт
-	}
-
-	public byte GetFortressOwner(byte fortressID)
-	{
-		return FortressOwnerPairs[fortressID];
+		return FortressOwnerPairs[fortressRate];
 	}
 
 	public void ProcessAttackToFortress(byte defendingFortRate, GroupOfCharacters attackersGroup, byte attackerID)
@@ -65,9 +36,9 @@ public class FortressManager : MonoBehaviour
 
 		if (attackerForce > defendersForce)
 		{
-			FortressOwnerPairs[defendingFortRate] = attackerID;
+			Mediator.OnFortressCaptured(defendingFort);
 
-			Mediator.OnFortressCaptured(defendingFort, attackerID);
+			FortressOwnerPairs[defendingFortRate] = attackerID;
 			defendingFort.SetDefenders(attackersGroup);
 			Debug.Log("Successful attack: TotalForce = " + attackerForce);
 		}
@@ -77,7 +48,7 @@ public class FortressManager : MonoBehaviour
 		}
 		else
 		{
-			Mediator.OnFortressUnsuccessfulAttacked();
+			Mediator.OnFortressUnsuccessfulAttacked(defendingFortRate);
 		}
 	}
 

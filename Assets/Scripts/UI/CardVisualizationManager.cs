@@ -1,10 +1,5 @@
-using Assets.Scripts;
-using Assets.Scripts.Cards;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using UnityEngine;
 using static Assets.Scripts.Constants;
 
@@ -14,9 +9,6 @@ using static Assets.Scripts.Constants;
 public class CardVisualizationManager : MonoBehaviour
 {
 	public static CardVisualizationManager instance;
-	public List<Card>
-			cards = new List<Card>();
-
 
 	private Transform[] playersHandsPosition;
 	private Transform[] playersFortsPosition;
@@ -55,7 +47,6 @@ public class CardVisualizationManager : MonoBehaviour
 		if (card.IsCardOnTheTable())
 		{
 			CreateCardOnTable(card);
-			Mediator.OnCardTaken();
 		}
 		else
 		{
@@ -107,17 +98,11 @@ public class CardVisualizationManager : MonoBehaviour
 		return;
 	}
 
-	public void RemoveAttackersFromHand()
+	public void RemoveAttackersFromHand(List<Character> attackersGroup)
 	{
-		var existingCards = cardsCardControllersPairs.Values.ToList();
-		foreach (var card in existingCards)
+		foreach (var card in attackersGroup)
 		{
-			if (card.IsCardInPlayerHand())
-				if (((Character)card.Card).IsInGroup)
-				{
-					cardsCardControllersPairs.Remove(card.Card);
-					Destroy(card.gameObject);
-				}
+			MakeInvisible(cardsCardControllersPairs[card]);
 		}
 	}
 
@@ -137,7 +122,7 @@ public class CardVisualizationManager : MonoBehaviour
 	{
 		if (card is Fortress)
 			cardsCardControllersPairs[card].ChangePosition(playersFortsPosition[playerID]);
-		if (card is Character)
+		else if (card is Character)
 			cardsCardControllersPairs[card].ChangePosition(playersHandsPosition[playerID]);
 	}
 
@@ -158,12 +143,26 @@ public class CardVisualizationManager : MonoBehaviour
 		cardsCardControllersPairs[card].SetSpecialEmission();
 	}
 
-	public void DisplayCardToChoice(byte playerWhichSelectingCardID, List<Character> charactersToChoice)
+	public void DisplayCardToChoice(List<Character> charactersToChoice)
 	{
 		foreach (Character character in charactersToChoice)
 		{
-			cardsCardControllersPairs[character].ChangePosition(selectingPanel);
-			cardsCardControllersPairs[character].transform.localRotation = Quaternion.Euler(0, 0, 0);
+			var card = cardsCardControllersPairs[character];
+
+            card.ChangePosition(selectingPanel);
+			card.transform.localRotation = Quaternion.Euler(0, 0, 0);
+			MakeVisible(card);
 		}
+	}
+
+	private void MakeVisible(CardController card)
+	{
+		card.gameObject.SetActive(true);
+		card.Show();
+	}
+
+	private void MakeInvisible(CardController card)
+	{
+		card.gameObject.SetActive(false);
 	}
 }
