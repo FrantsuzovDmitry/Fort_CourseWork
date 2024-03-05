@@ -7,21 +7,26 @@ public class Card
 {
 	public byte OwnerID;
 	public string cardName;
-    public Sprite illustration;
+    public Sprite logo;
 
     public Card() { }
 
-    public Card(string cardName, Sprite illustration)
+    public Card(string cardName, Sprite logo = null)
     {
         this.cardName=cardName;
-        this.illustration=illustration;
+        this.logo=logo;
     }
 
     public Card(Card card)
     {
 		this.OwnerID = card.OwnerID;
 		this.cardName = card.cardName;
-        this.illustration = card.illustration;
+        this.logo = card.logo;
+    }
+
+    public void SetLogo(Sprite logo)
+    {
+        this.logo = logo;
     }
 
     /// <summary>

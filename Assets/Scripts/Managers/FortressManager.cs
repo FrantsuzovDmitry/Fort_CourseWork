@@ -11,7 +11,7 @@ using static Assets.Scripts.Constants;
 public class FortressManager : MonoBehaviour
 {
 	public static FortressManager instance;
-	public Dictionary<byte, byte> FortressOwnerPairs = new(MAX_FORT_RATE);       // Pairs Fortress <-> owner
+	public Dictionary<byte, byte> FortressOwnerPairs = new(MAX_FORT_RATE);       // Pairs FortressRate <-> owner
 	public Fortress[] Fortresses = new Fortress[8];
 
 	private void Awake()
@@ -62,4 +62,16 @@ public class FortressManager : MonoBehaviour
 	{
 		Fortresses[fort.Rate] = fort;
 	}
+
+    public List<Fortress> GetPlayersForts(byte lastWinnerID)
+    {
+        List<Fortress> result = new List<Fortress>(FortressOwnerPairs.Count);
+		foreach (var pair in FortressOwnerPairs)
+		{
+			if (pair.Value ==  lastWinnerID)
+				result.Add(Fortresses[pair.Key - 1]);
+		}	
+
+		return result;
+    }
 }

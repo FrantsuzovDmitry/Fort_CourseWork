@@ -3,11 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public class Sandglass : Card
 {
-    public Sandglass(Sprite logo) : base("Sandglass", logo) { }
+    public Sandglass(Sprite logo=null) : base("Sandglass", logo) { }
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
-		if (UserStateManager.IsCreatingGroupInProgress)
+		if (CurrentUserStateManager.IsCreatingGroupInProgress)
 			Mediator.OnAttackStopped();
 		return NeedToBeSelected.NO;
 	}

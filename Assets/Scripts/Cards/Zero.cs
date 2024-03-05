@@ -9,7 +9,7 @@ namespace Assets.Scripts.Cards
 {
 	public class Zero : Character
 	{
-		public Zero(Sprite illustration) : base("Zero", illustration) { }
+		public Zero(Sprite illustration = null) : base("Zero", illustration) { }
 
 		public override void EnterInGroup(ref int totalForce, ref int totalWeight)
 		{

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Joker : Character
 {
-    public Joker(Sprite logo) : base("Joker", logo) { }
+    public Joker(Sprite logo=null) : base("Joker", logo) { }
 
     public override void EnterInGroup(ref int totalForce, ref int totalWeight)
     {

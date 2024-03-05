@@ -6,27 +6,13 @@ using static Assets.Scripts.Constants;
 
 public class TurnManager : MonoBehaviour
 {
-    public enum GameStage
-    {
-        StandardStage,          // Getting card
-        SelectingCharacters     // I'll try to generalize 
-    }
-
     public static TurnManager instance;
     public byte CurrentPlayerTurn {  get; private set; }
-    public GameStage CurrentGameStage { get; private set; }
 
     private void Awake()
     {
         instance = this;
-    }
-
-    private void Start()
-    {
         CurrentPlayerTurn = 0;
-        CurrentGameStage = GameStage.StandardStage;
-
-        Mediator.OnTurnStarted();
     }
 
     public void AssignNextPlayerTurn()
@@ -40,13 +26,10 @@ public class TurnManager : MonoBehaviour
             // Next player turn;
             ++CurrentPlayerTurn;
         }
-
-        CurrentGameStage = GameStage.StandardStage;
     }
 
-    public void AssignSelectingCard(byte playerID)
+    public void AssignTurn(byte playerID)
     {
-        CurrentGameStage = GameStage.SelectingCharacters;
         CurrentPlayerTurn = playerID;
     }
 }

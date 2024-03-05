@@ -1,0 +1,431 @@
+[
+  // 1 - 10
+  //{
+  //  "type": "Rule",
+  //  "sequenceNumber": 1
+  //},
+  {
+    "type": "Fortress",
+    "parameter": 3,
+    "sequenceNumber": 2
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 3
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 4
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 5
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 6
+  },
+  //{
+  //  "type": "Rule",
+  //  "sequenceNumber": 7
+  //},
+  //{
+  //  "type": "Rule",
+  //  "sequenceNumber": 8
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 9
+  },
+  {
+    "type": "Sandglass",
+    "sequenceNumber": 10
+  },
+
+  // 11 - 20
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 11
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 12
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 13
+  },
+  //14 card
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 15
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 16
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 17
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 4,
+    "sequenceNumber": 18
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 5,
+    "sequenceNumber": 19
+  },
+  {
+    "type": "Sandglass",
+    "sequenceNumber": 20
+  },
+
+  // 21 - 30
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 21
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 22
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 4,
+    "sequenceNumber": 23
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 8,
+    "sequenceNumber": 24
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 5,
+    "sequenceNumber": 25
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 4,
+    "sequenceNumber": 26
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 5,
+    "sequenceNumber": 27
+  },
+  {
+    "type": "Sandglass",
+    "sequenceNumber": 28
+  },
+  //{
+  //  "type": "Rule",
+  //  "sequenceNumber": 29
+  //},
+  {
+    "type": "TwoCharactersWithForce1",
+    "sequenceNumber": 30
+  },
+
+  // 31 - 40
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 31
+  },
+  {
+    "type": "Joker",
+    "sequenceNumber": 32
+  },
+  {
+    "type": "Fortress",
+    "parameter": 1,
+    "sequenceNumber": 33
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 6,
+    "sequenceNumber": 34
+  },
+  {
+    "type": "Joker",
+    "sequenceNumber": 35
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 36
+  },
+  {
+    "type": "Fortress",
+    "parameter": 2,
+    "sequenceNumber": 37
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 38
+  },
+  {
+    "type": "TwoCharactersWithForce1",
+    "sequenceNumber": 39
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 40
+  },
+
+  // 41 - 50
+  {
+    "type": "Fortress",
+    "parameter": 4,
+    "sequenceNumber": 41
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 42
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 43
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 4,
+    "sequenceNumber": 44
+  },
+  //{
+  //  "type": "Rule",
+  //  "sequenceNumber": 45
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 11,
+    "sequenceNumber": 46
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 47
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 48
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 49
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 9,
+    "sequenceNumber": 50
+  },
+
+  // 51 - 60
+  {
+    "type": "SimpleCharacter",
+    "parameter": 12,
+    "sequenceNumber": 51
+  },
+  {
+    "type": "Fortress",
+    "parameter": 6,
+    "sequenceNumber": 52
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 4,
+    "sequenceNumber": 53
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 54
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 55
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 56
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 5,
+    "sequenceNumber": 57
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 58
+  },
+  {
+    "type": "Fortress",
+    "parameter": 7,
+    "sequenceNumber": 59
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 7,
+    "sequenceNumber": 60
+  },
+
+  // 61 - 70
+  //{
+  //  "type": "SpecialCard",
+  //  "sequenceNumber": 61
+  //},
+  {
+    "type": "Mirror",
+    "sequenceNumber": 62
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 10,
+    "sequenceNumber": 63
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 64
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 65
+  },
+  //{
+  //  "type": "Rule",
+  //  "sequenceNumber": 66
+  //}
+  {
+    "type": "Zero",
+    "sequenceNumber": 67
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 68
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 5,
+    "sequenceNumber": 69
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 70
+  },
+
+  // 71 - 80
+  {
+    "type": "Zero",
+    "sequenceNumber": 71
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 1,
+    "sequenceNumber": 72
+  },
+  {
+    "type": "TwoCharactersWithForce1",
+    "sequenceNumber": 73
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 74
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 75
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 76
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 77
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 78
+  //},
+  {
+    "type": "SimpleCharacter",
+    "parameter": 3,
+    "sequenceNumber": 79
+  },
+  //{
+  //  "type": "SpecialCard1",
+  //  "sequenceNumber": 80
+  //},
+
+  // 81 - 90
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 81
+  },
+  {
+    "type": "Wizard",
+    "sequenceNumber": 82
+  },
+  {
+    "type": "Fortress",
+    "parameter": 8,
+    "sequenceNumber": 83
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 5,
+    "sequenceNumber": 84
+  },
+  {
+    "type": "Joker",
+    "sequenceNumber": 85
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 4,
+    "sequenceNumber": 86
+  },
+  {
+    "type": "SimpleCharacter",
+    "parameter": 2,
+    "sequenceNumber": 87
+  },
+  {
+    "type": "TwoCharactersWithForce1",
+    "sequenceNumber": 88
+  },
+  {
+    "type": "RainbowFortress",
+    "sequenceNumber": 89
+  }
+]

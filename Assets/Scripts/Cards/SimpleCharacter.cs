@@ -12,7 +12,7 @@ public class SimpleCharacter : Character
 		this.Force = card.Force;
 	}
 
-	public SimpleCharacter(int force, Sprite illustration) : base("SimpleCharacter", illustration)
+	public SimpleCharacter(int force, Sprite illustration=null) : base("SimpleCharacter", illustration)
 	{
 		this.Force = force;
 	}

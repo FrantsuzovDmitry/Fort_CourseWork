@@ -117,12 +117,19 @@ public class UIManager : MonoBehaviour
 			hintPanel.SetActive(false);
 	}
 
-	public void ShowWinnerPanel()
+	public void ShowWinnerPanel(byte winnerID)
 	{
-		var winner = PlayerManager.instance.DefineWinner();
 		winnerPanel.SetActive(true);
-		winnerName.text = $"Player {winner.ID + 1} has won!";
+		winnerName.text = $"Player {winnerID + 1} has won!";
+		winnerName.color = new Color(132, 255, 119);
 	}
+
+	public void ShowDrawPanel()
+	{
+        winnerPanel.SetActive(true);
+        winnerName.text = $"Draw :(";
+		winnerName.color = Color.gray;
+    }
 
 	public void ShowButton(UIButtons button)
 	{
@@ -145,7 +152,7 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	// Probably should remember active button and set inactive only it
+	// TODO: Probably should remember active button and set inactive only it
 	public void HideAllButtons() 
 	{
 		foreach (Button btn in UIbuttons)

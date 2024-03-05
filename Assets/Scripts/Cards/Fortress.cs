@@ -9,12 +9,9 @@ using UnityEngine.TextCore.Text;
 public class Fortress : Card
 {
     public byte Rate { get; }
-    //public List<Character> DefendersGroup {  get; private set; }
     public GroupOfCharacters DefendersGroup { get; private set; }
 
-    public Fortress() { }
-
-    public Fortress(byte rate, Sprite illustrarion) : base("Fortress", illustrarion)
+    public Fortress(byte rate, Sprite illustrarion=null) : base("Fortress", illustrarion)
     {
         this.Rate = rate;
     }

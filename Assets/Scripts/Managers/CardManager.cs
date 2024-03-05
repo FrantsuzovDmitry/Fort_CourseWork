@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets.Scripts.Managers
@@ -6,35 +7,24 @@ namespace Assets.Scripts.Managers
 	public static class CardManager
 	{
 		private static List<LinkedList<Card>> playersHands = new(4);
-		private static List<LinkedList<Fortress>> playersForts = new(4);
 
-		private static Deck deck = new Deck();
-
-		public static int NumberOfCardsOnDeck => deck.deck.Count;
-		public static byte NumberOfSandglasses { get; private set; }
-		public static bool IsGameFinished { get; private set; }
+		private static CurrentDeck deck = new CurrentDeck();
+		public static int NumberOfCardsInDeck => deck.deck.Count;
 
 		public static void Init()
 		{
 			deck.Init();
 			playersHands.Clear();
-			playersForts.Clear();
 
 			for (int i = 0; i < Constants.MAX_PLAYER_ID; i++)
 			{
 				playersHands.Add(new LinkedList<Card>());
-				playersForts.Add(new LinkedList<Fortress>());
 			}
-
-			NumberOfSandglasses = 0;
-			IsGameFinished = false;
 		}
 
 		public static Card GetCardFromDeck()
 		{
 			var card = deck.Pop();
-
-			card.InvokeOnCardAppearsEvent();
 
 			if (!card.IsCardOnTheTable())
 				playersHands[TurnManager.instance.CurrentPlayerTurn].AddLast(card);
@@ -50,26 +40,24 @@ namespace Assets.Scripts.Managers
 			return list2;
 		}
 
-		public static void IncreaseNumberOfSandglasses()
-		{
-			NumberOfSandglasses++;
-			CheckOfStopGameCondition();
-		}
-
-		private static void CheckOfStopGameCondition()
-		{
-			if (NumberOfSandglasses == 3)
-			{
-				IsGameFinished = true;
-				Mediator.OnGameStopped();
-			}
-		}
-
 		public static void ChangeCardOwner(Character character, byte newOwnerID)
 		{
 			playersHands[character.OwnerID].Remove(character);
 			character.OwnerID = newOwnerID;
 			playersHands[newOwnerID].AddLast(character);
 		}
-	}
+
+        public static void GenerateNewDeck(List<Card> cardsToRemove)
+        {
+            deck.RemoveCardsFromDeck(cardsToRemove);
+			deck.AddFiveCardFromMainDeck();
+			deck.Shuffle();
+		}
+
+        public static void ResetCardsOwners()
+        {
+            foreach (var card in deck.deck)
+                card.OwnerID = Constants.NOT_A_PLAYER_ID;
+        }
+    }
 }

@@ -1,13 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField] private List<Player> players = new List<Player>();
+
     public static PlayerManager instance;
-    public List<Player> players = new List<Player>();
+
     public byte LAST_PLAYER_ID => players.Last().ID;
 
     private void Awake()
@@ -17,33 +17,9 @@ public class PlayerManager : MonoBehaviour
         for (byte i = 0; i < players.Count; i++) players[i].ID = i;
     }
 
-    internal void AssignTurn(int currentPlayerTurn)
+    public void IncreaseWinNumber(int playerID)
     {
-        foreach (Player player in players)
-        {
-            player.MyTurn = player.ID == currentPlayerTurn;
-        }
-    }
-
-    public Player FindPlayerByID(int id)
-    {
-        foreach (Player player in players)
-        {
-            if (player.ID == id)
-            {
-                return player;
-            }
-        }
-
-        // if not found in List
-        return null;
-    }
-
-    public Player DefineWinner()
-    {
-        // TODO: Implement the function of define winner later
-        
-
-        return players[0];
+        var plr = players.FirstOrDefault(p => p.ID == playerID);
+        if (plr != null) plr.WinsCount++;
     }
 }

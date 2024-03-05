@@ -805,6 +805,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1176586115}
+  - {fileID: 590847145}
   - {fileID: 946002555}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -1095,12 +1096,12 @@ RectTransform:
   - {fileID: 1229680551}
   - {fileID: 264318783}
   - {fileID: 2007053521}
-  m_Father: {fileID: 1176586115}
-  m_RootOrder: 14
+  m_Father: {fileID: 374961172}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0046082, y: -0.64249}
+  m_AnchoredPosition: {x: 0.005462692, y: -0.7974583}
   m_SizeDelta: {x: 1920, y: 1081.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &590847146
@@ -1422,7 +1423,6 @@ GameObject:
   - component: {fileID: 946002555}
   - component: {fileID: 946002557}
   - component: {fileID: 946002556}
-  - component: {fileID: 946002558}
   m_Layer: 5
   m_Name: EndGamePanel
   m_TagString: Untagged
@@ -1444,12 +1444,12 @@ RectTransform:
   m_Children:
   - {fileID: 1230273481}
   m_Father: {fileID: 374961172}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 15.640015}
+  m_SizeDelta: {x: 0, y: -31.28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &946002556
 MonoBehaviour:
@@ -1489,19 +1489,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 946002554}
   m_CullTransparentMesh: 1
---- !u!114 &946002558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 946002554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79d93035c1e08034fb719f055a62fe0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  winnerName: {fileID: 1230273482}
 --- !u!1 &960840398
 GameObject:
   m_ObjectHideFlags: 0
@@ -2054,13 +2041,12 @@ RectTransform:
   - {fileID: 1932480344}
   - {fileID: 1707147057}
   - {fileID: 1870858519}
-  - {fileID: 590847145}
   m_Father: {fileID: 374961172}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0008544922, y: -0.15496826}
+  m_AnchoredPosition: {x: 0.0009765625, y: -0.1550293}
   m_SizeDelta: {x: -0.00085449, y: -0.30957}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1229680550
@@ -2152,7 +2138,7 @@ GameObject:
   - component: {fileID: 1230273483}
   - component: {fileID: 1230273482}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: WinnerNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2801,13 +2787,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players:
   - ID: 0
-    myTurn: 0
-  - ID: 1
-    myTurn: 0
-  - ID: 1
-    myTurn: 0
-  - ID: 1
-    myTurn: 0
+    WinsCount: 0
+  - ID: 0
+    WinsCount: 0
+  - ID: 0
+    WinsCount: 0
+  - ID: 0
+    WinsCount: 0
 --- !u!114 &1564123590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2820,7 +2806,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc7548e79da953b4aa8405d62e96cd04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cards: []
   cardControllerPrefab: {fileID: 2284559454111406803, guid: b435d3d764cf02a4fa2f9e61a43f31c8, type: 3}
   selectingPanel: {fileID: 264318783}
   player1Hand: {fileID: 192280224}
@@ -3404,7 +3389,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0.14855957}
+  m_AnchoredPosition: {x: 0, y: 0.14855957}
   m_SizeDelta: {x: 0, y: -0.30273}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1896842149
