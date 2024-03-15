@@ -33,7 +33,6 @@ namespace Assets.Scripts
 
         public void Init()
         {
-            //CreateTestDeck();
             CreateStartDeck();
         }
 

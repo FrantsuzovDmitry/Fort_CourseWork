@@ -3,9 +3,10 @@ using Assets.Scripts.GameEntities;
 using Assets.Scripts.Managers;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using static Assets.Scripts.Managers.GameStateManager;
 
-public static class Mediator
+public class Mediator
 {
 	private static CardExchangeManager CardExchangeController;
 	private static UIManager UIManager => UIManager.instance;
@@ -43,20 +44,20 @@ public static class Mediator
 
 	public static void OnAttackStarted(byte rate)
     {
-        CurrentUserStateManager.RememberUserFortSelection(rate);
+        CurrentUserIntentionState.RememberUserFortSelection(rate);
         UIManager.ShowButton(UIButtons.StartAttack);
     }
 
     public static void OnAttackStopped() 
     {
-        CurrentUserStateManager.StopCreatingOfGroupOfCharacters();
+        CurrentUserIntentionState.StopCreatingOfGroupOfCharacters();
         UIManager.HideAllButtons();
         CardVisualizationManager.DeselectAllCards();
     }
 
 	public static void OnCreatingAttackersGroupStarted()
 	{
-		CurrentUserStateManager.StartCreatingOfGroupOfCharacters();
+		CurrentUserIntentionState.StartCreatingOfGroupOfCharacters();
 		UIManager.ShowButton(UIButtons.AttackConfirmation);
 	}
 
@@ -64,14 +65,14 @@ public static class Mediator
     {
 		CardVisualizationManager.DeselectAllCards();
 
-        if (!CurrentUserStateManager.CanAttackFortress)
+        if (!CurrentUserIntentionState.CanAttackFortress)
         {
             UIManager.ShowWarningMessage("Выберите хотя бы одного атакующего!");
             return;
         }
 
-        FortressManager.ProcessAttackToFortress(CurrentUserStateManager.SelectedFortIDToAttack, 
-													CurrentUserStateManager.GetAttackersGroup(),
+        FortressManager.ProcessAttackToFortress(CurrentUserIntentionState.SelectedFortIDToAttack, 
+													CurrentUserIntentionState.GetAttackersGroup(),
 															CurrentPlayerTurn);
 
 		UIManager.HideAllButtons();
@@ -81,7 +82,7 @@ public static class Mediator
     {
 		var attackerID = CurrentPlayerTurn;
 		CardVisualizationManager.MoveCardToPlayer(fort, attackerID);
-		CardVisualizationManager.RemoveAttackersFromHand(CurrentUserStateManager.GetAttackersGroup().ToList());
+		CardVisualizationManager.RemoveAttackersFromHand(CurrentUserIntentionState.GetAttackersGroup().ToList());
         CardVisualizationManager.DeselectAllCards();
 
 		if (fort.DefendersGroup != null)
@@ -115,7 +116,7 @@ public static class Mediator
 
     public static void OnCardToGiveChosen(Character card)
     {
-        CurrentUserStateManager.RememberUserCharacterSelection(card);
+        CurrentUserIntentionState.RememberUserCharacterSelection(card);
         CardVisualizationManager.DeselectAllCards();
         CardVisualizationManager.SetCardRedEmission(card);
         UIManager.ShowButton(UIButtons.SelectionCharacterToGiveConfirmation);
@@ -142,13 +143,18 @@ public static class Mediator
 
 	public static void OnGameStopped()
 	{
-		DefinitionWinnerManager.DefineWinner();
-		StartNewRound(DefinitionWinnerManager.LastWinnerID);
+		var winnerID = DefinitionWinnerManager.GetWinnerID();
+        if (winnerID != Constants.NOT_A_PLAYER_ID)
+            UIManager.instance.ShowWinnerPanel(winnerID);
+        else
+            UIManager.instance.ShowDrawPanel();
+        PlayerManager.instance.IncreaseWinNumber(winnerID);
 	}
 
-	public static void OnSandglassAppears(Sandglass card)
+	public static void OnSandglassAppears()
 	{
 		GameStateManager.IncreaseNumberOfSandglasses();
+		GameStateManager.CheckOfStopGameCondition();
 	}
 
 	public static void OnRuleAppears(Rule card)

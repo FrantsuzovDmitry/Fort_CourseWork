@@ -16,7 +16,7 @@ namespace Assets.Scripts.Managers
 			deck.Init();
 			playersHands.Clear();
 
-			for (int i = 0; i < Constants.MAX_PLAYER_ID; i++)
+			for (int i = 0; i < Constants.MAX_PLAYER_ID + 1; i++)
 			{
 				playersHands.Add(new LinkedList<Card>());
 			}

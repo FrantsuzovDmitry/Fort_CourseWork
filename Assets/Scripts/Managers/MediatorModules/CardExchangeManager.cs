@@ -24,7 +24,7 @@ namespace Assets.Scripts.Managers
             UIManager.instance.ToggleCardSelectionPanelVisibility(UIElementState.ON);
 
             CardVisualizationManager.instance.DisplayCardToChoice(charactersToChoice);
-            CurrentUserStateManager.IsSelectingCardToGiveInProgress = true;
+            CurrentUserIntentionState.IsSelectingCardToGiveInProgress = true;
         }
 
         // Is it need?
@@ -37,14 +37,14 @@ namespace Assets.Scripts.Managers
 
         public void ChangeCardOwnerAndReturnCardsToHand()
         {
-            CurrentUserStateManager.IsSelectingCardToGiveInProgress = false;
+            CurrentUserIntentionState.IsSelectingCardToGiveInProgress = false;
 
             #region CARD EXCHANGING
-            CardManager.ChangeCardOwner(CurrentUserStateManager.SelectedCharacter, _playerWhichGettingCardID);
+            CardManager.ChangeCardOwner(CurrentUserIntentionState.SelectedCharacter, _playerWhichGettingCardID);
             CardVisualizationManager.instance.DeselectAllCards();
 
             CardVisualizationManager.instance.
-                MoveCardToPlayer(CurrentUserStateManager.SelectedCharacter, _playerWhichGettingCardID);
+                MoveCardToPlayer(CurrentUserIntentionState.SelectedCharacter, _playerWhichGettingCardID);
 
             ReturnOtherCardsToHand();
             #endregion

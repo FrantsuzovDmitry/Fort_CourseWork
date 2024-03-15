@@ -22,7 +22,7 @@ public class Character : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
-		if (CurrentUserStateManager.IsSelectingCardToGiveInProgress)
+		if (CurrentUserIntentionState.IsSelectingCardToGiveInProgress)
 		{
 			if (c.IsOneOfTheCardsThatCanBeGiven())
 			{
@@ -32,7 +32,7 @@ public class Character : Card
 			return NeedToBeSelected.NO;
 		}
 
-		if (CurrentUserStateManager.IsCreatingGroupInProgress)
+		if (CurrentUserIntentionState.IsCreatingGroupInProgress)
 		{
 			if (!c.IsCardInPlayerHand())
 				return NeedToBeSelected.NO;
@@ -40,12 +40,12 @@ public class Character : Card
 			if (this.IsInGroup)
 			{
 				IsInGroup = false;
-				CurrentUserStateManager.RemoveCharacterFromGroup(this);
+				CurrentUserIntentionState.RemoveCharacterFromGroup(this);
 				return NeedToBeSelected.NO;
 			}
 
 			IsInGroup = true;
-			CurrentUserStateManager.AddCharacterToGroup(this);
+			CurrentUserIntentionState.AddCharacterToGroup(this);
 			return NeedToBeSelected.YES;
 		}
 		return NeedToBeSelected.NO;

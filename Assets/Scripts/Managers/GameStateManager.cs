@@ -28,10 +28,9 @@ namespace Assets.Scripts.Managers
         public static void IncreaseNumberOfSandglasses()
         {
             NumberOfSandglasses++;
-            CheckOfStopGameCondition();
         }
 
-        private static void CheckOfStopGameCondition()
+        public static void CheckOfStopGameCondition()
         {
             if (NumberOfSandglasses == 3)
             {

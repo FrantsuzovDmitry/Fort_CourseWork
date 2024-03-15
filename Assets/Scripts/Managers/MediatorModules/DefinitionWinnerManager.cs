@@ -16,16 +16,12 @@ namespace Assets.Scripts.Managers
         public void DefineWinner()
         {
             var winnerID = GetWinnerID();
-            if (winnerID != NOT_A_PLAYER_ID)
-                UIManager.instance.ShowWinnerPanel(winnerID);
-            else
-                UIManager.instance.ShowDrawPanel();
-            PlayerManager.instance.IncreaseWinNumber(winnerID);
+            
 
             LastWinnerID = winnerID;
         }
 
-        private byte GetWinnerID()
+        public byte GetWinnerID()
         {
             if (FortressRate_Owner_Pairs.Count == 0) return NOT_A_PLAYER_ID;
 

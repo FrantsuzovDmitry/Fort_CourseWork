@@ -7,13 +7,13 @@ public class Sandglass : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
-		if (CurrentUserStateManager.IsCreatingGroupInProgress)
+		if (CurrentUserIntentionState.IsCreatingGroupInProgress)
 			Mediator.OnAttackStopped();
 		return NeedToBeSelected.NO;
 	}
 
     public override void InvokeOnCardAppearsEvent()
     {
-		Mediator.OnSandglassAppears(this);
+		Mediator.OnSandglassAppears();
     }
 }
