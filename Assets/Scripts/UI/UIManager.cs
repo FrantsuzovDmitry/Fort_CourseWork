@@ -38,6 +38,8 @@ public class UIManager : MonoBehaviour
 	private Button getCardButton;
 	private TextMeshProUGUI hintMessage;
 
+	private Mediator _mediator;
+
 	private void Awake()
 	{
 		instance = this;
@@ -47,31 +49,36 @@ public class UIManager : MonoBehaviour
 		SetupButtons();
 	}
 
+	public void Init(Mediator mediator)
+	{
+		_mediator = mediator;
+	}
+
 	private void SetupButtons()
 	{
 		endTurnButton.onClick.AddListener(() =>
 		{
-			Mediator.OnTurnEnded();
+			_mediator.OnTurnEnded();
 		});
 
 		getCardButton.onClick.AddListener(() =>
 		{
-			Mediator.OnCardTaken();
+            _mediator.OnCardTaken();
 		});
 
 		startAttackButton.onClick.AddListener(() =>
 		{
-			Mediator.OnCreatingAttackersGroupStarted();
+            _mediator.OnCreatingAttackersGroupStarted();
 		});
 
 		attackConfirmationButton.onClick.AddListener(() =>
 		{
-			Mediator.OnFortressTriedAttacked();
+			_mediator.OnFortressTriedAttacked();
 		});
 
 		exchangeConfirmationButton.onClick.AddListener(() =>
 		{
-			Mediator.OnCardGiven();
+			_mediator.OnCardGiven();
 		});
 	}
 

@@ -1,3 +1,4 @@
+using Assets.Scripts.FSM;
 using UnityEngine;
 
 [System.Serializable]

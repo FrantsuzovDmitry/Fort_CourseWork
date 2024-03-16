@@ -26,6 +26,7 @@ public class Fortress : Card
 
     public virtual bool IsRequirementsToDefendersAreAccept(GroupOfCharacters groupOfCharacters)
     {
+        // TODO: Only one wizard (I can just check this here straight)
         var characters = groupOfCharacters.SimpleCharacters;
 		int comparisonForce = characters[0].Force;
 		for (int i = 1; i < characters.Count; i++)
@@ -36,6 +37,8 @@ public class Fortress : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
+
+
         if (c.IsCardIsPlayersOwn())
         {
 			Mediator.OnAttackStopped();

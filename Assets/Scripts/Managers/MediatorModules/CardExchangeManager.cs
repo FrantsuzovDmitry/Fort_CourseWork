@@ -13,6 +13,15 @@ namespace Assets.Scripts.Managers
         private static List<Character> _charactersToChoice;
         private static Character _selectedCharacterToGive;
 
+        private CardManager _cardManager;
+        private Mediator _mediator;
+
+        public CardExchangeManager(Mediator mediator, CardManager cardManager)
+        {
+            _mediator = mediator;
+            _cardManager = cardManager;
+        }
+
         public void StartCardExchangeProcess(byte playerWhichSelectingCardID,
                                                     byte playerWhichGettingCardID,
                                                     List<Character> charactersToChoice)
@@ -27,20 +36,12 @@ namespace Assets.Scripts.Managers
             CurrentUserIntentionState.IsSelectingCardToGiveInProgress = true;
         }
 
-        // Is it need?
-        public void OnCardChosen(Character card)
-        {
-            CardVisualizationManager.instance.DeselectAllCards();
-            CardVisualizationManager.instance.SetCardRedEmission(card);
-            UIManager.instance.ShowButton(UIButtons.SelectionCharacterToGiveConfirmation);
-        }
-
         public void ChangeCardOwnerAndReturnCardsToHand()
         {
             CurrentUserIntentionState.IsSelectingCardToGiveInProgress = false;
 
             #region CARD EXCHANGING
-            CardManager.ChangeCardOwner(CurrentUserIntentionState.SelectedCharacter, _playerWhichGettingCardID);
+            _cardManager.ChangeCardOwner(CurrentUserIntentionState.SelectedCharacter, _playerWhichGettingCardID);
             CardVisualizationManager.instance.DeselectAllCards();
 
             CardVisualizationManager.instance.
@@ -50,12 +51,12 @@ namespace Assets.Scripts.Managers
             #endregion
 
             UIManager.instance.ToggleCardSelectionPanelVisibility(UIElementState.OFF);
-            Mediator.OnTurnEnded();
+            _mediator.OnTurnEnded();
         }
 
         private void ReturnOtherCardsToHand()
         {
-            var otherAttackersCharacters = CardManager.GetUserHandCharacters(_playerWhichSelectingCardID);
+            var otherAttackersCharacters = _cardManager.GetUserHandCharacters(_playerWhichSelectingCardID);
             foreach (var card in otherAttackersCharacters)
                 CardVisualizationManager.instance.MoveCardToPlayer(card, _playerWhichSelectingCardID);
         }

@@ -10,16 +10,17 @@ using static Assets.Scripts.Constants;
 /// </summary>
 public class FortressManager : MonoBehaviour
 {
-	public static FortressManager instance;
 	public Dictionary<byte, byte> FortressOwnerPairs = new(MAX_FORT_RATE);       // Pairs FortressRate <-> owner
 	public Fortress[] Fortresses = new Fortress[8];
 
-	private void Awake()
+    private Mediator _mediator;
+
+	public FortressManager(Mediator mediator)
 	{
-		instance = this;
+		_mediator = mediator;
 	}
 
-	public byte GetFortressOwner(byte fortressRate)
+    public byte GetFortressOwner(byte fortressRate)
 	{
 		return FortressOwnerPairs[fortressRate];
 	}
@@ -36,7 +37,7 @@ public class FortressManager : MonoBehaviour
 
 		if (attackerForce > defendersForce)
 		{
-			Mediator.OnFortressCaptured(defendingFort);
+			_mediator.OnFortressCaptured(defendingFort);
 
 			FortressOwnerPairs[defendingFortRate] = attackerID;
 			defendingFort.SetDefenders(attackersGroup);
@@ -44,11 +45,11 @@ public class FortressManager : MonoBehaviour
 		}
 		else if (attackerForce == defendersForce)
 		{
-			Mediator.OnFortressDestroyed(defendingFort);
+			_mediator.OnFortressDestroyed(defendingFort);
 		}
 		else
 		{
-			Mediator.OnFortressUnsuccessfulAttacked(defendingFortRate);
+			_mediator.OnFortressUnsuccessfulAttacked(defendingFortRate);
 		}
 	}
 

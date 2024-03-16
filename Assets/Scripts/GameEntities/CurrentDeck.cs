@@ -14,12 +14,24 @@ namespace Assets.Scripts
     {
         public List<Card> deck = new(60);
 
+        private MainDeck _mainDeck;
+
         private void Add(Card card) => deck.Add(card);
         private Card Get()
         {
             var card = deck.Last();
             deck.Remove(card);
             return card;
+        }
+
+        public CurrentDeck(MainDeck mainDeck)
+        {
+            _mainDeck = mainDeck;
+        }
+
+        public void Init()
+        {
+            CreateStartDeck();
         }
 
         public Card Pop()
@@ -31,11 +43,6 @@ namespace Assets.Scripts
             else return null;
         }
 
-        public void Init()
-        {
-            CreateStartDeck();
-        }
-
         private void CreateStartDeck()
         {
             const int numOf3rdSasdglassInDeck = 28;
@@ -43,7 +50,7 @@ namespace Assets.Scripts
             for (int i = 0;
                 i < numOf3rdSasdglassInDeck - cardsNumbersToExclude.Count;
                 i++)
-                Add(MainDeck.Dequeue());
+                Add(_mainDeck.Dequeue());
 
             deck.Reverse();
         }
@@ -79,7 +86,7 @@ namespace Assets.Scripts
         public void AddFiveCardFromMainDeck()
         {
             for (int i = 0; i < 5; i++)
-                Add(MainDeck.Dequeue());
+                Add(_mainDeck.Dequeue());
         }
 
         public void Shuffle()
@@ -99,7 +106,7 @@ namespace Assets.Scripts
         {
             foreach (var card in cards)
             {
-                MainDeck.RemoveUsedCardFromDeck(card);
+                _mainDeck.RemoveUsedCardFromDeck(card);
                 deck.Remove(card);
             }
         }

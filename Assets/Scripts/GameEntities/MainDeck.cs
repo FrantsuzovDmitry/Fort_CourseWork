@@ -9,9 +9,9 @@ namespace Assets.Scripts.GameEntities
     public class MainDeck
     {
         // All cards (card number = 90)
-        private static Queue<Card> vanillaDeck = new(90);
+        private readonly Queue<Card> vanillaDeck;
         // The cards of the winning players that were in the fortress they captured are sent to this deck.
-        private static Queue<Card> cardsOutOfGame = new(60);
+        private readonly Queue<Card> cardsOutOfGame = new(60);
 
         private const string PathToJSON = "Assets/Resources/DECK/deck.json";
 
@@ -22,14 +22,14 @@ namespace Assets.Scripts.GameEntities
             public byte sequenceNumber;
         }
 
-        public static Card Dequeue() => vanillaDeck.Dequeue();
+        public Card Dequeue() => vanillaDeck.Dequeue();
 
-        public static void Init()
+        public MainDeck()
         {
             vanillaDeck = DeserializeDeckFromJSON(PathToJSON);
         }
 
-        private static Queue<Card> DeserializeDeckFromJSON(string filename)
+        private Queue<Card> DeserializeDeckFromJSON(string filename)
         {
             string jsonText = System.IO.File.ReadAllText(filename);
             List<CardInfo> listOfCardData = JsonConvert.DeserializeObject<List<CardInfo>>(jsonText);
@@ -62,7 +62,7 @@ namespace Assets.Scripts.GameEntities
             }
             return mainDeck;
         }
-        public static void RemoveUsedCardFromDeck(Card card)
+        public void RemoveUsedCardFromDeck(Card card)
         {
             cardsOutOfGame.Enqueue(card);
         }

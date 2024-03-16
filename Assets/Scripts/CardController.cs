@@ -20,7 +20,7 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     private Transform parentPosition;
     private Vector3 Position => transform.position;
 
-    public void Initialize(Card card, int ownerID)
+    public void Initialize(Card card)
     {
         this.Card = card;
         this.Card.OwnerID = card.OwnerID;
@@ -73,7 +73,6 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     public void MakeSelected()
     {
         currentEmission.SetActive();
-        //standardEmission.SetActive();
         transform.position = new Vector3(Position.x, Position.y, -5);   // set in front
         Selected = true;
     }
@@ -81,7 +80,6 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     public void MakeUnselected()
     {
         currentEmission.SetInactive();
-        //standardEmission.SetInactive();
         transform.position = new Vector3(Position.x, Position.y, 0);    // default value
         Selected = false;
     }
@@ -104,11 +102,5 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     {
         this.gameObject.transform.SetParent(parent);
         parentPosition = parent;
-    }
-
-    private void ReturnToHand()
-    {
-        //transform.SetParent(originalParent);
-        //transform.localPosition = Vector3.zero;
     }
 }

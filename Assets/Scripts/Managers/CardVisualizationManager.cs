@@ -59,7 +59,7 @@ public class CardVisualizationManager : MonoBehaviour
 		card.OwnerID = playerID;
 		CardController newCard = Instantiate(cardControllerPrefab, playersHandsPosition[playerID]);
 		newCard.transform.localPosition = Vector3.zero;
-		newCard.Initialize(card, playerID);
+		newCard.Initialize(card);
 
 		// Remember the Card-CardController pairs:
 		cardsCardControllersPairs.Add(card, newCard);
@@ -90,7 +90,7 @@ public class CardVisualizationManager : MonoBehaviour
 				break;
 		}
 		newCard.transform.localPosition = Vector3.zero;
-		newCard.Initialize(card, NOT_A_PLAYER_ID);
+		newCard.Initialize(card);
 
 		// Remember the Card-CardController pair:
 		cardsCardControllersPairs.Add(card, newCard);
