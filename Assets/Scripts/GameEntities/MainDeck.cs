@@ -44,20 +44,19 @@ namespace Assets.Scripts.GameEntities
 
                 Card card = cardData.type switch
                 {
-                    "Rule" => new Rule(),
-                    "Fortress" => new Fortress(parameter),
-                    "SimpleCharacter" => new SimpleCharacter(parameter),
-                    "Sandglass" => new Sandglass(),
-                    "Joker" => new Joker(),
-                    "TwoCharactersWithForce1" => new TwoCharactersWithForce1(),
-                    "Mirror" => new Mirror(),
-                    "Zero" => new Zero(),
-                    "RainbowFortress" => new RainbowFortress(),
-                    "Wizard" => new Wizard(),
+                    "Rule" => new Rule(cardLogo),
+                    "Fortress" => new Fortress(parameter, cardLogo),
+                    "SimpleCharacter" => new SimpleCharacter(parameter, cardLogo),
+                    "Sandglass" => new Sandglass(cardLogo),
+                    "Joker" => new Joker(cardLogo),
+                    "TwoCharactersWithForce1" => new TwoCharactersWithForce1(cardLogo),
+                    "Mirror" => new Mirror(cardLogo),
+                    "Zero" => new Zero(cardLogo),
+                    "RainbowFortress" => new RainbowFortress(cardLogo),
+                    "Wizard" => new Wizard(cardLogo),
 
                     _ => throw new ArgumentException($"Unknown card type: {type}"),
                 };
-                card.SetLogo(cardLogo);
 
                 mainDeck.Enqueue(card);
             }

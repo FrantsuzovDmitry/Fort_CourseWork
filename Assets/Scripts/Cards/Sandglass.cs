@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class Sandglass : Card
 {
-    public Sandglass(Sprite logo=null) : base("Sandglass", logo) { }
+    public Sandglass(Sprite illustration) : base("Sandglass", illustration) { }
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{

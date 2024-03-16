@@ -1,32 +1,16 @@
-using System;
-using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
 public class Card
 {
-	public byte OwnerID;
-	public string cardName;
-    public Sprite logo;
+    public byte OwnerID;
+    public readonly string cardName;
+    public readonly Sprite logo;
 
-    public Card() { }
-
-    public Card(string cardName, Sprite logo = null)
+    public Card(string cardName, Sprite logo)
     {
         this.cardName=cardName;
         this.logo=logo;
-    }
-
-    public Card(Card card)
-    {
-		this.OwnerID = card.OwnerID;
-		this.cardName = card.cardName;
-        this.logo = card.logo;
-    }
-
-    public void SetLogo(Sprite logo)
-    {
-        this.logo = logo;
     }
 
     /// <summary>

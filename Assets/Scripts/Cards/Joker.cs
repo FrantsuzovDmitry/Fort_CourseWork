@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Joker : Character
 {
-    public Joker(Sprite logo=null) : base("Joker", logo) { }
+    public Joker(Sprite illustration) : base("Joker", illustration) { }
 
     public override void EnterInGroup(ref int totalForce, ref int totalWeight)
     {

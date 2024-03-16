@@ -16,12 +16,6 @@ public class Fortress : Card
         this.Rate = rate;
     }
 
-    public Fortress(Fortress fort) : base(fort)
-    {
-        this.Rate = fort.Rate;
-        DefendersGroup = null;
-    }
-
     public void SetDefenders(GroupOfCharacters defenders)
     {
         if (defenders != null)

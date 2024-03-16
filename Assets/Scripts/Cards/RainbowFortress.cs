@@ -6,7 +6,7 @@ namespace Assets.Scripts.Cards
 {
 	public class RainbowFortress : Fortress
 	{
-		public RainbowFortress() : base(5) { }
+		public RainbowFortress(Sprite logo) : base(5, logo) { }
 
 		public override bool IsRequirementsToDefendersAreAccept(GroupOfCharacters groupOfCharacters)
 		{
