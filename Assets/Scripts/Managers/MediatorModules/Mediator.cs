@@ -14,7 +14,7 @@ public class Mediator
 	private CardVisualizationManager CardVisualizationManager => CardVisualizationManager.instance;
 	private TurnManager TurnManager => TurnManager.instance;
 	private PlayerManager PlayerManager => PlayerManager.instance;
-	private DefinitionWinnerManager _definitionWinnerManager;
+	private WinnerDefinitionManager _winneDefinitionrManager;
 	private CardManager _cardManager;
 	private GameState _gameState;
 
@@ -30,7 +30,7 @@ public class Mediator
 		_fortressManager = new FortressManager(this);
 		_gameState = new GameState();
 		_cardExchangeController = new CardExchangeManager(this, _cardManager);
-		_definitionWinnerManager = new DefinitionWinnerManager();
+		_winneDefinitionrManager = new WinnerDefinitionManager();
 
 		UIManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
 	}
@@ -150,7 +150,9 @@ public class Mediator
 
 	public void OnGameStopped()
 	{
-		var winnerID = _definitionWinnerManager.GetWinnerID();
+		_winneDefinitionrManager.DefineWinner(_fortressManager.FortressOwnerPairs);
+
+		var winnerID = _winneDefinitionrManager.LastWinnerID;
         if (winnerID != Constants.NOT_A_PLAYER_ID)
             UIManager.instance.ShowWinnerPanel(winnerID);
         else
@@ -185,7 +187,7 @@ public class Mediator
 	/// </summary>
 	private List<Card> GetCardsToRemove()
 	{
-        List<Fortress> winnersForts = _fortressManager.GetPlayersForts(_definitionWinnerManager.LastWinnerID);
+        List<Fortress> winnersForts = _fortressManager.GetPlayersForts(_winneDefinitionrManager.LastWinnerID);
         List<Card> cardsToRemove = new();
         foreach (var fort in winnersForts)
         {

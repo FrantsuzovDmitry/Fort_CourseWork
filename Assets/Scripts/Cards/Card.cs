@@ -8,6 +8,8 @@ public class Card
     public readonly string cardName;
     public readonly Sprite logo;
 
+    public static Mediator Mediator;
+
     public Card(string cardName, Sprite logo)
     {
         this.cardName=cardName;

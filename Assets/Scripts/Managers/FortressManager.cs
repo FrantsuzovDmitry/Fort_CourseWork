@@ -27,7 +27,7 @@ public class FortressManager : MonoBehaviour
 
 	public void ProcessAttackToFortress(byte defendingFortRate, GroupOfCharacters attackersGroup, byte attackerID)
 	{
-		var defendingFort = Fortresses.FirstOrDefault(f => f.Rate == defendingFortRate);
+		var defendingFort = Fortresses.FirstOrDefault(f => f?.Rate == defendingFortRate);
 		if (defendingFort == null) throw new Exception("Trying to attack unexisting fortress");
 		if (attackersGroup.Characters.Count < 1) throw new Exception("Empty attackers group");
 

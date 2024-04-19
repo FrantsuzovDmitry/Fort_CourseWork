@@ -37,8 +37,6 @@ public class Fortress : Card
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
 	{
-
-
         if (c.IsCardIsPlayersOwn())
         {
 			Mediator.OnAttackStopped();

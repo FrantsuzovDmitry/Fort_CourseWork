@@ -67,6 +67,11 @@ public class CardVisualizationManager : MonoBehaviour
 		return;
 	}
 
+	public void MakeCardSelected(Card card)
+	{
+		cardsCardControllersPairs[card].MakeSelected();
+	}
+
 	private void CreateCardOnTable(Card card)
 	{
 		CardController newCard;

@@ -12,6 +12,7 @@ public class EntryPoint : MonoBehaviour
 		UIManager.instance.Init(_mediator);
 
 		// Entry point
+		Card.Mediator = _mediator;
 		_mediator.StartFirstRound(Constants.MIN_PLAYER_ID);
     }
 }
