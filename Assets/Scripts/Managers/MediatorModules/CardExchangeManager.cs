@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Assets.Scripts.Managers
 {
@@ -10,16 +6,16 @@ namespace Assets.Scripts.Managers
     {
         private static byte _playerWhichSelectingCardID;
         private static byte _playerWhichGettingCardID;
-        private static List<Character> _charactersToChoice;
-        private static Character _selectedCharacterToGive;
 
         private CardManager _cardManager;
         private Mediator _mediator;
+        private GameState _gameState;
 
-        public CardExchangeManager(Mediator mediator, CardManager cardManager)
+        public CardExchangeManager(Mediator mediator, CardManager cardManager, GameState gameState)
         {
             _mediator = mediator;
             _cardManager = cardManager;
+            _gameState = gameState;
         }
 
         public void StartCardExchangeProcess(byte playerWhichSelectingCardID,
@@ -28,27 +24,26 @@ namespace Assets.Scripts.Managers
         {
             _playerWhichSelectingCardID = playerWhichSelectingCardID;
             _playerWhichGettingCardID = playerWhichGettingCardID;
-            _charactersToChoice = charactersToChoice;
 
+            UIManager.instance.ShowHint(
+                "Your attack is unsuccessful!\n " +
+                "Give to defender 1 character from hand");
             UIManager.instance.ToggleCardSelectionPanelVisibility(UIElementState.ON);
 
             CardVisualizationManager.instance.DisplayCardToChoice(charactersToChoice);
-            CurrentUserIntentionState.IsSelectingCardToGiveInProgress = true;
+            _gameState.OnCardExchangingStarted();
         }
 
-        public void ChangeCardOwnerAndReturnCardsToHand()
+        public void ChangeCardOwner(Character selectedCharacter)
         {
-            CurrentUserIntentionState.IsSelectingCardToGiveInProgress = false;
+            _gameState.OnCardExchangingStopped();
 
-            #region CARD EXCHANGING
-            _cardManager.ChangeCardOwner(CurrentUserIntentionState.SelectedCharacter, _playerWhichGettingCardID);
+            // CARD EXCHANGING
+            _cardManager.ChangeCardOwner(selectedCharacter, _playerWhichGettingCardID);
             CardVisualizationManager.instance.DeselectAllCards();
-
             CardVisualizationManager.instance.
-                MoveCardToPlayer(CurrentUserIntentionState.SelectedCharacter, _playerWhichGettingCardID);
-
+                MoveCardToPlayer(selectedCharacter, _playerWhichGettingCardID);
             ReturnOtherCardsToHand();
-            #endregion
 
             UIManager.instance.ToggleCardSelectionPanelVisibility(UIElementState.OFF);
             _mediator.OnTurnEnded();

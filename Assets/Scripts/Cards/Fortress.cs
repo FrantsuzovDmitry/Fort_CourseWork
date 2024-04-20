@@ -2,6 +2,7 @@ using Assets.Scripts;
 using Assets.Scripts.Cards;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -46,7 +47,7 @@ public class Fortress : Card
         else
         {
             Mediator.OnAttackStopped();
-			Mediator.OnAttackStarted(Rate);
+			Mediator.OnAttackStarted(this);
 		}
         
         return NeedToBeSelected.YES;
@@ -55,5 +56,14 @@ public class Fortress : Card
     public override void InvokeOnCardAppearsEvent()
     {
         Mediator.OnFortressAppears(this);
+    }
+
+    public bool ValidateAttackersGroup(GroupOfCharacters attackers)
+    {
+        List<SimpleCharacter> simpleCharactersInAttackersGroup = attackers.SimpleCharacters;
+        int commonForce = simpleCharactersInAttackersGroup[0].Force;
+        foreach (var c in simpleCharactersInAttackersGroup)
+            if (c.Force != commonForce) return false;
+        return true;
     }
 }

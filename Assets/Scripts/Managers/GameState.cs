@@ -1,15 +1,18 @@
-﻿namespace Assets.Scripts.Managers
+﻿using System;
+
+namespace Assets.Scripts.Managers
 {
     public class GameState
     {
         public enum GameStage : byte
         {
             PlayerTurn,
-            PlayerSelectingCardToGive,
+            PlayerIsCreatingGroupToAttackAFort,
+            CardExchanging,
             GameFinished
         }
 
-        public GameStage CurrentGameStage { get; set; }
+        public GameStage CurrentGameStage { get; private set; }
         public byte NumberOfSandglasses { get; private set; }
 
         public GameState()
@@ -18,7 +21,7 @@
             CurrentGameStage = GameStage.PlayerTurn;
         }
 
-        public void IncreaseNumberOfSandglasses()
+        public void OnSandglassAppears()
         {
             NumberOfSandglasses++;
         }
@@ -30,5 +33,17 @@
                 CurrentGameStage = GameStage.GameFinished;
             }
         }
+
+        public void OnTurnStarted() => SetBaseState();
+
+        public void OnCreatingAttackersGroupStarted() => CurrentGameStage = GameStage.PlayerIsCreatingGroupToAttackAFort;
+
+        public void OnAttackStopped() => CurrentGameStage = GameStage.PlayerTurn;
+
+        public void OnCardExchangingStarted() => CurrentGameStage = GameStage.CardExchanging;
+
+        public void OnCardExchangingStopped() => SetBaseState();
+
+        private void SetBaseState() => CurrentGameStage = GameStage.PlayerTurn;
     }
 }

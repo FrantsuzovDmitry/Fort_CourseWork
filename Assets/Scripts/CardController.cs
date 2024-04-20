@@ -1,6 +1,7 @@
 using Assets.Scripts;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -102,5 +103,6 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     {
         this.gameObject.transform.SetParent(parent);
         parentPosition = parent;
+        this.gameObject.transform.localRotation = Quaternion.identity;
     }
 }

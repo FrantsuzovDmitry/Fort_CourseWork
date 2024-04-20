@@ -11,8 +11,9 @@ using static Assets.Scripts.Constants;
 public class FortressManager : MonoBehaviour
 {
 	public Dictionary<byte, byte> FortressOwnerPairs = new(MAX_FORT_RATE);       // Pairs FortressRate <-> owner
-	public Fortress[] Fortresses = new Fortress[8];
+	public Fortress Fortress(byte rate) => Fortresses[rate - 1];
 
+	private Fortress[] Fortresses = new Fortress[8];
     private Mediator _mediator;
 
 	public FortressManager(Mediator mediator)
@@ -25,12 +26,8 @@ public class FortressManager : MonoBehaviour
 		return FortressOwnerPairs[fortressRate];
 	}
 
-	public void ProcessAttackToFortress(byte defendingFortRate, GroupOfCharacters attackersGroup, byte attackerID)
+	public void ProcessAttackToFortress(Fortress defendingFort, GroupOfCharacters attackersGroup, byte attackerID)
 	{
-		var defendingFort = Fortresses.FirstOrDefault(f => f?.Rate == defendingFortRate);
-		if (defendingFort == null) throw new Exception("Trying to attack unexisting fortress");
-		if (attackersGroup.Characters.Count < 1) throw new Exception("Empty attackers group");
-
 		var defendersGroup = defendingFort.DefendersGroup;
 		int attackerForce = attackersGroup.TotalForce;
 		int defendersForce = defendersGroup?.TotalForce ?? int.MinValue;
@@ -39,29 +36,29 @@ public class FortressManager : MonoBehaviour
 		{
 			_mediator.OnFortressCaptured(defendingFort);
 
-			FortressOwnerPairs[defendingFortRate] = attackerID;
+			FortressOwnerPairs[defendingFort.Rate] = attackerID;
 			defendingFort.SetDefenders(attackersGroup);
 			Debug.Log("Successful attack: TotalForce = " + attackerForce);
 		}
 		else if (attackerForce == defendersForce)
 		{
-			_mediator.OnFortressDestroyed(defendingFort);
+			_mediator.OnFortressDestroyed(defendingFort.Rate);
 		}
 		else
 		{
-			_mediator.OnFortressUnsuccessfulAttacked(defendingFortRate);
+			_mediator.OnFortressUnsuccessfulAttacked(defendingFort.Rate);
 		}
 	}
 
-	public void RemoveFortress(Fortress fort)
+	public void RemoveFortress(byte fortRate)
 	{
-		Fortresses[fort.Rate] = null;
-		FortressOwnerPairs[fort.Rate] = NOT_A_PLAYER_ID;
+		Fortresses[fortRate] = null;
+		FortressOwnerPairs[fortRate] = NOT_A_PLAYER_ID;
 	}
 
 	public void AddNewFort(Fortress fort)
 	{
-		Fortresses[fort.Rate] = fort;
+		Fortresses[fort.Rate - 1] = fort;
 	}
 
     public List<Fortress> GetPlayersForts(byte lastWinnerID)
