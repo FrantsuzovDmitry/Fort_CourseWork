@@ -1,11 +1,14 @@
 using Assets.Scripts;
-using Assets.Scripts.GameEntities;
 using Assets.Scripts.Managers;
+using Assets.Scripts.Managers.Commands;
 using Assets.Scripts.Managers.MediatorModules;
 using System;
 using System.Collections.Generic;
 using static Assets.Scripts.Managers.GameState;
 
+/// <summary>
+/// Redirects requests between modules
+/// </summary>
 public class Mediator
 {
     public bool IsCreatingGroupInProgress => CurrentGameStage == GameStage.PlayerIsCreatingGroupToAttackAFort;
@@ -13,47 +16,67 @@ public class Mediator
 
     private GameStage CurrentGameStage => _gameState.CurrentGameStage;
 
-    private CardExchangeManager _cardExchangeController;
-    private UIManager UIManager => UIManager.instance;
-    private FortressManager _fortressManager;
-    private CardVisualizationManager CardVisualizationManager => CardVisualizationManager.instance;
-    private TurnManager TurnManager => TurnManager.instance;
-    private PlayerManager PlayerManager => PlayerManager.instance;
-    private WinnerDefinitionManager _winneDefinitionrManager;
-    private CardManager _cardManager;
-    private GameState _gameState;
-    private UserActionsValidator _userActionsValidator;
-    private CurrentUserIntentionState _currentUserIntentionState;
+    private readonly UIManager _uiManager;
+    private readonly FortressManager _fortressManager;
+    private readonly CardVisualizationManager _cardVisualizationManager;
+    private readonly TurnManager _turnManager;
+    private readonly PlayerManager _playerManager;
+    private readonly WinnerDefinitionManager _winneDefinitionrManager;
+    private readonly CardManager _cardManager;
+    private readonly GameState _gameState;
+    private readonly UserActionsValidator _userActionsValidator;
+    private readonly CurrentUserIntentionState _currentUserIntentionState;
+    private readonly CardExchangeController _cardExchangeController;
 
-    private MainDeck _mainDeck;
-
-    private byte CurrentPlayerTurn => TurnManager.CurrentPlayerTurn;
-
-    public void InitializeComponents()
+    public Mediator(UIManager uiManager, FortressManager fortressManager, CardVisualizationManager cardVisualizationManager, TurnManager turnManager, PlayerManager playerManager, WinnerDefinitionManager winneDefinitionrManager, CardManager cardManager, GameState gameState, UserActionsValidator userActionsValidator, CurrentUserIntentionState currentUserIntentionState, CardExchangeController cardExchangeController)
     {
-        _mainDeck = new MainDeck();
-        _cardManager = new CardManager(_mainDeck);
-        _fortressManager = new FortressManager(this);
-        _gameState = new GameState();
-        _cardExchangeController = new CardExchangeManager(this, _cardManager, _gameState);
-        _winneDefinitionrManager = new WinnerDefinitionManager();
-        _currentUserIntentionState = new CurrentUserIntentionState();
-        _userActionsValidator = new UserActionsValidator();
-
-        UIManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
+        _uiManager=uiManager;
+        _fortressManager=fortressManager;
+        _cardVisualizationManager=cardVisualizationManager;
+        _turnManager=turnManager;
+        _playerManager=playerManager;
+        _winneDefinitionrManager=winneDefinitionrManager;
+        _cardManager=cardManager;
+        _gameState=gameState;
+        _userActionsValidator=userActionsValidator;
+        _currentUserIntentionState=currentUserIntentionState;
+        _cardExchangeController=cardExchangeController;
     }
+
+    private byte CurrentPlayerTurn => _turnManager.CurrentPlayerTurn;
+
+    // legacy
+    //public void InitializeComponents()
+    //{
+    //    _cardManager = new CardManager();
+    //    _fortressManager = new FortressManager();
+    //    _gameState = new GameState();
+    //    _cardExchangeController = new CardExchangeManager(_cardManager, _gameState);
+    //    _winneDefinitionrManager = new WinnerDefinitionManager();
+    //    _currentUserIntentionState = new CurrentUserIntentionState();
+    //    _userActionsValidator = new UserActionsValidator();
+    //    _playerManager = PlayerManager.instance;
+    //    _cardVisualizationManager = CardVisualizationManager.instance;
+    //    _uiManager = UIManager.instance;
+    //    _turnManager = TurnManager.instance;
+
+    //    Command.InitializeComponents(_fortressManager, _uiManager, _cardVisualizationManager);
+    //    Card.Mediator = this;
+    //    _fortressManager.Initialize(this);
+
+    //    _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
+    //}
 
     public void OnCardTaken()
     {
         OnAttackStopped();
         var card = _cardManager.GetCardFromDeck();
-        CardVisualizationManager.
-            CreateCardInCorrectArea(card, CurrentPlayerTurn);
-        UIManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
+        _cardVisualizationManager.OnCardTaken(card, CurrentPlayerTurn);
+        _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
 
         card.InvokeOnCardAppearsEvent();
 
-        if (card.IsCardOnTheTable() && CurrentGameStage != GameStage.GameFinished)
+        if (card.CardShouldBeOnTheTable() && CurrentGameStage != GameStage.GameFinished)
             // Make move again
             this.OnCardTaken();
     }
@@ -61,21 +84,21 @@ public class Mediator
     public void OnAttackStarted(Fortress fort)
     {
         _currentUserIntentionState.RememberUserFortSelection(fort);
-        UIManager.ShowButton(UIButtons.StartAttack);
+        _uiManager.ShowButton(UIButtons.StartAttack);
     }
 
     public void OnAttackStopped()
     {
         _gameState.OnAttackStopped();
         _currentUserIntentionState.OnAttackStopped();
-        UIManager.HideAllButtons();
-        CardVisualizationManager.DeselectAllCards();
+        _uiManager.HideAllButtons();
+        this.SetStandardState();
     }
 
     public void OnCreatingAttackersGroupStarted()
     {
         _gameState.OnCreatingAttackersGroupStarted();
-        UIManager.ShowButton(UIButtons.AttackConfirmation);
+        _uiManager.ShowButton(UIButtons.AttackConfirmation);
     }
 
     public void OnFortressTriedAttacked()
@@ -85,33 +108,33 @@ public class Mediator
                                             _currentUserIntentionState.SelectedFortToAttack);
         if (!userActionIsCorrect)
         {
-            UIManager.ShowWarningMessage(_userActionsValidator.LastErrorMessage);
+            _uiManager.ShowWarningMessage(_userActionsValidator.LastErrorMessage);
             return;
         }
 
-        CardVisualizationManager.DeselectAllCards();
+        this.SetStandardState();
 
-        _fortressManager.ProcessAttackToFortress(_currentUserIntentionState.SelectedFortToAttack,
+        _fortressManager.ProcessAttackingToFortress(_currentUserIntentionState.SelectedFortToAttack,
                                                     _currentUserIntentionState.GetAttackersGroup(),
                                                             CurrentPlayerTurn);
 
-        UIManager.HideAllButtons();
+        _uiManager.HideAllButtons();
     }
 
     public void OnFortressCaptured(Fortress fort)
     {
         var attackerID = CurrentPlayerTurn;
-        CardVisualizationManager.MoveCardToPlayer(fort, attackerID);
-        CardVisualizationManager.RemoveAttackersFromHand(_currentUserIntentionState.GetAttackersGroup().ToList());
-        CardVisualizationManager.DeselectAllCards();
+        _cardVisualizationManager.MoveCardToPlayer(fort, attackerID);
+        _cardVisualizationManager.RemoveAttackersFromHand(_currentUserIntentionState.GetAttackersGroup().ToList());
+        this.SetStandardState();
 
         if (fort.DefendersGroup != null)
         {
             var defenderID = _fortressManager.GetFortressOwner(fort.Rate);
-            UIManager.ShowHint("Your fortress has been captured!\n" +
+            _uiManager.ShowHint("Your fortress has been captured!\n" +
                                 "Give to attacker 1 character from defenders group");
-            _cardExchangeController.StartCardExchangeProcess(
-                    defenderID, attackerID, fort.DefendersGroup.ToList());
+
+            _cardExchangeController.OnFortressCaptured(attackerID, defenderID, fort);
         }
     }
 
@@ -120,7 +143,11 @@ public class Mediator
         var attackerID = CurrentPlayerTurn;
         var defenderID = _fortressManager.GetFortressOwner(fortRate);
 
-        _cardExchangeController.StartCardExchangeProcess(attackerID, defenderID, _cardManager.GetUserHandCharacters(attackerID));
+        UIManager.instance.ShowHint(
+                "Your attack is unsuccessful!\n " +
+                "Give to defender 1 character from hand");
+
+        _cardExchangeController.OnFortressUnsuccessfulAttacked(attackerID: attackerID, defenderID: defenderID);
     }
 
     public void OnFortressAppears(Fortress fort)
@@ -128,37 +155,42 @@ public class Mediator
         _fortressManager.AddNewFort(fort);
     }
 
-    public void OnFortressDestroyed(byte fortRate)
+    public void OnFortressDestroyed(Fortress fort)
     {
-        _fortressManager.RemoveFortress(fortRate);
+        new DestroyFortress(fort, CurrentPlayerTurn)
+            .Execute();
+        _cardVisualizationManager.ShowCurrentPlayersAndHideOpponentsCards(CurrentPlayerTurn);
     }
 
     public void OnCardToGiveChosen(Character card)
     {
         _currentUserIntentionState.RememberUserCharacterSelection(card);
-        CardVisualizationManager.DeselectAllCards();
-        CardVisualizationManager.SetCardRedEmission(card);
-        UIManager.ShowButton(UIButtons.SelectionCharacterToGiveConfirmation);
+        this.SetStandardState();
+        _cardVisualizationManager.SetCardRedEmission(card);
+        _uiManager.ShowButton(UIButtons.SelectionCharacterToGiveConfirmation);
     }
 
     public void OnCardGiven()
     {
         var selectedCharacter = _currentUserIntentionState.SelectedCharacter;
-        _cardExchangeController.ChangeCardOwner(selectedCharacter);
+        _cardExchangeController.OnCardGiven(selectedCharacter);
+
+        _cardVisualizationManager.ShowCurrentPlayersAndHideOpponentsCards(CurrentPlayerTurn);
+        //this.OnTurnEnded();
     }
 
     public void OnTurnStarted()
     {
         OnAttackStopped();
         _gameState.OnTurnStarted();
-        CardVisualizationManager.ShowCurrentPlayersAndHideOpponentsCards(CurrentPlayerTurn);
-        UIManager.UpdateCurrentPlayerTurnLabel(CurrentPlayerTurn);
+        _cardVisualizationManager.ShowCurrentPlayersAndHideOpponentsCards(CurrentPlayerTurn);
+        _uiManager.UpdateCurrentPlayerTurnLabel(CurrentPlayerTurn);
     }
 
     public void OnTurnEnded()
     {
-        UIManager.HideAllButtons();
-        TurnManager.AssignNextPlayerTurn();
+        _uiManager.HideAllButtons();
+        _turnManager.AssignNextPlayerTurn();
         this.OnTurnStarted();
     }
 
@@ -171,7 +203,7 @@ public class Mediator
             UIManager.instance.ShowWinnerPanel(winnerID);
         else
             UIManager.instance.ShowDrawPanel();
-        PlayerManager.IncreaseWinNumber(winnerID);
+        _playerManager.IncreaseWinNumber(winnerID);
     }
 
     public void OnSandglassAppears()
@@ -192,7 +224,7 @@ public class Mediator
         List<Card> cardsToRemove = GetCardsToRemove();
 
         _cardManager.GenerateNewDeck(cardsToRemove);
-        TurnManager.AssignTurn(firstPlayerID);
+        _turnManager.AssignTurn(firstPlayerID);
         this.OnTurnStarted();
     }
 
@@ -212,11 +244,18 @@ public class Mediator
 
     public void StartFirstRound(byte firstPlayerID)
     {
-        TurnManager.AssignTurn(firstPlayerID);
+        _turnManager.AssignTurn(firstPlayerID);
         this.OnTurnStarted();
     }
 
     public void RemoveCharacterFromGroup(Character character) => _currentUserIntentionState.RemoveCharacterFromGroup(character);
 
     public void AddCharacterToGroup(Character character) => _currentUserIntentionState.AddCharacterToGroup(character);
+
+    private void ExecuteCommand(Command command) => command.Execute();
+
+    private void SetStandardState()
+    {
+        _cardVisualizationManager.DeselectAllCards();
+    }
 }

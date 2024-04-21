@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,9 +43,18 @@ public class CardVisualizationManager : MonoBehaviour
 		playersHandsPosition[3] = player4Hand;
 	}
 
-	public void CreateCardInCorrectArea(Card card, byte playerID)
+	public void OnCardTaken(Card card, byte playerID) => CreateCardInCorrectArea(card, playerID);
+
+	public void OnFortressDestroyed(Fortress fortress)
 	{
-		if (card.IsCardOnTheTable())
+		Destroy(cardsCardControllersPairs[fortress].gameObject);
+		cardsCardControllersPairs.Remove(fortress);
+		//cardsCardControllersPairs[fortress].gameObject.Destroy();
+	}
+
+    private void CreateCardInCorrectArea(Card card, byte playerID)
+	{
+		if (card.CardShouldBeOnTheTable())
 		{
 			CreateCardOnTable(card);
 		}
@@ -125,10 +135,14 @@ public class CardVisualizationManager : MonoBehaviour
 
 	public void MoveCardToPlayer(Card card, byte playerID)
 	{
-		if (card is Fortress)
-			cardsCardControllersPairs[card].ChangePosition(playersFortsPosition[playerID]);
+		var cardController = cardsCardControllersPairs[card];
+
+        if (card is Fortress)
+			cardController.ChangePosition(playersFortsPosition[playerID]);
 		else if (card is Character)
-			cardsCardControllersPairs[card].ChangePosition(playersHandsPosition[playerID]);
+			cardController.ChangePosition(playersHandsPosition[playerID]);
+
+		MakeVisible(cardController);
 	}
 
 	public void DeselectAllCards()
@@ -148,7 +162,7 @@ public class CardVisualizationManager : MonoBehaviour
 		cardsCardControllersPairs[card].SetSpecialEmission();
 	}
 
-	public void DisplayCardToChoice(List<Character> charactersToChoice)
+	public void DisplayCardsToChoice(List<Character> charactersToChoice)
 	{
 		foreach (Character character in charactersToChoice)
 		{

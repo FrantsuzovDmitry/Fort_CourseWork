@@ -2737,7 +2737,6 @@ GameObject:
   - component: {fileID: 1564123589}
   - component: {fileID: 1564123590}
   - component: {fileID: 1564123591}
-  - component: {fileID: 1564123592}
   - component: {fileID: 1564123593}
   m_Layer: 0
   m_Name: Managers
@@ -2840,43 +2839,6 @@ MonoBehaviour:
   Deck: {fileID: 1707147056}
   hintPanel: {fileID: 590847144}
   endTurnButton: {fileID: 1932480345}
---- !u!114 &1564123592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564123586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c0e1cccbbef11045a8bcdfec3e6ec78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Fortresses:
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
-  - OwnerID: 0
-    cardName: 
-    illustration: {fileID: 0}
 --- !u!114 &1564123593
 MonoBehaviour:
   m_ObjectHideFlags: 0

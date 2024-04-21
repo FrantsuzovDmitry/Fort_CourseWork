@@ -3,6 +3,7 @@ using Assets.Scripts.Cards;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -25,15 +26,14 @@ public class Fortress : Card
             throw new Exception("Trying to set nullable defenders group to the fort");
     }
 
-    public virtual bool IsRequirementsToDefendersAreAccept(GroupOfCharacters groupOfCharacters)
+    public virtual bool ValidateAttackersGroup(GroupOfCharacters attackers)
     {
         // TODO: Only one wizard (I can just check this here straight)
-        var characters = groupOfCharacters.SimpleCharacters;
-		int comparisonForce = characters[0].Force;
-		for (int i = 1; i < characters.Count; i++)
-			if (comparisonForce != characters[i].Force)
-				return false;
-		return true;
+        List<SimpleCharacter> simpleCharactersInAttackersGroup = attackers.SimpleCharacters;
+        int commonForce = simpleCharactersInAttackersGroup[0].Force;
+        foreach (var c in simpleCharactersInAttackersGroup)
+            if (c.Force != commonForce) return false;
+        return true;
     }
 
 	public override NeedToBeSelected ProcessOnClick(in CardController c)
@@ -56,14 +56,5 @@ public class Fortress : Card
     public override void InvokeOnCardAppearsEvent()
     {
         Mediator.OnFortressAppears(this);
-    }
-
-    public bool ValidateAttackersGroup(GroupOfCharacters attackers)
-    {
-        List<SimpleCharacter> simpleCharactersInAttackersGroup = attackers.SimpleCharacters;
-        int commonForce = simpleCharactersInAttackersGroup[0].Force;
-        foreach (var c in simpleCharactersInAttackersGroup)
-            if (c.Force != commonForce) return false;
-        return true;
     }
 }

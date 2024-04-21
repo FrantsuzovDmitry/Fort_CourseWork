@@ -1,4 +1,3 @@
-using Assets.Scripts.FSM;
 using UnityEngine;
 
 [System.Serializable]
@@ -21,7 +20,7 @@ public class Card
     /// </summary>
     public virtual NeedToBeSelected ProcessOnClick(in CardController cardController) { return NeedToBeSelected.NO; } // abstract
 
-    public bool IsCardOnTheTable() { return this is Fortress || this is Sandglass || this is Rule; }
+    public bool CardShouldBeOnTheTable() { return this is Fortress || this is Sandglass || this is Rule; }
 
     public virtual void InvokeOnCardAppearsEvent() { }
 }

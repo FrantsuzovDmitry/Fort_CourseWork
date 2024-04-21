@@ -9,13 +9,13 @@ namespace Assets.Scripts.Managers
 	{
 		private readonly List<LinkedList<Card>> playersHands = new(4);
 
-		private readonly CurrentDeck deck;
-		public int NumberOfCardsInDeck => deck.deck.Count;
+		private readonly CurrentDeck currentDeck;
+		public int NumberOfCardsInDeck => currentDeck.deck.Count;
 
-		public CardManager(MainDeck mainDeck)
+		public CardManager()
 		{
-			deck = new CurrentDeck(mainDeck);
-            deck.Init();
+			currentDeck = new CurrentDeck(new MainDeck());
+            currentDeck.Init();
 			playersHands.Clear();
 
 			for (int i = 0; i < Constants.MAX_PLAYER_ID + 1; i++)
@@ -26,9 +26,9 @@ namespace Assets.Scripts.Managers
 
 		public Card GetCardFromDeck()
 		{
-			var card = deck.Pop();
+			var card = currentDeck.Pop();
 
-			if (!card.IsCardOnTheTable())
+			if (!card.CardShouldBeOnTheTable())
 				playersHands[TurnManager.instance.CurrentPlayerTurn].AddLast(card);
 
 			return card;
@@ -51,14 +51,15 @@ namespace Assets.Scripts.Managers
 
         public void GenerateNewDeck(List<Card> cardsToRemove)
         {
-            deck.RemoveCardsFromDeck(cardsToRemove);
-			deck.AddFiveCardFromMainDeck();
-			deck.Shuffle();
+            currentDeck.RemoveCardsFromDeck(cardsToRemove);
+			currentDeck.AddFiveCardFromMainDeck();
+			currentDeck.Shuffle();
 		}
 
-        public void ResetCardsOwners()
+        public void OnGameStopped()
         {
-            foreach (var card in deck.deck)
+			// Reset cards owners
+            foreach (var card in currentDeck.deck)
                 card.OwnerID = Constants.NOT_A_PLAYER_ID;
         }
     }

@@ -1,18 +1,18 @@
 using Assets.Scripts;
+using Assets.Scripts.Managers;
 using UnityEngine;
 
 // Entry point
 public class EntryPoint : MonoBehaviour
 {
-	Mediator _mediator;
+	private static Mediator _mediator;
+
 	void Start()
     {
-		_mediator = new Mediator();
-		_mediator.InitializeComponents();
-		UIManager.instance.Init(_mediator);
+        InitializeComponents.ExecuteInitialization();
+        _mediator = InitializeComponents.Mediator;
 
-		// Entry point
-		Card.Mediator = _mediator;
-		_mediator.StartFirstRound(Constants.MIN_PLAYER_ID);
+        // Entry point
+        _mediator.StartFirstRound(Constants.MIN_PLAYER_ID);
     }
 }
