@@ -35,7 +35,7 @@ namespace Assets.Scripts.Managers
                 cardExchangeController: _cardExchangeController
                 );
 
-            Command.InitializeComponents(_fortressManager, _uiManager, _cardVisualizationManager, _cardManager);
+            Command.InitializeComponents(_fortressManager, _uiManager, _cardVisualizationManager, _cardManager, _winneDefinitionrManager);
             Card.Mediator = Mediator;
             _fortressManager.Init(Mediator);
             UIManager.instance.Init(Mediator);

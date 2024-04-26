@@ -9,10 +9,10 @@
     "parameter": 3,
     "sequenceNumber": 2
   },
-  {
-    "type": "RainbowFortress",
-    "sequenceNumber": 89
-  },
+  //{
+  //  "type": "RainbowFortress",
+  //  "sequenceNumber": 89
+  //},
   {
     "type": "SimpleCharacter",
     "parameter": 1,
@@ -134,6 +134,7 @@
     "parameter": 5,
     "sequenceNumber": 27
   },
+  // Third card of sandglasses
   {
     "type": "Sandglass",
     "sequenceNumber": 28

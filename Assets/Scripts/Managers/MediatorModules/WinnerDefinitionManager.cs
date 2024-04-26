@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Assets.Scripts.Constants;
 
 namespace Assets.Scripts.Managers
 {
     public class WinnerDefinitionManager
     {
-        public byte LastWinnerID = NOT_A_PLAYER_ID;
+        public byte CurrentWinnerID { get; private set; } = NOT_A_PLAYER_ID;
+        public byte LastWinnerID { get; private set;} = NOT_A_PLAYER_ID;
 
         private Dictionary<byte, byte> FortressRate_Owner_Pairs { get; set; }
 
@@ -17,7 +15,9 @@ namespace Assets.Scripts.Managers
         {
             FortressRate_Owner_Pairs = fortressRate_Owner_Pairs;
             var winnerID = GetWinnerID();
-            LastWinnerID = winnerID;
+            CurrentWinnerID = winnerID;
+
+            if (winnerID != NOT_A_PLAYER_ID) LastWinnerID = CurrentWinnerID;
         }
 
         private byte GetWinnerID()
@@ -25,8 +25,7 @@ namespace Assets.Scripts.Managers
             if (FortressRate_Owner_Pairs.Count == 0) return NOT_A_PLAYER_ID;
 
             var playerFortressesCounts = new Dictionary<byte, byte>(4);
-            for (byte i = 0; i <= MAX_PLAYER_ID; i++)
-                playerFortressesCounts[i] = 0;
+            for (byte i = 0; i <= MAX_PLAYER_ID; i++) playerFortressesCounts[i] = 0;
             CalculateFortressCounts(playerFortressesCounts);
 
             var max = playerFortressesCounts.Values.Max();

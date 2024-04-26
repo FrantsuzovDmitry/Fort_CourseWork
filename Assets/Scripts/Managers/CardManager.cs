@@ -15,7 +15,6 @@ namespace Assets.Scripts.Managers
 		public CardManager()
 		{
 			currentDeck = new CurrentDeck(new MainDeck());
-            currentDeck.Init();
 			playersHands.Clear();
 
 			for (int i = 0; i < Constants.MAX_PLAYER_ID + 1; i++)
@@ -49,18 +48,27 @@ namespace Assets.Scripts.Managers
 			playersHands[newOwnerID].AddLast(character);
 		}
 
-        public void GenerateNewDeck(List<Card> cardsToRemove)
-        {
-            currentDeck.RemoveCardsFromDeck(cardsToRemove);
-			currentDeck.AddFiveCardFromMainDeck();
-			currentDeck.Shuffle();
-		}
-
         public void OnGameStopped()
         {
 			// Reset cards owners
             foreach (var card in currentDeck.deck)
                 card.OwnerID = Constants.NOT_A_PLAYER_ID;
+        }
+
+        public void OnNewRoundStarted(List<Card> winnersCardsThatShouldToRemove)
+        {
+			GenerateNewDeck(winnersCardsThatShouldToRemove);
+
+            //TODO: remove winner's cards from game
+            //TODO: AND return other cards in the deck (ПРОВЕРИТЬ ЧТО КОЛОДА ГЕНЕРИРУЕТСЯ КОРРЕКТНО)*********************
+            //TODO: AND add new 5 cards to the current deck
+        }
+
+        private void GenerateNewDeck(List<Card> cardsToRemove)
+        {
+            currentDeck.RemoveCardsFromDeck(cardsToRemove);
+            currentDeck.AddFiveCardFromMainDeck();
+            currentDeck.Shuffle();
         }
     }
 }

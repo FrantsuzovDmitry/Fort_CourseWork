@@ -196,21 +196,24 @@ public class Mediator
 
     public void OnGameStopped()
     {
+        new StopGameOperation().Execute();
+
+        /*
         _winneDefinitionrManager.DefineWinner(_fortressManager.FortressOwnerPairs);
 
-        var winnerID = _winneDefinitionrManager.LastWinnerID;
+        var winnerID = _winneDefinitionrManager.CurrentWinnerID;
         if (winnerID != Constants.NOT_A_PLAYER_ID)
             UIManager.instance.ShowWinnerPanel(winnerID);
         else
             UIManager.instance.ShowDrawPanel();
-        _playerManager.IncreaseWinNumber(winnerID);
+        _playerManager.IncreaseWinsCounter(winnerID);
+        */
     }
 
     public void OnSandglassAppears()
     {
         _gameState.OnSandglassAppears();
-        _gameState.CheckOfStopGameCondition();
-        if (CurrentGameStage == GameStage.GameFinished)
+        if (_gameState.IsTheGameOver)
             this.OnGameStopped();
     }
 
@@ -219,40 +222,24 @@ public class Mediator
         throw new NotImplementedException();
     }
 
-    public void StartNewRound(byte firstPlayerID)
+    public void OnNewtNewRoundStarted()
     {
-        List<Card> cardsToRemove = GetCardsToRemove();
+        var lastWinnerID = _winneDefinitionrManager.LastWinnerID;
+        var currentWinnerID = _winneDefinitionrManager.CurrentWinnerID;
+        new StartNewRoundOperation(lastWinnerID, currentWinnerID).Execute();
 
-        _cardManager.GenerateNewDeck(cardsToRemove);
-        _turnManager.AssignTurn(firstPlayerID);
         this.OnTurnStarted();
-    }
-
-    /// <summary>
-    /// Returns the characters and special cards that winner used.
-    /// </summary>
-    private List<Card> GetCardsToRemove()
-    {
-        List<Fortress> winnersForts = _fortressManager.GetPlayersForts(_winneDefinitionrManager.LastWinnerID);
-        List<Card> cardsToRemove = new();
-        foreach (var fort in winnersForts)
-        {
-            cardsToRemove.AddRange(fort.DefendersGroup.ToList());
-        }
-        return cardsToRemove;
     }
 
     public void StartFirstRound(byte firstPlayerID)
     {
-        _turnManager.AssignTurn(firstPlayerID);
+        _turnManager.AssignTurnToFirstPlayer(firstPlayerID);
         this.OnTurnStarted();
     }
 
     public void RemoveCharacterFromGroup(Character character) => _currentUserIntentionState.RemoveCharacterFromGroup(character);
 
     public void AddCharacterToGroup(Character character) => _currentUserIntentionState.AddCharacterToGroup(character);
-
-    private void ExecuteCommand(Command command) => command.Execute();
 
     private void SetStandardState()
     {

@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour
         for (byte i = 0; i < players.Count; i++) players[i].ID = i;
     }
 
-    public void IncreaseWinNumber(int playerID)
+    public void IncreaseWinsCounter(int playerID)
     {
         var plr = players.FirstOrDefault(p => p.ID == playerID);
         if (plr != null) plr.WinsCount++;

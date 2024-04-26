@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-	public static class UnityExtentions
+	public static class ImageExtentions
 	{
 		public static void SetActive(this Image image)
 		{
@@ -13,11 +12,6 @@ namespace Assets.Scripts
 		public static void SetInactive(this Image image)
 		{
 			image.gameObject?.SetActive(false);
-		}
-
-		public static void Destroy(this GameObject gameObject)
-		{
-			Destroy(gameObject);
 		}
 	}
 }

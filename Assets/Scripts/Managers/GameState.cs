@@ -24,15 +24,10 @@ namespace Assets.Scripts.Managers
         public void OnSandglassAppears()
         {
             NumberOfSandglasses++;
+            CheckEndRoundCondition();
         }
 
-        public void CheckOfStopGameCondition()
-        {
-            if (NumberOfSandglasses == 3)
-            {
-                CurrentGameStage = GameStage.GameFinished;
-            }
-        }
+        public bool IsTheGameOver => CurrentGameStage == GameStage.GameFinished;
 
         public void OnTurnStarted() => SetBaseState();
 
@@ -45,5 +40,11 @@ namespace Assets.Scripts.Managers
         public void OnCardExchangingStopped() => SetBaseState();
 
         private void SetBaseState() => CurrentGameStage = GameStage.PlayerTurn;
+
+        private void CheckEndRoundCondition()
+        {
+            if (NumberOfSandglasses == 3)
+                CurrentGameStage = GameStage.GameFinished;
+        }
     }
 }

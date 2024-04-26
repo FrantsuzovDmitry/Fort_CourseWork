@@ -1,6 +1,6 @@
-using Assets.Scripts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Assets.Scripts.Constants;
 
@@ -14,7 +14,7 @@ public class CardVisualizationManager : MonoBehaviour
 	private Transform[] playersHandsPosition;
 	private Transform[] playersFortsPosition;
 
-	private Dictionary<Card, CardController> cardsCardControllersPairs = new(25);
+    protected Dictionary<Card, CardController> cardsCardControllersPairs = new(25);
 
 	[SerializeField] private CardController cardControllerPrefab;
 	[SerializeField] private Transform selectingPanel;
@@ -49,7 +49,6 @@ public class CardVisualizationManager : MonoBehaviour
 	{
 		Destroy(cardsCardControllersPairs[fortress].gameObject);
 		cardsCardControllersPairs.Remove(fortress);
-		//cardsCardControllersPairs[fortress].gameObject.Destroy();
 	}
 
     private void CreateCardInCorrectArea(Card card, byte playerID)
@@ -183,5 +182,33 @@ public class CardVisualizationManager : MonoBehaviour
 	private void MakeInvisible(CardController card)
 	{
 		card.gameObject.SetActive(false);
+	}
+
+    public void OnNewRoundStarted()
+    {
+        cardsCardControllersPairs.ToList().ForEach(pair =>
+        {
+            // Returning fortresses in the mid of the table
+            if (pair.Key is Fortress)
+            {
+                cardsCardControllersPairs[pair.Key].ChangePosition(playArea);
+            }
+            // Returning cards in the deck
+            else
+			{
+				Destroy(cardsCardControllersPairs[pair.Key].gameObject);
+                cardsCardControllersPairs.Remove(pair.Key);
+			}
+        });
+    }
+
+	private void RemoveSandglasses()
+	{
+		var sandglassesCardControllers = sandglassesArea.GetComponentsInChildren<CardController>();
+		foreach (var card in sandglassesCardControllers)
+		{
+			Destroy(card.gameObject);
+			cardsCardControllersPairs.Remove(card.Card);
+		}
 	}
 }

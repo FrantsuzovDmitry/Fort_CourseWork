@@ -22,17 +22,18 @@ public enum UIElementState : byte
 public class UIManager : MonoBehaviour
 {
 	public static UIManager instance;
-	public GameObject winnerPanel;
 
+	[SerializeField] private GameObject winnerPanel;
 	[SerializeField] private TextMeshProUGUI winnerName;
 	[SerializeField] private TextMeshProUGUI numberOfCardsText;
 	[SerializeField] private TextMeshProUGUI currentPlayerTurnMessage;
 	[SerializeField] private Button startAttackButton;
 	[SerializeField] private Button attackConfirmationButton;
 	[SerializeField] private Button exchangeConfirmationButton;
+	[SerializeField] private Button endTurnButton;
+	[SerializeField] private Button startNewRoundButton;
 	[SerializeField] private GameObject Deck;
 	[SerializeField] private GameObject hintPanel;
-	[SerializeField] private Button endTurnButton;
 
 	private List<Button> UIbuttons;
 	private Button getCardButton;
@@ -79,6 +80,11 @@ public class UIManager : MonoBehaviour
 		exchangeConfirmationButton.onClick.AddListener(() =>
 		{
 			_mediator.OnCardGiven();
+		});
+
+		startNewRoundButton.onClick.AddListener(() =>
+		{
+			_mediator.OnNewtNewRoundStarted();
 		});
 	}
 
@@ -137,6 +143,11 @@ public class UIManager : MonoBehaviour
         winnerName.text = $"Draw :(";
 		winnerName.color = Color.gray;
     }
+
+	public void HideWinnerPanel()
+	{
+		winnerPanel.SetActive(false);
+	}
 
 	public void ShowButton(UIButtons button)
 	{

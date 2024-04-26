@@ -1,13 +1,10 @@
-using Assets.Scripts;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using static Assets.Scripts.Constants;
 
 public class TurnManager : MonoBehaviour
 {
     public static TurnManager instance;
-    public byte CurrentPlayerTurn {  get; private set; }
+    public byte CurrentPlayerTurn { get; private set; }
 
     private void Awake()
     {
@@ -28,7 +25,7 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    public void AssignTurn(byte playerID)
+    public void AssignTurnToFirstPlayer(byte playerID)
     {
         CurrentPlayerTurn = playerID;
     }

@@ -14,24 +14,14 @@ namespace Assets.Scripts
     {
         public List<Card> deck = new(60);
 
-        private MainDeck _mainDeck;
+        private readonly MainDeck _mainDeck;
 
-        private void Add(Card card) => deck.Add(card);
-        private Card Get()
-        {
-            var card = deck.Last();
-            deck.Remove(card);
-            return card;
-        }
+        public int Count => deck.Count;
 
         public CurrentDeck(MainDeck mainDeck)
         {
             _mainDeck = mainDeck;
-        }
-
-        public void Init()
-        {
-            CreateStartDeck();
+            Initialize();
         }
 
         public Card Pop()
@@ -41,6 +31,48 @@ namespace Assets.Scripts
                 return Get();
             }
             else return null;
+        }
+
+        public void AddFiveCardFromMainDeck()
+        {
+            for (int i = 0; i < 5; i++)
+                Add(_mainDeck.Dequeue());
+        }
+
+        public void Shuffle()
+        {
+            Card card;
+            System.Random rnd = new ();
+            for (int i = 0; i < deck.Count; i++)
+            {
+                var index = rnd.Next(i, deck.Count);
+                card = deck[i];
+                deck[i] = deck[index];
+                deck[index] = card;
+            }
+        }
+
+        public void RemoveCardsFromDeck(List<Card> cards)
+        {
+            foreach (var card in cards)
+            {
+                _mainDeck.RemoveUsedCardFromDeck(card);
+                deck.Remove(card);
+            }
+        }
+
+        private void Add(Card card) => deck.Add(card);
+
+        private Card Get()
+        {
+            var card = deck.Last();
+            deck.Remove(card);
+            return card;
+        }
+
+        private void Initialize()
+        {
+            CreateStartDeck();
         }
 
         private void CreateStartDeck()
@@ -81,34 +113,6 @@ namespace Assets.Scripts
             deck.Add(new Fortress(2, Resources.Load<Sprite>("Sprites/33")));
             deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
             deck.Add(new Mirror(Resources.Load<Sprite>("Sprites/62")));
-        }
-
-        public void AddFiveCardFromMainDeck()
-        {
-            for (int i = 0; i < 5; i++)
-                Add(_mainDeck.Dequeue());
-        }
-
-        public void Shuffle()
-        {
-            Card card;
-            System.Random rnd = new System.Random();
-            for (int i = 0; i < deck.Count; i++)
-            {
-                var index = rnd.Next(i, deck.Count);
-                card = deck[i];
-                deck[i] = deck[index];
-                deck[index] = card;
-            }
-        }
-
-        public void RemoveCardsFromDeck(List<Card> cards)
-        {
-            foreach (var card in cards)
-            {
-                _mainDeck.RemoveUsedCardFromDeck(card);
-                deck.Remove(card);
-            }
         }
     }
 }

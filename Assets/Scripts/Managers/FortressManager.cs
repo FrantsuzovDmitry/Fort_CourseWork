@@ -1,5 +1,7 @@
 using Assets.Scripts.Cards;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Assets.Scripts.Constants;
 
@@ -63,10 +65,20 @@ public class FortressManager
         List<Fortress> result = new List<Fortress>(FortressOwnerPairs.Count);
         foreach (var pair in FortressOwnerPairs)
         {
-            if (pair.Value ==  lastWinnerID)
-                result.Add(_fortresses[pair.Key - 1]);
+            var fortOwnerID = pair.Value;
+            if (fortOwnerID ==  lastWinnerID)
+            {
+                var winnersFort = _fortresses[pair.Key - 1];
+                result.Add(winnersFort);
+            }
         }
 
         return result;
+    }
+
+    public void OnNewRoundStarted()
+    {
+        FortressOwnerPairs.Keys.ToList()
+            .ForEach(fortress => FortressOwnerPairs[fortress] = NOT_A_PLAYER_ID);
     }
 }
