@@ -39,6 +39,8 @@ namespace Assets.Scripts.Managers
 
         public void OnCardExchangingStopped() => SetBaseState();
 
+        public void OnNewRoundStarted() => NumberOfSandglasses = 0;
+
         private void SetBaseState() => CurrentGameStage = GameStage.PlayerTurn;
 
         private void CheckEndRoundCondition()

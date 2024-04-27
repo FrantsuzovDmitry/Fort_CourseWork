@@ -201,14 +201,4 @@ public class CardVisualizationManager : MonoBehaviour
 			}
         });
     }
-
-	private void RemoveSandglasses()
-	{
-		var sandglassesCardControllers = sandglassesArea.GetComponentsInChildren<CardController>();
-		foreach (var card in sandglassesCardControllers)
-		{
-			Destroy(card.gameObject);
-			cardsCardControllersPairs.Remove(card.Card);
-		}
-	}
 }

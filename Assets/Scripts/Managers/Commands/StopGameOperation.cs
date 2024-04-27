@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Assets.Scripts.Managers.Commands
+﻿namespace Assets.Scripts.Managers.Commands
 {
     public class StopGameOperation : Command
     {
@@ -8,10 +6,10 @@ namespace Assets.Scripts.Managers.Commands
 
         public override void Execute()
         {
-            StopTheGame();
+            OnGameStopped();
         }
 
-        private void StopTheGame()
+        private void OnGameStopped()
         {
             _winnerDefinitionManager.DefineWinner(_fortressManager.FortressOwnerPairs);
 

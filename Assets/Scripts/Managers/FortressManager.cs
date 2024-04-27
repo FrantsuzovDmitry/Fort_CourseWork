@@ -78,7 +78,6 @@ public class FortressManager
 
     public void OnNewRoundStarted()
     {
-        FortressOwnerPairs.Keys.ToList()
-            .ForEach(fortress => FortressOwnerPairs[fortress] = NOT_A_PLAYER_ID);
+        FortressOwnerPairs.Clear();
     }
 }

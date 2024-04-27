@@ -7,13 +7,15 @@ namespace Assets.Scripts.Managers.Commands
     {
         private readonly byte lastWinnerID;
         private readonly byte currentWinnerID;
+        private readonly GameState _gameState;
 
         private TurnManager TurnManager => TurnManager.instance;
 
-        public StartNewRoundOperation(byte lastWinnerID, byte currentWinnerID)
+        public StartNewRoundOperation(byte lastWinnerID, byte currentWinnerID, GameState gameState)
         {
             this.lastWinnerID=lastWinnerID;
             this.currentWinnerID=currentWinnerID;
+            _gameState=gameState;
         }
 
         public override void Execute()
@@ -33,6 +35,10 @@ namespace Assets.Scripts.Managers.Commands
             _fortressManager.OnNewRoundStarted();
 
             _uiManager.HideWinnerPanel();
+            _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
+
+            _gameState.OnNewRoundStarted();
+            _winnerDefinitionManager.OnNewRoundStarted();
         }
 
         byte GetFirstPlayerID()

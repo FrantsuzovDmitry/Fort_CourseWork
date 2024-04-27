@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour
 
 		startNewRoundButton.onClick.AddListener(() =>
 		{
-			_mediator.OnNewtNewRoundStarted();
+			_mediator.OnNewRoundStarted();
 		});
 	}
 

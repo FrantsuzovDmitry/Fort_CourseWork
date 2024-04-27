@@ -20,6 +20,11 @@ namespace Assets.Scripts.Managers
             if (winnerID != NOT_A_PLAYER_ID) LastWinnerID = CurrentWinnerID;
         }
 
+        public void OnNewRoundStarted()
+        {
+            CurrentWinnerID = NOT_A_PLAYER_ID;
+        }
+
         private byte GetWinnerID()
         {
             if (FortressRate_Owner_Pairs.Count == 0) return NOT_A_PLAYER_ID;

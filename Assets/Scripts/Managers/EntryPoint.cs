@@ -1,6 +1,5 @@
 using Assets.Scripts;
 using Assets.Scripts.Managers;
-using System;
 using UnityEngine;
 
 // Entry point

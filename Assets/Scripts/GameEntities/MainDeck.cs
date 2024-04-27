@@ -8,6 +8,7 @@ namespace Assets.Scripts.GameEntities
 {
     public class MainDeck
     {
+        private Queue<Card> currentMainDeck;
         // All cards (card number = 90)
         private readonly Queue<Card> vanillaDeck;
         // The cards of the winning players that were in the fortress they captured are sent to this deck.
@@ -22,11 +23,12 @@ namespace Assets.Scripts.GameEntities
             public byte sequenceNumber;
         }
 
-        public Card Dequeue() => vanillaDeck.Dequeue();
+        public Card Dequeue() => currentMainDeck.Dequeue();
 
         public MainDeck()
         {
             vanillaDeck = DeserializeDeckFromJSON(PathToJSON);
+            currentMainDeck = vanillaDeck;
         }
 
         private Queue<Card> DeserializeDeckFromJSON(string filename)
@@ -62,9 +64,16 @@ namespace Assets.Scripts.GameEntities
             }
             return mainDeck;
         }
+
         public void RemoveUsedCardFromDeck(Card card)
         {
             cardsOutOfGame.Enqueue(card);
+        }
+
+        public void OnDeckOver()
+        {
+            // Changing of deck
+            currentMainDeck = cardsOutOfGame;
         }
     }
 }

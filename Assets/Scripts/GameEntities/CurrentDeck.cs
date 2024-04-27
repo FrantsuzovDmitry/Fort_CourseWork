@@ -1,9 +1,7 @@
 using Assets.Scripts.GameEntities;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -12,8 +10,7 @@ namespace Assets.Scripts
     /// </summary>
     public class CurrentDeck
     {
-        public List<Card> deck = new(60);
-
+        private readonly List<Card> deck = new(60);
         private readonly MainDeck _mainDeck;
 
         public int Count => deck.Count;
@@ -22,6 +19,11 @@ namespace Assets.Scripts
         {
             _mainDeck = mainDeck;
             Initialize();
+        }
+
+        public void Push(Card card)
+        {
+            deck.Add(card);
         }
 
         public Card Pop()
@@ -42,7 +44,7 @@ namespace Assets.Scripts
         public void Shuffle()
         {
             Card card;
-            System.Random rnd = new ();
+            Random rnd = new();
             for (int i = 0; i < deck.Count; i++)
             {
                 var index = rnd.Next(i, deck.Count);
@@ -57,8 +59,12 @@ namespace Assets.Scripts
             foreach (var card in cards)
             {
                 _mainDeck.RemoveUsedCardFromDeck(card);
-                deck.Remove(card);
             }
+        }
+
+        public void DepersonalizeCards()
+        {
+            deck.ForEach(card => card.OwnerID = Constants.NOT_A_PLAYER_ID);
         }
 
         private void Add(Card card) => deck.Add(card);
@@ -90,29 +96,6 @@ namespace Assets.Scripts
         private void CreateRandomDeck()
         {
             //TODO: (last)implement random deck generation
-        }
-
-        private void CreateTestDeck()
-        {
-            //string logoPath = "Sprites/" + 1;
-            //Sprite logo = Resources.Load<Sprite>(logoPath);
-            deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
-            deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
-            deck.Add(new Sandglass(Resources.Load<Sprite>("Sprites/10")));
-            deck.Add(new Fortress(3, Resources.Load<Sprite>("Sprites/2")));
-            deck.Add(new SimpleCharacter(2, Resources.Load<Sprite>("Sprites/4")));
-            deck.Add(new SimpleCharacter(1, Resources.Load<Sprite>("Sprites/5")));
-            deck.Add(new SimpleCharacter(2, Resources.Load<Sprite>("Sprites/6")));
-            deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
-            deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
-            deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
-            deck.Add(new Joker(Resources.Load<Sprite>("Sprites/35")));
-            deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
-            deck.Add(new SimpleCharacter(3, Resources.Load<Sprite>("Sprites/9")));
-            deck.Add(new Fortress(3, Resources.Load<Sprite>("Sprites/37")));
-            deck.Add(new Fortress(2, Resources.Load<Sprite>("Sprites/33")));
-            deck.Add(new Fortress(1, Resources.Load<Sprite>("Sprites/2")));
-            deck.Add(new Mirror(Resources.Load<Sprite>("Sprites/62")));
         }
     }
 }

@@ -45,28 +45,6 @@ public class Mediator
 
     private byte CurrentPlayerTurn => _turnManager.CurrentPlayerTurn;
 
-    // legacy
-    //public void InitializeComponents()
-    //{
-    //    _cardManager = new CardManager();
-    //    _fortressManager = new FortressManager();
-    //    _gameState = new GameState();
-    //    _cardExchangeController = new CardExchangeManager(_cardManager, _gameState);
-    //    _winneDefinitionrManager = new WinnerDefinitionManager();
-    //    _currentUserIntentionState = new CurrentUserIntentionState();
-    //    _userActionsValidator = new UserActionsValidator();
-    //    _playerManager = PlayerManager.instance;
-    //    _cardVisualizationManager = CardVisualizationManager.instance;
-    //    _uiManager = UIManager.instance;
-    //    _turnManager = TurnManager.instance;
-
-    //    Command.InitializeComponents(_fortressManager, _uiManager, _cardVisualizationManager);
-    //    Card.Mediator = this;
-    //    _fortressManager.Initialize(this);
-
-    //    _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
-    //}
-
     public void OnCardTaken()
     {
         OnAttackStopped();
@@ -124,8 +102,11 @@ public class Mediator
     public void OnFortressCaptured(Fortress fort)
     {
         var attackerID = CurrentPlayerTurn;
+        List<Character> attackersGroup = _currentUserIntentionState.GetAttackersGroup().ToList();
+
         _cardVisualizationManager.MoveCardToPlayer(fort, attackerID);
-        _cardVisualizationManager.RemoveAttackersFromHand(_currentUserIntentionState.GetAttackersGroup().ToList());
+        _cardVisualizationManager.RemoveAttackersFromHand(attackersGroup);
+        _cardManager.OnFortressCaptured(attackerID, attackersGroup);
         this.SetStandardState();
 
         if (fort.DefendersGroup != null)
@@ -197,17 +178,6 @@ public class Mediator
     public void OnGameStopped()
     {
         new StopGameOperation().Execute();
-
-        /*
-        _winneDefinitionrManager.DefineWinner(_fortressManager.FortressOwnerPairs);
-
-        var winnerID = _winneDefinitionrManager.CurrentWinnerID;
-        if (winnerID != Constants.NOT_A_PLAYER_ID)
-            UIManager.instance.ShowWinnerPanel(winnerID);
-        else
-            UIManager.instance.ShowDrawPanel();
-        _playerManager.IncreaseWinsCounter(winnerID);
-        */
     }
 
     public void OnSandglassAppears()
@@ -222,11 +192,11 @@ public class Mediator
         throw new NotImplementedException();
     }
 
-    public void OnNewtNewRoundStarted()
+    public void OnNewRoundStarted()
     {
         var lastWinnerID = _winneDefinitionrManager.LastWinnerID;
         var currentWinnerID = _winneDefinitionrManager.CurrentWinnerID;
-        new StartNewRoundOperation(lastWinnerID, currentWinnerID).Execute();
+        new StartNewRoundOperation(lastWinnerID, currentWinnerID, _gameState).Execute();
 
         this.OnTurnStarted();
     }
