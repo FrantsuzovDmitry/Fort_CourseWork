@@ -69,6 +69,7 @@ namespace Assets.Scripts.Managers
             ReturnOtherCardsInDeck();
             currentDeck.AddFiveCardFromMainDeck();
             currentDeck.Shuffle();
+            currentDeck.Shuffle();
             currentDeck.DepersonalizeCards();
         }
 

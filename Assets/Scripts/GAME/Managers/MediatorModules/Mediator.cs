@@ -55,6 +55,8 @@ public class Mediator
         if (card.CardShouldBeOnTheTable() && CurrentGameStage != GameStage.GameFinished)
             // Make move again
             this.OnCardTaken();
+        else
+            this.OnTurnEnded();
     }
 
     public void OnAttackStarted(Fortress fort)
@@ -102,8 +104,7 @@ public class Mediator
         var attackerID = CurrentPlayerTurn;
         List<Character> attackersGroup = _currentUserIntentionState.GetAttackersGroup().ToList();
 
-        _cardVisualizationManager.MoveCardToPlayer(fort, attackerID);
-        _cardVisualizationManager.RemoveAttackersFromHand(attackersGroup);
+        _cardVisualizationManager.OnFortressCaptured(attackerID, fort, attackersGroup);
         _cardManager.OnFortressCaptured(attackerID, attackersGroup);
         this.SetStandardState();
 
@@ -155,7 +156,6 @@ public class Mediator
         _cardExchangeController.OnCardGiven(selectedCharacter);
 
         _cardVisualizationManager.ShowCurrentPlayersAndHideOpponentsCards(CurrentPlayerTurn);
-        //this.OnTurnEnded();
     }
 
     public void OnTurnStarted()

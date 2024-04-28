@@ -23,7 +23,7 @@ public class EntryPoint : MonoBehaviour
         for (int i = 0; i < 20; i++)
         {
             _mediator.OnCardTaken();
-            _mediator.OnTurnEnded();
+            //_mediator.OnTurnEnded();
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using static Assets.Scripts.Constants;
 
 namespace Assets.Scripts.Managers.Commands
 {
     public class StartNewRoundOperation : Command
     {
-        private readonly byte lastWinnerID;
         private readonly byte currentWinnerID;
+        private readonly byte lastWinnerID;
         private readonly GameState _gameState;
         private readonly TurnManager _turnManager;
 
@@ -25,7 +24,7 @@ namespace Assets.Scripts.Managers.Commands
 
         private void StartNewRound()
         {
-            _turnManager.AssignTurnToFirstPlayer(GetFirstPlayerID());
+            _turnManager.AssignTurnToFirstPlayer(GetFirstTurnPlayerID());
 
             List<Fortress> winnersForts = _fortressManager.GetPlayersForts(currentWinnerID);
             var winnersCardsInHisFortresses = GetWinnersCardsInHisFortresses(winnersForts);
@@ -41,12 +40,9 @@ namespace Assets.Scripts.Managers.Commands
             _winnerDefinitionManager.OnNewRoundStarted();
         }
 
-        byte GetFirstPlayerID()
+        private byte GetFirstTurnPlayerID()
         {
-            if (currentWinnerID == NOT_A_PLAYER_ID)
-                return (byte)((lastWinnerID + 1) % 4);
-            else
-                return currentWinnerID;
+            return lastWinnerID;
         }
 
         private List<Card> GetWinnersCardsInHisFortresses(List<Fortress> winnersForts)

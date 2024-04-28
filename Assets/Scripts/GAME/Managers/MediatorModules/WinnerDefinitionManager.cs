@@ -7,7 +7,7 @@ namespace Assets.Scripts.Managers
     public class WinnerDefinitionManager
     {
         public byte CurrentWinnerID { get; private set; } = NOT_A_PLAYER_ID;
-        public byte LastWinnerID { get; private set;} = NOT_A_PLAYER_ID;
+        public byte LastWinnerID { get; private set;} = MIN_PLAYER_ID;
 
         private Dictionary<byte, byte> FortressRate_Owner_Pairs { get; set; }
 

@@ -51,67 +51,6 @@ public class CardVisualizationManager : MonoBehaviour
 		cardsCardControllersPairs.Remove(fortress);
 	}
 
-    private void CreateCardInCorrectArea(Card card, byte playerID)
-	{
-		if (card.CardShouldBeOnTheTable())
-		{
-			CreateCardOnTable(card);
-		}
-		else
-		{
-			CreateCardInPlayerHand(card, playerID);
-		}
-	}
-
-	private void CreateCardInPlayerHand(Card card, byte playerID)
-	{
-		card.OwnerID = playerID;
-		CardController newCard = Instantiate(cardControllerPrefab, playersHandsPosition[playerID]);
-		newCard.transform.localPosition = Vector3.zero;
-		newCard.Initialize(card);
-
-		// Remember the Card-CardController pairs:
-		cardsCardControllersPairs.Add(card, newCard);
-
-		return;
-	}
-
-	public void MakeCardSelected(Card card)
-	{
-		cardsCardControllersPairs[card].MakeSelected();
-	}
-
-	private void CreateCardOnTable(Card card)
-	{
-		CardController newCard;
-		card.OwnerID = NOT_A_PLAYER_ID;
-		switch (card)
-		{
-			case Sandglass _:
-				newCard = Instantiate(cardControllerPrefab, sandglassesArea);
-				break;
-
-			case Fortress _:
-				newCard = Instantiate(cardControllerPrefab, playArea);
-				break;
-
-			case Rule _:
-				throw new NotImplementedException();
-				break;
-
-			default:
-				throw new NotImplementedException();
-				break;
-		}
-		newCard.transform.localPosition = Vector3.zero;
-		newCard.Initialize(card);
-
-		// Remember the Card-CardController pair:
-		cardsCardControllersPairs.Add(card, newCard);
-
-		return;
-	}
-
 	public void RemoveAttackersFromHand(List<Character> attackersGroup)
 	{
 		foreach (var card in attackersGroup)
@@ -173,17 +112,6 @@ public class CardVisualizationManager : MonoBehaviour
 		}
 	}
 
-	private void MakeVisible(CardController card)
-	{
-		card.gameObject.SetActive(true);
-		card.Show();
-	}
-
-	private void MakeInvisible(CardController card)
-	{
-		card.gameObject.SetActive(false);
-	}
-
     public void OnNewRoundStarted()
     {
         cardsCardControllersPairs.ToList().ForEach(pair =>
@@ -192,6 +120,7 @@ public class CardVisualizationManager : MonoBehaviour
             if (pair.Key is Fortress)
             {
                 cardsCardControllersPairs[pair.Key].ChangePosition(playArea);
+                cardsCardControllersPairs[pair.Key].SetActiveDefendersPanel(false);
             }
             // Returning cards in the deck
             else
@@ -200,5 +129,79 @@ public class CardVisualizationManager : MonoBehaviour
                 cardsCardControllersPairs.Remove(pair.Key);
 			}
         });
+    }
+
+    public void OnFortressCaptured(byte attackerID, Fortress fort, List<Character> attackersGroup)
+    {
+        MoveCardToPlayer(fort, attackerID);
+        RemoveAttackersFromHand(attackersGroup);
+		cardsCardControllersPairs[fort].SetActiveDefendersPanel(true, attackersGroup.Count);
+    }
+
+    private void MakeVisible(CardController card)
+    {
+        card.gameObject.SetActive(true);
+        card.Show();
+    }
+
+    private void MakeInvisible(CardController card)
+    {
+        card.gameObject.SetActive(false);
+    }
+
+    private void CreateCardInCorrectArea(Card card, byte playerID)
+    {
+        if (card.CardShouldBeOnTheTable())
+        {
+            CreateCardOnTable(card);
+        }
+        else
+        {
+            CreateCardInPlayerHand(card, playerID);
+        }
+    }
+
+    private void CreateCardInPlayerHand(Card card, byte playerID)
+    {
+        card.OwnerID = playerID;
+        CardController newCard = Instantiate(cardControllerPrefab, playersHandsPosition[playerID]);
+        newCard.transform.localPosition = Vector3.zero;
+        newCard.Initialize(card);
+
+        // Remember the Card-CardController pairs:
+        cardsCardControllersPairs.Add(card, newCard);
+
+        return;
+    }
+
+    private void CreateCardOnTable(Card card)
+    {
+        CardController newCard;
+        card.OwnerID = NOT_A_PLAYER_ID;
+        switch (card)
+        {
+            case Sandglass _:
+                newCard = Instantiate(cardControllerPrefab, sandglassesArea);
+                break;
+
+            case Fortress _:
+                newCard = Instantiate(cardControllerPrefab, playArea);
+                break;
+
+            case Rule _:
+                throw new NotImplementedException();
+                break;
+
+            default:
+                throw new NotImplementedException();
+                break;
+        }
+        newCard.transform.localPosition = Vector3.zero;
+        newCard.Initialize(card);
+
+        // Remember the Card-CardController pair:
+        cardsCardControllersPairs.Add(card, newCard);
+
+        return;
     }
 }
