@@ -11,6 +11,8 @@ public enum NeedToBeSelected : byte
 
 public class CardController : MonoBehaviour, IPointerDownHandler
 {
+
+    private Vector3 Position => transform.position;
     public Card Card;
     [SerializeField] private TextMeshProUGUI cardName;
     [SerializeField] private Image illustration, standardEmission, specialEmission, currentEmission, cardBack;
@@ -18,7 +20,13 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     public bool Selected { get; private set; } = false;
 
     private Transform parentPosition;
-    private Vector3 Position => transform.position;
+
+    private static TurnManager _turnManager;
+
+    public static void SetManagers(TurnManager turnManager)
+    {
+        _turnManager = turnManager;
+    }
 
     public void Initialize(Card card)
     {
@@ -87,13 +95,13 @@ public class CardController : MonoBehaviour, IPointerDownHandler
     public bool IsCardInPlayerHand()
     {
         return parentPosition.name ==
-                $"Player{TurnManager.instance.CurrentPlayerTurn + 1}Hand";
+                $"Player{_turnManager.CurrentPlayerTurn + 1}Hand";
     }
 
     public bool IsCardIsPlayersOwn()
     {
         return parentPosition.name ==
-                $"Player{TurnManager.instance.CurrentPlayerTurn + 1}Forts";
+                $"Player{_turnManager.CurrentPlayerTurn + 1}Forts";
     }
 
     public bool IsCardInTheMidOfTable() { return parentPosition.name == "PlayArea"; }

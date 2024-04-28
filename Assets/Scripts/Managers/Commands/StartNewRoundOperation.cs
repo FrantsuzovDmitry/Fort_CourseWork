@@ -8,14 +8,14 @@ namespace Assets.Scripts.Managers.Commands
         private readonly byte lastWinnerID;
         private readonly byte currentWinnerID;
         private readonly GameState _gameState;
+        private readonly TurnManager _turnManager;
 
-        private TurnManager TurnManager => TurnManager.instance;
-
-        public StartNewRoundOperation(byte lastWinnerID, byte currentWinnerID, GameState gameState)
+        public StartNewRoundOperation(byte lastWinnerID, byte currentWinnerID, GameState gameState, TurnManager turnManager)
         {
             this.lastWinnerID=lastWinnerID;
             this.currentWinnerID=currentWinnerID;
             _gameState=gameState;
+            _turnManager=turnManager;
         }
 
         public override void Execute()
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Managers.Commands
 
         private void StartNewRound()
         {
-            TurnManager.AssignTurnToFirstPlayer(GetFirstPlayerID());
+            _turnManager.AssignTurnToFirstPlayer(GetFirstPlayerID());
 
             List<Fortress> winnersForts = _fortressManager.GetPlayersForts(currentWinnerID);
             var winnersCardsInHisFortresses = GetWinnersCardsInHisFortresses(winnersForts);

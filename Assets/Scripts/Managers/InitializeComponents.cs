@@ -7,6 +7,8 @@ namespace Assets.Scripts.Managers
     {
         public static Mediator Mediator {  get; private set; }
 
+        private const byte PlayersNumber = 4;
+
         public static void ExecuteInitialization()
         {
             var _cardManager = new CardManager();
@@ -16,10 +18,10 @@ namespace Assets.Scripts.Managers
             var _currentUserIntentionState = new CurrentUserIntentionState();
             var _userActionsValidator = new UserActionsValidator();
             var _cardExchangeController = new CardExchangeController(_cardManager, _gameState);
-            var _playerManager = PlayerManager.instance;
+            var _playerManager = new PlayerManager(PlayersNumber);
             var _cardVisualizationManager = CardVisualizationManager.instance;
             var _uiManager = UIManager.instance;
-            var _turnManager = TurnManager.instance;
+            var _turnManager = new TurnManager(PlayersNumber);
 
             Mediator = new Mediator(
                 uiManager: _uiManager,
@@ -39,6 +41,7 @@ namespace Assets.Scripts.Managers
             Card.Mediator = Mediator;
             _fortressManager.Init(Mediator);
             UIManager.instance.Init(Mediator);
+            CardController.SetManagers(_turnManager);
 
             _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
 

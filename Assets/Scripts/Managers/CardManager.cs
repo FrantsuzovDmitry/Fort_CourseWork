@@ -23,12 +23,12 @@ namespace Assets.Scripts.Managers
             }
         }
 
-        public Card GetCardFromDeck()
+        public Card GetCardFromDeck(byte currentPlayerTurn)
         {
             var card = currentDeck.Pop();
 
             if (!card.CardShouldBeOnTheTable())
-                playersHands[TurnManager.instance.CurrentPlayerTurn].AddLast(card);
+                playersHands[currentPlayerTurn].AddLast(card);
 
             if (card is Sandglass) sandglasses.Add(card);
 

@@ -2,7 +2,12 @@
 {
     public class StopGameOperation : Command
     {
-        private PlayerManager PlayerManager => PlayerManager.instance;
+        private readonly PlayerManager _playerManager;
+
+        public StopGameOperation(PlayerManager playerManager)
+        {
+            _playerManager = playerManager;
+        }
 
         public override void Execute()
         {
@@ -15,10 +20,10 @@
 
             var winnerID = _winnerDefinitionManager.CurrentWinnerID;
             if (winnerID != Constants.NOT_A_PLAYER_ID)
-                UIManager.instance.ShowWinnerPanel(winnerID);
+                _uiManager.ShowWinnerPanel(winnerID);
             else
-                UIManager.instance.ShowDrawPanel();
-            PlayerManager.IncreaseWinsCounter(winnerID);
+                _uiManager.ShowDrawPanel();
+            _playerManager.IncreaseWinsCounter(winnerID);
         }
     }
 }

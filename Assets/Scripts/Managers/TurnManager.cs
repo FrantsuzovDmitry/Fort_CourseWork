@@ -1,20 +1,21 @@
-using UnityEngine;
 using static Assets.Scripts.Constants;
 
-public class TurnManager : MonoBehaviour
+public class TurnManager
 {
-    public static TurnManager instance;
     public byte CurrentPlayerTurn { get; private set; }
+    public byte FirstTurnPlayer {  get; private set; }  // Player that make first move in current round
 
-    private void Awake()
+    private byte lastPlayerID;
+
+    public TurnManager(byte numberOfPlayers)
     {
-        instance = this;
         CurrentPlayerTurn = 0;
+        lastPlayerID = (byte)(numberOfPlayers - 1);
     }
 
     public void AssignNextPlayerTurn()
     {
-        if (CurrentPlayerTurn == LAST_PLAYER_ID)
+        if (CurrentPlayerTurn == lastPlayerID)
         {
             CurrentPlayerTurn = MIN_PLAYER_ID;
         }

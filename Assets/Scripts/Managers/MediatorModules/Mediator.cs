@@ -1,4 +1,3 @@
-using Assets.Scripts;
 using Assets.Scripts.Managers;
 using Assets.Scripts.Managers.Commands;
 using Assets.Scripts.Managers.MediatorModules;
@@ -14,6 +13,7 @@ public class Mediator
     public bool IsCreatingGroupInProgress => CurrentGameStage == GameStage.PlayerIsCreatingGroupToAttackAFort;
     public bool IsSelectingCardToGiveInProgress => CurrentGameStage == GameStage.CardExchanging;
 
+    private byte CurrentPlayerTurn => _turnManager.CurrentPlayerTurn;
     private GameStage CurrentGameStage => _gameState.CurrentGameStage;
 
     private readonly UIManager _uiManager;
@@ -43,12 +43,10 @@ public class Mediator
         _cardExchangeController=cardExchangeController;
     }
 
-    private byte CurrentPlayerTurn => _turnManager.CurrentPlayerTurn;
-
     public void OnCardTaken()
     {
         OnAttackStopped();
-        var card = _cardManager.GetCardFromDeck();
+        var card = _cardManager.GetCardFromDeck(CurrentPlayerTurn);
         _cardVisualizationManager.OnCardTaken(card, CurrentPlayerTurn);
         _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
 
@@ -177,7 +175,7 @@ public class Mediator
 
     public void OnGameStopped()
     {
-        new StopGameOperation().Execute();
+        new StopGameOperation(_playerManager).Execute();
     }
 
     public void OnSandglassAppears()
@@ -196,7 +194,7 @@ public class Mediator
     {
         var lastWinnerID = _winneDefinitionrManager.LastWinnerID;
         var currentWinnerID = _winneDefinitionrManager.CurrentWinnerID;
-        new StartNewRoundOperation(lastWinnerID, currentWinnerID, _gameState).Execute();
+        new StartNewRoundOperation(lastWinnerID, currentWinnerID, _gameState, _turnManager).Execute();
 
         this.OnTurnStarted();
     }

@@ -7,6 +7,5 @@
 		public const byte MIN_PLAYER_ID = 0;
 		public const byte MAX_PLAYER_ID = 3;
 		public const byte NOT_A_PLAYER_ID = 100;
-		public static byte LAST_PLAYER_ID = PlayerManager.instance.LAST_PLAYER_ID;
 	}
 }

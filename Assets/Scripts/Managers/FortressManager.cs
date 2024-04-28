@@ -1,7 +1,5 @@
 using Assets.Scripts.Cards;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using static Assets.Scripts.Constants;
 
@@ -12,7 +10,7 @@ public class FortressManager
 {
     public Dictionary<byte, byte> FortressOwnerPairs = new(MAX_FORT_RATE);       // Pairs FortressRate <-> owner
 
-    private Fortress[] _fortresses = new Fortress[8];
+    private readonly Fortress[] _fortresses = new Fortress[8];
     private Mediator _mediator;
 
     public void Init(Mediator mediator)
@@ -79,5 +77,10 @@ public class FortressManager
     public void OnNewRoundStarted()
     {
         FortressOwnerPairs.Clear();
+
+        foreach (var fortress in _fortresses)
+        {
+            fortress?.ResetDefenders();
+        }
     }
 }

@@ -1,18 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager
 {
-    [SerializeField] private List<Player> players = new List<Player>();
-
-    public static PlayerManager instance;
-
     public byte LAST_PLAYER_ID => players.Last().ID;
 
-    private void Awake()
+    private readonly List<Player> players;
+
+    public PlayerManager(byte numOfPlayers)
     {
-        instance = this;
+        players = new List<Player>(numOfPlayers);
 
         for (byte i = 0; i < players.Count; i++) players[i].ID = i;
     }

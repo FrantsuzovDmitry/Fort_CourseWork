@@ -1,11 +1,7 @@
-using Assets.Scripts;
 using Assets.Scripts.Cards;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [System.Serializable]
 public class Fortress : Card
@@ -13,7 +9,7 @@ public class Fortress : Card
     public byte Rate { get; }
     public GroupOfCharacters DefendersGroup { get; private set; }
 
-    public Fortress(byte rate, Sprite illustrarion=null) : base("Fortress", illustrarion)
+    public Fortress(byte rate, Sprite illustrarion = null) : base("Fortress", illustrarion)
     {
         this.Rate = rate;
     }
@@ -26,9 +22,11 @@ public class Fortress : Card
             throw new Exception("Trying to set nullable defenders group to the fort");
     }
 
+    public void ResetDefenders() => DefendersGroup = null;
+
     public virtual bool ValidateAttackersGroup(GroupOfCharacters attackers)
     {
-        // TODO: Only one wizard (I can just check this here straight)
+        // TODO: Only one wizard (I can just check this here directly)
         List<SimpleCharacter> simpleCharactersInAttackersGroup = attackers.SimpleCharacters;
         int commonForce = simpleCharactersInAttackersGroup[0].Force;
         foreach (var c in simpleCharactersInAttackersGroup)
@@ -36,22 +34,22 @@ public class Fortress : Card
         return true;
     }
 
-	public override NeedToBeSelected ProcessOnClick(in CardController c)
-	{
+    public override NeedToBeSelected ProcessOnClick(in CardController c)
+    {
         if (c.IsCardIsPlayersOwn())
         {
-			Mediator.OnAttackStopped();
-			// TODO: Show the defenders group
-			// ShowDefendersGroup()
-		}
+            Mediator.OnAttackStopped();
+            // TODO: Show the defenders group
+            // ShowDefendersGroup()
+        }
         else
         {
             Mediator.OnAttackStopped();
-			Mediator.OnAttackStarted(this);
-		}
-        
+            Mediator.OnAttackStarted(this);
+        }
+
         return NeedToBeSelected.YES;
-	}
+    }
 
     public override void InvokeOnCardAppearsEvent()
     {
