@@ -1,5 +1,7 @@
-﻿using Assets.Scripts.Managers.Commands;
+﻿using Assets.Scripts.AI;
+using Assets.Scripts.Managers.Commands;
 using Assets.Scripts.Managers.MediatorModules;
+using UnityEditor;
 
 namespace Assets.Scripts.Managers
 {
@@ -11,39 +13,42 @@ namespace Assets.Scripts.Managers
 
         public static void ExecuteInitialization()
         {
-            var _cardManager = new CardManager();
-            var _fortressManager = new FortressManager();
-            var _gameState = new GameState();
-            var _winneDefinitionrManager = new WinnerDefinitionManager();
-            var _currentUserIntentionState = new CurrentUserIntentionState();
-            var _userActionsValidator = new UserActionsValidator();
-            var _cardExchangeController = new CardExchangeController(_cardManager, _gameState);
-            var _playerManager = new PlayerManager(PlayersNumber);
-            var _cardVisualizationManager = CardVisualizationManager.instance;
-            var _uiManager = UIManager.instance;
-            var _turnManager = new TurnManager(PlayersNumber);
+            var cardManager = new CardManager();
+            var fortressManager = new FortressManager();
+            var gameState = new GameState();
+            var winneDefinitionrManager = new WinnerDefinitionManager();
+            var currentUserIntentionState = new CurrentUserIntentionState();
+            var userActionsValidator = new UserActionsValidator();
+            var cardExchangeController = new CardExchangeController(cardManager, gameState);
+            var playerManager = new PlayerManager(PlayersNumber);
+            var cardVisualizationManager = CardVisualizationManager.instance;
+            var uiManager = UIManager.instance;
+            var turnManager = new TurnManager(PlayersNumber);
+            var gameInterfaceForAI = new GameInterface();
 
             Mediator = new Mediator(
-                uiManager: _uiManager,
-                fortressManager: _fortressManager,
-                cardVisualizationManager: _cardVisualizationManager,
-                turnManager: _turnManager,
-                playerManager: _playerManager,
-                winneDefinitionrManager: _winneDefinitionrManager,
-                cardManager: _cardManager,
-                gameState: _gameState,
-                userActionsValidator: _userActionsValidator,
-                currentUserIntentionState: _currentUserIntentionState,
-                cardExchangeController: _cardExchangeController
+                uiManager: uiManager,
+                fortressManager: fortressManager,
+                cardVisualizationManager: cardVisualizationManager,
+                turnManager: turnManager,
+                playerManager: playerManager,
+                winneDefinitionrManager: winneDefinitionrManager,
+                cardManager: cardManager,
+                gameState: gameState,
+                userActionsValidator: userActionsValidator,
+                currentUserIntentionState: currentUserIntentionState,
+                cardExchangeController: cardExchangeController,
+                gameInterface: gameInterfaceForAI
                 );
 
-            Command.InitializeComponents(_fortressManager, _uiManager, _cardVisualizationManager, _cardManager, _winneDefinitionrManager);
-            Card.Mediator = Mediator;
-            _fortressManager.Init(Mediator);
-            UIManager.instance.Init(Mediator);
-            CardController.SetManagers(_turnManager);
 
-            _uiManager.UpdateCardNumberText(_cardManager.NumberOfCardsInDeck);
+            Command.InitializeComponents(fortressManager, uiManager, cardVisualizationManager, cardManager, winneDefinitionrManager);
+            Card.Mediator = Mediator;
+            fortressManager.Init(Mediator);
+            UIManager.instance.Init(Mediator);
+            CardController.SetManagers(turnManager);
+
+            uiManager.UpdateCardNumberText(cardManager.NumberOfCardsInDeck);
 
         }
     }

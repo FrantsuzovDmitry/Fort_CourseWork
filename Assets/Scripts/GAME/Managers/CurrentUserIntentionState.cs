@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class CurrentUserIntentionState
 {
 	public GroupOfCharacters GetAttackersGroup() => new GroupOfCharacters(selectedCharacters);
-	public Character SelectedCharacter { get; private set; }	// TODO: remove this and make field MakeSelectedCharacters (single character in case exchanging card, so what?)
+	public Character SelectedCharacter { get; private set; }
 	public Fortress SelectedFortToAttack { get; private set; }
 
 

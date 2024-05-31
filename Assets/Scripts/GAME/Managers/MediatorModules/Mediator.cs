@@ -1,3 +1,5 @@
+using Assets.Scripts.AI;
+using Assets.Scripts.GAME.Commands;
 using Assets.Scripts.Managers;
 using Assets.Scripts.Managers.Commands;
 using Assets.Scripts.Managers.MediatorModules;
@@ -27,8 +29,9 @@ public class Mediator
     private readonly UserActionsValidator _userActionsValidator;
     private readonly CurrentUserIntentionState _currentUserIntentionState;
     private readonly CardExchangeController _cardExchangeController;
+    private readonly GameInterface _gameInterface;
 
-    public Mediator(UIManager uiManager, FortressManager fortressManager, CardVisualizationManager cardVisualizationManager, TurnManager turnManager, PlayerManager playerManager, WinnerDefinitionManager winneDefinitionrManager, CardManager cardManager, GameState gameState, UserActionsValidator userActionsValidator, CurrentUserIntentionState currentUserIntentionState, CardExchangeController cardExchangeController)
+    public Mediator(UIManager uiManager, FortressManager fortressManager, CardVisualizationManager cardVisualizationManager, TurnManager turnManager, PlayerManager playerManager, WinnerDefinitionManager winneDefinitionrManager, CardManager cardManager, GameState gameState, UserActionsValidator userActionsValidator, CurrentUserIntentionState currentUserIntentionState, CardExchangeController cardExchangeController, GameInterface gameInterface)
     {
         _uiManager=uiManager;
         _fortressManager=fortressManager;
@@ -41,6 +44,7 @@ public class Mediator
         _userActionsValidator=userActionsValidator;
         _currentUserIntentionState=currentUserIntentionState;
         _cardExchangeController=cardExchangeController;
+        _gameInterface=gameInterface;
     }
 
     public void OnCardTaken()
@@ -164,6 +168,8 @@ public class Mediator
         _gameState.OnTurnStarted();
         _cardVisualizationManager.ShowCurrentPlayersAndHideOpponentsCards(CurrentPlayerTurn);
         _uiManager.UpdateCurrentPlayerTurnLabel(CurrentPlayerTurn);
+
+        new NotifyPlayerAboutTurnOperation(_playerManager, _gameInterface, CurrentPlayerTurn).Execute();
     }
 
     public void OnTurnEnded()
@@ -173,16 +179,16 @@ public class Mediator
         this.OnTurnStarted();
     }
 
-    public void OnGameStopped()
+    public void OnRoundEnded()
     {
-        new StopGameOperation(_playerManager).Execute();
+        new CompleteRoundOperation(_playerManager, _gameInterface).Execute();
     }
 
     public void OnSandglassAppears()
     {
         _gameState.OnSandglassAppears();
         if (_gameState.IsTheGameOver)
-            this.OnGameStopped();
+            this.OnRoundEnded();
     }
 
     public void OnRuleAppears(Rule card)

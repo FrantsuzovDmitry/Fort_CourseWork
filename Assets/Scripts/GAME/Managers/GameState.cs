@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Assets.Scripts.Managers
+﻿namespace Assets.Scripts.Managers
 {
     public class GameState
     {

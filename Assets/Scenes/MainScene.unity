@@ -2869,8 +2869,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1564123587}
-  - component: {fileID: 1564123588}
-  - component: {fileID: 1564123589}
   - component: {fileID: 1564123590}
   - component: {fileID: 1564123591}
   - component: {fileID: 1564123593}
@@ -2896,39 +2894,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1564123588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564123586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 540d7ba5746276e40979b9292c845fbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1564123589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564123586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70a2bfd5b72b22f42a1b81809fbfe7ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  players:
-  - ID: 0
-    WinsCount: 0
-  - ID: 0
-    WinsCount: 0
-  - ID: 0
-    WinsCount: 0
-  - ID: 0
-    WinsCount: 0
 --- !u!114 &1564123590
 MonoBehaviour:
   m_ObjectHideFlags: 0
